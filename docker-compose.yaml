@@ -28,5 +28,11 @@ services:
       timeout: 5s
       retries: 5
 
+  frontend:
+    restart: always
+    build: ./frontend
+    ports:
+      - "80:80"
+
 volumes:
   db-data:
