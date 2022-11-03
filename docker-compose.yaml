@@ -1,0 +1,40 @@
+version: "1"
+
+services:
+  backend:
+    restart: always
+    command: "poetry run python3 ./manage.py runserver 0.0.0.0:8000"
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres
+    restart: always
+    user: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=backend
+      - POSTGRES_PASSWORD=pleasechangeme
+    expose:
+      - 5432
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+
+  frontend:
+    restart: always
+    build: ./frontend
+    ports:
+      - "80:80"
+
+volumes:
+  db-data:
