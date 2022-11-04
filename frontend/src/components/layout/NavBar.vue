@@ -9,7 +9,9 @@
       </b-navbar-item>
     </template>
     <template #start>
-      <b-navbar-item href="#"> Koła naukowe </b-navbar-item>
+      <b-navbar-item :to="{ name: 'GroupCatalog' }" tag="router-link">
+        Koła naukowe
+      </b-navbar-item>
       <b-navbar-item href="#"> Projekty </b-navbar-item>
       <b-navbar-item href="#"> Poradniki </b-navbar-item>
     </template>

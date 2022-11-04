@@ -9,7 +9,7 @@
           </div>
           <div class="column">
             <div id="content">
-              testetsetsetsetsetsetsetsetsetsetsestestestestesetsetsetsetsestestestesetsetsetsetseststestesstestesetsetsetsetsetsetestestestesetsetsetsetsestestestesetsetsetsetseststestesstestesetsetsetsetsetsetestestestesetsetsetsetsestestestesetsetsetsetseststestesstestesetsetsetsetsetset
+              <router-view />
             </div>
           </div>
         </div>
