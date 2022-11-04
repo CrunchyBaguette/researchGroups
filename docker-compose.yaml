@@ -3,6 +3,7 @@ version: "1"
 services:
   backend:
     restart: always
+    container_name: backend
     command: "poetry run python3 ./manage.py runserver 0.0.0.0:8000"
     build: .
     ports:
@@ -13,13 +14,15 @@ services:
 
   postgres:
     image: postgres
+    container_name: postgres
     restart: always
     user: postgres
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=backend
-      - POSTGRES_PASSWORD=pleasechangeme
+      POSTGRES_DB: "backend"
+      POSTGRES_PASSWORD: "pleasechangeme"
+      POSTGRES_USER: "admin"
     expose:
       - 5432
     healthcheck:
@@ -31,6 +34,7 @@ services:
       - "5432:5432"
 
   frontend:
+    container_name: frontend
     restart: always
     build: ./frontend
     ports:
