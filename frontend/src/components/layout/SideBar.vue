@@ -1,0 +1,25 @@
+<template>
+  <b-menu>
+    <b-menu-list label="Szuflada">
+      <b-menu-item label="Koła naukowe">
+        <b-menu-item label="Koło 1"></b-menu-item>
+        <b-menu-item label="Koło 2"></b-menu-item>
+      </b-menu-item>
+      <b-menu-item label="Projekty">
+        <b-menu-item label="Projekt 1"></b-menu-item>
+        <b-menu-item label="Projekt 2"></b-menu-item>
+      </b-menu-item>
+    </b-menu-list>
+  </b-menu>
+</template>
+
+
+
+<style>
+.menu {
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 100%;
+}
+</style>

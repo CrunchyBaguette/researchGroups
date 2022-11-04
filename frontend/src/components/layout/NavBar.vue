@@ -9,12 +9,9 @@
       </b-navbar-item>
     </template>
     <template #start>
-      <b-navbar-item href="#"> Home </b-navbar-item>
-      <b-navbar-item href="#"> Documentation </b-navbar-item>
-      <b-navbar-dropdown label="Info">
-        <b-navbar-item href="#"> About </b-navbar-item>
-        <b-navbar-item href="#"> Contact </b-navbar-item>
-      </b-navbar-dropdown>
+      <b-navbar-item href="#"> Koła naukowe </b-navbar-item>
+      <b-navbar-item href="#"> Projekty </b-navbar-item>
+      <b-navbar-item href="#"> Poradniki </b-navbar-item>
     </template>
 
     <template #end>
