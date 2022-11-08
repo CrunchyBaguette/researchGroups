@@ -1,9 +1,9 @@
 <template>
-  <div>Katalog kół naukowych</div>
+  <div>Katalog projektów</div>
 </template>
 
 <script>
 export default {
-  name: "groupCatalog",
+  name: "projectCatalog",
 };
 </script>

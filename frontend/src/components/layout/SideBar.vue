@@ -1,5 +1,5 @@
 <template>
-  <b-menu>
+  <b-menu :activable="false" :accordion="false">
     <b-menu-list label="Szuflada">
       <b-menu-item label="Koła naukowe">
         <b-menu-item label="Koło 1"></b-menu-item>
@@ -13,7 +13,11 @@
   </b-menu>
 </template>
 
-
+<script>
+export default {
+  name: "SideBar",
+};
+</script>
 
 <style>
 .menu {
