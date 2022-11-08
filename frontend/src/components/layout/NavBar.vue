@@ -23,10 +23,16 @@
     <template #end>
       <b-navbar-item tag="div">
         <div class="buttons">
-          <a class="button is-primary">
+          <b-button
+            type="is-primary"
+            :to="{ name: 'register' }"
+            tag="router-link"
+          >
             <strong>Rejestracja</strong>
-          </a>
-          <a class="button is-light">Zaloguj się</a>
+          </b-button>
+          <b-button type="is-light" :to="{ name: 'login' }" tag="router-link"
+            >Zaloguj się</b-button
+          >
         </div>
       </b-navbar-item>
     </template>
@@ -36,18 +42,6 @@
 <script>
 export default {
   name: "NavBar",
-  props: {
-    groups: { type: Object },
-    projects: { type: Object },
-  },
-
-  ready: function () {
-    "b-navbar-item.test".on("click", function (e) {
-      this.next("ul").toggle();
-      e.stopPropagation();
-      e.preventDefault();
-    });
-  },
 };
 </script>
 
@@ -55,12 +49,7 @@ export default {
 .navbar {
   background-color: #a0ff42;
 }
-.dropdown-submenu {
-  position: relative;
-}
-.dropdown-submenu .dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -1px;
+a {
+  color: black;
 }
 </style>

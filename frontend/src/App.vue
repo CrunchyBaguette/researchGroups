@@ -4,7 +4,7 @@
       <div class="column">
         <NavBar />
         <div class="columns" style="height: 100%">
-          <div class="column is-2">
+          <div class="column is-2" v-if="!this.isLoginOrRegister()">
             <SideBar />
           </div>
           <div class="column">
@@ -27,6 +27,11 @@ export default {
   components: {
     NavBar,
     SideBar,
+  },
+  methods: {
+    isLoginOrRegister() {
+      return this.$route.name == "login" || this.$route.name == "register";
+    },
   },
 };
 </script>
