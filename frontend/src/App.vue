@@ -4,7 +4,11 @@
       <div class="column">
         <NavBar />
         <div class="columns" style="height: 100%">
-          <div class="column is-2" v-if="!this.isLoginOrRegister()">
+          <div
+            id="sidebar"
+            class="column is-2"
+            v-if="!this.isLoginOrRegister()"
+          >
             <SideBar />
           </div>
           <div class="column">
@@ -58,7 +62,7 @@ body {
   left: 0;
   width: 13%;
   min-width: 100px;
-  background-color: rgb(224, 224, 224);
+  background-color: rgb(203, 203, 203);
 }
 
 #navbar {
@@ -66,13 +70,11 @@ body {
 }
 
 #content {
-  /* float: left; */
   padding: 10px;
   height: 100%;
   position: relative;
   overflow: auto;
   word-wrap: anywhere;
   white-space: normal;
-  background-color: red;
 }
 </style>
