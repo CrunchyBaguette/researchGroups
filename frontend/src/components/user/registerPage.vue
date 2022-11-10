@@ -1,23 +1,3 @@
-<!-- <template>
-  <div>Rejestracja
-    <p>Imię</p>
-    <input v-model="name" placeholder="Jan">
-    <p>Nazwisko</p>
-    <input v-model="surname" placeholder="Kowalski">
-    <p>Email</p>
-    <input v-model="email" placeholder="e@e.com">
-    <p>Login</p>
-    <input v-model="login" placeholder="user1">
-    <p>Hasło</p>
-    <input v-model="password" placeholder="pass#12">
-    <p>Powtórz hasło</p>
-    <input v-model="repeatedPassword" placeholder="pass#12">
-    <br><br>
-    <button>ZAŁÓŻ KONTO</button>
-  </div>
-  
-</template> -->
-
 <template>
   <div class="register-container">
     <h1 class="title">Rejestracja</h1>
@@ -25,21 +5,27 @@
     <br>
 
     <b-field label="Imię">
-        <b-input maxlength="30"></b-input>
+        <b-input maxlength="30"
+            required>
+        </b-input>
     </b-field>
 
     <b-field label="Nazwisko">
-        <b-input maxlength="30"></b-input>
+        <b-input maxlength="30"
+            required>
+        </b-input>
     </b-field>
 
     <b-field label="Email">
         <b-input type="email"
-            maxlength="30">
+            maxlength="30"
+            required>
         </b-input>
     </b-field>
 
     <b-field label="Login">
-        <b-input maxlength="30">
+        <b-input maxlength="30"
+            required>
         </b-input>
     </b-field>
 
@@ -47,7 +33,8 @@
         <b-input type="password"
             password-reveal
             minlength="8"
-            maxlength="30">
+            maxlength="30"
+            required>
         </b-input>
     </b-field>
 
@@ -55,7 +42,8 @@
         <b-input type="password"
             password-reveal
             minlength="8"
-            maxlength="30">
+            maxlength="30"
+            required>
         </b-input>
     </b-field>
 
@@ -82,7 +70,7 @@ export default {
 <style>
 .register-container {
   margin: 0 auto;
-  max-width: 300px;
+  max-width: 320px;
 }
 
 .title {

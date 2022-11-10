@@ -5,7 +5,8 @@
     <br>
 
     <b-field label="Login">
-        <b-input maxlength="30">
+        <b-input maxlength="30"
+            required>
         </b-input>
     </b-field>
 
@@ -13,7 +14,8 @@
         <b-input type="password"
             password-reveal
             minlength="8"
-            maxlength="30">
+            maxlength="30"
+            required>
         </b-input>
     </b-field>
 
@@ -45,7 +47,7 @@ export default {
 <style>
 .login-container {
   margin: 0 auto;
-  max-width: 300px;
+  max-width: 320px;
 }
 
 .title {
