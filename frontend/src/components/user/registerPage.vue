@@ -49,7 +49,9 @@
 
     <br>
 
-    <b-button type="is-primary" expanded>ZAŁÓŻ KONTO</b-button>
+    <b-button type="is-primary" :to="{ name: 'login' }" tag="router-link" expanded>
+      ZAŁÓŻ KONTO
+    </b-button>
 
     <br>
     <br>

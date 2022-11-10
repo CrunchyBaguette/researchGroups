@@ -2,7 +2,11 @@
   <div id="app">
     <div class="columns" style="height: 100%">
       <div class="column">
-        <NavBar />
+        <div
+            v-if="!this.isLoginOrRegister()"
+        >
+          <NavBar />
+        </div>
         <div class="columns" style="height: 100%">
           <div
             id="sidebar"

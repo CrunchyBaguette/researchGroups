@@ -26,7 +26,7 @@
     <br>
     <br>
 
-    <b-button type="is-primary" expanded>ZALOGUJ SIĘ</b-button>
+    <b-button type="is-primary" :to="{ name: 'announcements' }" tag="router-link" expanded>ZALOGUJ SIĘ</b-button>
 
     <br>
     <br>
