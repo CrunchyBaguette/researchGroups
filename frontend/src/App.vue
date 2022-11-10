@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     isLoginOrRegister() {
-      return this.$route.name == "login" || this.$route.name == "register";
+      return this.$route.name == "login" || this.$route.name == "register" || this.$route.name == "passwordReminder";
     },
   },
 };
