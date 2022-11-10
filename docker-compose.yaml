@@ -11,6 +11,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    profiles:
+      - prod
+      - debug
 
   postgres:
     image: postgres
@@ -32,6 +35,10 @@ services:
       retries: 5
     ports:
       - "5432:5432"
+    profiles:
+      - prod
+      - dev
+      - debug
 
   frontend:
     container_name: frontend
@@ -39,6 +46,28 @@ services:
     build: ./frontend
     ports:
       - "80:80"
+    profiles:
+      - prod
+      - debug
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+       postgres:
+         condition: service_healthy
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin'
+    profiles:
+      - dev
+      - debug
 
 volumes:
   db-data:
+  pgadmin-data:
