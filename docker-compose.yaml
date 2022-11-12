@@ -39,6 +39,7 @@ services:
       - prod
       - dev
       - debug
+      - db
 
   frontend:
     container_name: frontend
@@ -67,6 +68,7 @@ services:
     profiles:
       - dev
       - debug
+      - db
 
 volumes:
   db-data:
