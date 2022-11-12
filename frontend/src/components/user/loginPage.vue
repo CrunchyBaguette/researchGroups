@@ -4,7 +4,7 @@
 
     <br>
 
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="submitLoginForm">
       <b-field label="Login">
           <b-input v-model="login"
               maxlength="30"
@@ -21,32 +21,39 @@
           </b-input>
       </b-field>
 
-      <b-navbar-item :to="{ name: 'passwordReminder' }" tag="router-link">
-          Nie pamiętam hasła.
-      </b-navbar-item>
-
-      <br>
-
-      <div class="notification is-danger" v-if="errors.length">
-        <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
+      <div class="notification is-danger" v-if="loginBtnErrors.length">
+        <p v-for="error in loginBtnErrors" v-bind:key="error">{{ error }}</p>
       </div>
 
       <br>
 
       <button id="btnLogin" class="button">ZALOGUJ SIĘ</button>
 
-      <br>
-      <br>
-
-      <b-navbar-item :to="{ name: 'register' }" tag="router-link">
-          Nie masz konta? &nbsp;<p class="p-register"> Zarejestruj się. </p>
-      </b-navbar-item>
     </form>
+
+    <br>
+    <br>
+    <br>
+    <button id="btnRemindPassword" class="button" v-on:click="moveToRemindPassword">Nie pamiętam hasła.</button>
+
+    <br>
+    <br>
+
+    <div class="notification is-danger" v-if="remindPasswordError !== ''">
+      <p>{{ remindPasswordError }}</p>
+    </div>
+
+    <br>
+
+    <b-navbar-item :to="{ name: 'register' }" tag="router-link" id="itemRegister">
+        Nie masz konta? &nbsp;<p class="p-register"> Zarejestruj się. </p>
+    </b-navbar-item>
+  
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+//import axios from 'axios'
 
 export default {
   name: "loginPage",
@@ -54,15 +61,16 @@ export default {
     return {
       login: '',
       password: '',
-      errors: []
+      loginBtnErrors: [],
+      remindPasswordError: ''
     }
   },
   mounted() {
       document.title = 'Zaloguj się'
   },
   methods: {
-    async submitForm() {
-      this.errors = []
+    async submitLoginForm() {
+      this.loginBtnErrors = []
       // if (this.login === '') {
       //   this.errors.push('Nie podałeś loginu!')
       // }
@@ -71,11 +79,13 @@ export default {
       // }
       // axios.defaults.headers.common["Authorization"] = ""
       // localStorage.removeItem("token")
-      if (!this.errors.length) {
+      if (!this.loginBtnErrors.length) {
+        /*
         const formData = {
           login: this.username,
           password: this.password
         }
+        
         await axios
           .post("/api/v1/token/login/", formData)
           .then(response => {
@@ -90,15 +100,24 @@ export default {
           .catch(error => {
               if (error.response) {
                   for (const property in error.response.data) {
-                      this.errors.push(`${property}: ${error.response.data[property]}`)
+                      this.loginBtnErrors.push(`${property}: ${error.response.data[property]}`)
                   }
               } else {
-                  this.errors.push('Something went wrong. Please try again')
+                  this.loginBtnErrors.push('Something went wrong. Please try again')
                   
                   console.log(JSON.stringify(error))
               }
           })
+          */
       }
+    },
+    moveToRemindPassword() {
+      this.remindPasswordError = ''
+      if (this.login === '') {
+          this.remindPasswordError = 'Wprowadź login!'
+      }
+
+      
     }
   }
 }
@@ -137,6 +156,26 @@ export default {
 #btnLogin:hover {
   background-color: #7957d5;
   box-shadow: 0 0 5px #7957d5;
+}
+
+#btnRemindPassword {
+  display: flex;
+  position: relative;
+  padding: 0.5rem 0.75rem;
+  line-height: 1.5;
+  color: #4a4a4a;
+  border: none;
+  transition: .3s;
+  cursor: pointer;
+}
+
+#btnRemindPassword:hover {
+  color: #7957d5;
+  background-color: #fafafa;
+}
+
+#itemRegister {
+  display: flex;
 }
 
 </style>

@@ -62,7 +62,7 @@
       <br>
       <br>
 
-      <b-navbar-item :to="{ name: 'login' }" tag="router-link" class="btn-login">
+      <b-navbar-item :to="{ name: 'login' }" tag="router-link" id="itemLogin">
           Masz już konto? &nbsp;<p class="p-login">Zaloguj się. </p>
       </b-navbar-item>
 
@@ -72,8 +72,8 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { toast } from 'bulma-toast'
+//import axios from 'axios'
+//import { toast } from 'bulma-toast'
 
 export default {
   name: "registerPage",
@@ -112,6 +112,7 @@ export default {
       }
 
       if (!this.errors.length) {
+        /*
         const formData = {
           name: this.name,
           surname: this.surname,
@@ -145,6 +146,7 @@ export default {
               console.log(JSON.stringify(error));
             }
           })
+          */
       }
     }
   }
@@ -184,6 +186,10 @@ export default {
 #btnRegister:hover {
   background-color: #7957d5;
   box-shadow: 0 0 5px #7957d5;
+}
+
+#itemLogin {
+  display: flex;
 }
 
 </style>
