@@ -33,10 +33,8 @@
 
     <br>
     <br>
-    <br>
-    <button id="btnRemindPassword" class="button" v-on:click="moveToRemindPassword">Nie pamiętam hasła.</button>
+    <button id="btnOther" class="button" v-on:click="moveToRemindPassword">Nie pamiętam hasła.</button>
 
-    <br>
     <br>
 
     <div class="notification is-danger" v-if="remindPasswordError !== ''">
@@ -45,9 +43,9 @@
 
     <br>
 
-    <b-navbar-item :to="{ name: 'register' }" tag="router-link" id="itemRegister">
+    <router-link :to="{ name: 'register' }" id="btnOther">
         Nie masz konta? &nbsp;<p class="p-register"> Zarejestruj się. </p>
-    </b-navbar-item>
+    </router-link>
   
   </div>
 </template>
@@ -158,7 +156,7 @@ export default {
   box-shadow: 0 0 5px #7957d5;
 }
 
-#btnRemindPassword {
+#btnOther {
   display: flex;
   position: relative;
   padding: 0.5rem 0.75rem;
@@ -169,13 +167,9 @@ export default {
   cursor: pointer;
 }
 
-#btnRemindPassword:hover {
+#btnOther:hover {
   color: #7957d5;
   background-color: #fafafa;
-}
-
-#itemRegister {
-  display: flex;
 }
 
 </style>

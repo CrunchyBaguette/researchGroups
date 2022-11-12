@@ -62,9 +62,9 @@
       <br>
       <br>
 
-      <b-navbar-item :to="{ name: 'login' }" tag="router-link" id="itemLogin">
+      <router-link :to="{ name: 'login' }" id="link">
           Masz już konto? &nbsp;<p class="p-login">Zaloguj się. </p>
-      </b-navbar-item>
+      </router-link>
 
     </form> 
 
@@ -188,8 +188,20 @@ export default {
   box-shadow: 0 0 5px #7957d5;
 }
 
-#itemLogin {
+#link {
   display: flex;
+  position: relative;
+  padding: 0.5rem 0.75rem;
+  line-height: 1.5;
+  color: #4a4a4a;
+  border: none;
+  transition: .3s;
+  cursor: pointer;
+}
+
+#link:hover {
+  color: #7957d5;
+  background-color: #fafafa;
 }
 
 </style>

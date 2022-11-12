@@ -5,6 +5,11 @@
         <div
             v-if="!this.isLoginOrRegister()"
         >
+          <NavBarWithLogin />
+        </div>
+        <div
+            v-if="this.isLoginOrRegister()"
+        >
           <NavBar />
         </div>
         <div class="columns" style="height: 100%">
@@ -27,12 +32,14 @@
 </template>
 
 <script>
+import NavBarWithLogin from "./components/layout/NavBarWithLogin.vue";
 import NavBar from "./components/layout/NavBar.vue";
 import SideBar from "./components/layout/SideBar.vue";
 
 export default {
   name: "App",
   components: {
+    NavBarWithLogin,
     NavBar,
     SideBar,
   },
