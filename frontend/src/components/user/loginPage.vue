@@ -32,14 +32,12 @@
     </form>
 
     <br>
-    <br>
-    <button id="btnOther" class="button" v-on:click="moveToRemindPassword">Nie pamiętam hasła.</button>
-
-    <br>
 
     <div class="notification is-danger" v-if="remindPasswordError !== ''">
       <p>{{ remindPasswordError }}</p>
     </div>
+
+    <button id="btnOther" class="button" v-on:click="moveToRemindPassword">Nie pamiętam hasła.</button>
 
     <br>
 

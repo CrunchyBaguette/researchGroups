@@ -6,14 +6,14 @@
 
     <form @submit.prevent="submitForm">
       <b-field label="Imię">
-          <b-input v-model="name" 
+          <b-input v-model="name"
               maxlength="30"
               required>
           </b-input>
       </b-field>
 
       <b-field label="Nazwisko">
-          <b-input v-model="surname" 
+          <b-input v-model="surname"
               maxlength="30"
               required>
           </b-input>
@@ -43,7 +43,7 @@
       </b-field>
 
       <b-field label="Powtórz hasło">
-          <b-input type="password" v-model="repeatedPassword"
+          <b-input type="password" v-model="repeatedPassword" 
               password-reveal
               minlength="8"
               maxlength="30"
@@ -59,7 +59,6 @@
       
       <button id="btnRegister" class="button">ZAREJESTRUJ SIĘ</button>
 
-      <br>
       <br>
 
       <router-link :to="{ name: 'login' }" id="link">
@@ -203,5 +202,16 @@ export default {
   color: #7957d5;
   background-color: #fafafa;
 }
+
+/* #b-input {
+  display: flex;
+  height: 40px; 
+  
+} 
+
+.label {
+    
+} */
+
 
 </style>
