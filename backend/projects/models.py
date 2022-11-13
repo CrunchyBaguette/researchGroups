@@ -1,5 +1,5 @@
 from django.db import models
-from ..tutorials.models import Guide
+from ..tutorials.models import Tutorial
 from ..research_groups.models import ResearchGroup
 from django.contrib.auth.models import User
 
@@ -12,7 +12,7 @@ class Project(models.Model):
     description = models.TextField(blank=True)
     deadline = models.DateField(null=True)
     funds = models.DecimalField(decimal_places=2, max_digits=20)
-    guides = models.ManyToManyField(Guide, through="GuideProject")
+    guides = models.ManyToManyField(Tutorial, through="GuideProject")
     research_groups = models.ManyToManyField(ResearchGroup)
 
     class Category(models.TextChoices):
@@ -25,7 +25,7 @@ class Project(models.Model):
 
 class GuideProject(models.Model):
     is_public = models.BooleanField(default=False)
-    guide = models.ForeignKey(Guide, on_delete=models.CASCADE)
+    guide = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True)
 

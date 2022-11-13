@@ -4,7 +4,7 @@ from ..research_groups.models import ResearchGroup
 
 
 # Create your models here.
-class Advertisement(models.Model):
+class Announcement(models.Model):
     title = models.CharField(max_length=120, null=False, blank=False)
     text = models.TextField(null=False, blank=False)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)

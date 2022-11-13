@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 # Create your models here.
-class Guide(models.Model):
+class Tutorial(models.Model):
     title = models.CharField(max_length=120, null=False, blank=False)
     text = models.TextField(null=False, blank=True)
     is_draft = models.BooleanField(default=False)
@@ -20,7 +20,7 @@ class Guide(models.Model):
 
 class Rating(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    guide = models.ForeignKey(Guide, on_delete=models.CASCADE, null=False)
+    guide = models.ForeignKey(Tutorial, on_delete=models.CASCADE, null=False)
 
     class Marks(models.IntegerChoices):
         GREAT = 5

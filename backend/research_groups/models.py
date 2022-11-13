@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from ..tutorials.models import Guide
+from ..tutorials.models import Tutorial
 
 # Create your models here.
 
@@ -12,7 +12,7 @@ class ResearchGroup(models.Model):
     what_we_do = models.TextField(null=False, blank=True)
     contact = models.TextField(null=False, blank=True)
     members = models.ManyToManyField(User, through="ResearchGroupUser")
-    guides = models.ManyToManyField(Guide, through="ResearchGroupGuide")
+    guides = models.ManyToManyField(Tutorial, through="ResearchGroupGuide")
 
     class Category(models.TextChoices):
         MATH = "math", "Math"
@@ -33,6 +33,7 @@ class ResearchGroupUser(models.Model):
         UNSPECIFIED = "un", "Unspecified"
         MEMBER = "mem", "Member"
         MODERATOR = "mod", "Moderator"
+        CREATOR = "cr", "Creator"
 
     role = models.CharField(
         max_length=20, choices=Roles.choices, default=Roles.UNSPECIFIED
@@ -44,4 +45,4 @@ class ResearchGroupUser(models.Model):
 class ResearchGroupGuide(models.Model):
     is_public = models.BooleanField(default=False)
     research_group = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
-    guide = models.ForeignKey(Guide, on_delete=models.CASCADE)
+    guide = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
