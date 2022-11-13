@@ -9,8 +9,8 @@ class Guide(models.Model):
     is_draft = models.BooleanField(default=False)
     created = models.DateField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    editors = models.ManyToManyField(User)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="owner")
+    editors = models.ManyToManyField(User, related_name="editor")
 
     class Types(models.TextChoices):
         DEFAULT = "def", "Default"
