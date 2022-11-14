@@ -14,3 +14,17 @@ Wystarczy odpalić `docker run --name postgres -e POSTGRES_DB=backend -e POSTGRE
 Można to zrobić tak: `docker compose up postgres`
 
 Aby zatrzymać kontener `docker compose down` a żeby przy zatrzymywaniu usunąć dane to `docker compose down -v`
+
+Dodałem jeszcze żeby pgadmin był w przeglądarce jest on na porcie 5050 czyli `localhost:5050` i będzię. Tylko wszystko to podzieliłem na profile żeby nie trzeba było wybierać co chce się uruchamiać
+
+Czyli jak chcecie odpalić pgadmin to zaczyna się `docker compose --profile dev up -d` to postawi tylko bazę i pgAdmin w kontenerach. Backend i front trzeba będzie samemu postawić.
+
+`docker compose --profile prod up -d` postawi wszystko oprócz pgadmina 
+
+`docker compose --profile debug up -d` postawi wszystkie kontenery.
+
+Żeby zamknąć kontenery uruchomione w ten sposób to trzeba wpisać `docker compose -profile profil down` bo samo `docker compose donw` nie zadziała
+
+Oczywiście można dodać na końcu -v aby usunąć dane.
+
+Dane do logowania do pgAdmin to admin@example.com i hasło admin

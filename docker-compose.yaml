@@ -11,6 +11,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    profiles:
+      - prod
+      - debug
 
   postgres:
     image: postgres
@@ -26,12 +29,17 @@ services:
     expose:
       - 5432
     healthcheck:
-      test: [ "CMD", "pg_isready" ]
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 10s
       timeout: 5s
       retries: 5
     ports:
       - "5432:5432"
+    profiles:
+      - prod
+      - dev
+      - debug
+      - db
 
   frontend:
     container_name: frontend
@@ -39,6 +47,29 @@ services:
     build: ./frontend
     ports:
       - "80:80"
+    profiles:
+      - prod
+      - debug
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+       postgres:
+         condition: service_healthy
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin'
+    profiles:
+      - dev
+      - debug
+      - db
 
 volumes:
   db-data:
+  pgadmin-data:
