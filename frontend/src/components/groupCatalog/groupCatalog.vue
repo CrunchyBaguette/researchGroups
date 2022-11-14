@@ -1,16 +1,23 @@
 <template>
   <div id="content">
     <p class="title">Katalog kół naukowych</p>
-    <div id="column-container" class="columns" v-if="test">
+    <div id="column-container" class="columns" v-if="loaded">
       <div id="c1" class="column is-two-thirds">
-        <groupTile
-          :groupName="researchGroups[0].name"
-          style="float: left; margin: 10px"
-        />
-        <groupTile
-          :groupName="researchGroups[1].name"
-          style="float: right; margin: 10px"
-        />
+        <div
+          v-for="(researchGroup, index) in researchGroups"
+          :key="researchGroup"
+        >
+          <groupTile
+            v-if="index % 2 == 0"
+            :groupName="researchGroup.name"
+            style="float: left; margin: 10px"
+          />
+          <groupTile
+            v-else
+            :groupName="researchGroup.name"
+            style="float: right; margin: 10px"
+          />
+        </div>
       </div>
       <div id="c2" class="column"></div>
     </div>
@@ -29,7 +36,7 @@ export default {
 
   data() {
     return {
-      test: false,
+      loaded: false,
     };
   },
 
@@ -45,7 +52,7 @@ export default {
 
   mounted() {
     // this.test ponieważ przed renderem należy poczekać na dane
-    this.getResearchGroups().then(() => (this.test = true));
+    this.getResearchGroups().then(() => (this.loaded = true));
   },
 };
 </script>
