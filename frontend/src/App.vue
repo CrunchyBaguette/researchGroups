@@ -1,12 +1,16 @@
 <template>
   <div id="app">
-    <div class="columns" style="height: 100%">
-      <div class="column">
+    <div class="columns" style="height: inherit">
+      <div class="column" style="height: inherit">
         <div>
           
           <NavBar :loginOrRegister="this.isLoginOrRegister()" />
         </div>
-        <div class="columns" style="height: 100%">
+        <div class="columns" style="height: inherit;
+                                    padding-top: 52px;
+                                    width: inherit;
+                                    margin: auto;
+                                    margin-top: -52px !important;">
           <div
             id="sidebar"
             class="column is-2"
@@ -14,7 +18,9 @@
           >
             <SideBar />
           </div>
-          <div class="column">
+          <div class="column" style="height: inherit;
+                              overflow-y: auto;
+                              width: 100%;">
             <div id="content">
               <router-view />
             </div>
@@ -47,6 +53,7 @@ export default {
 html,
 body {
   height: 100%;
+  overflow: hidden;
 }
 
 #navbar {
@@ -75,8 +82,8 @@ body {
 #content {
   padding: 10px;
   height: 100%;
+  width: 100%;
   position: relative;
-  overflow: auto;
   word-wrap: anywhere;
   white-space: normal;
 }
