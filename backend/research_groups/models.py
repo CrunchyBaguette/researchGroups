@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-from ..tutorials.models import Tutorial
+from backend.tutorials.models import Tutorial
+from backend.common.models import Link
+
 
 # Create your models here.
 
@@ -62,3 +64,11 @@ class ResearchGroupPostComment(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     added = models.DateTimeField(auto_now=True)
     post = models.ForeignKey(ResearchGroupPost, on_delete=models.CASCADE)
+
+
+class ProjectDisk(Link):
+    project = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
+
+
+class ProjectLink(Link):
+    project = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
