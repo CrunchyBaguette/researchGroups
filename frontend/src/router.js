@@ -8,6 +8,7 @@ import tutorialCatalog from "@/components/tutorialCatalog/tutorialCatalog"
 import loginPage from "@/components/user/loginPage"
 import registerPage from "@/components/user/registerPage"
 import passwordReminder from "@/components/user/passwordReminder"
+import group from "@/components/groupCatalog/group"
 
 Vue.use(Router);
 
@@ -47,7 +48,12 @@ const router = new Router({
             path: "/login/password-reminder",
             name: "passwordReminder",
             component: passwordReminder,
-        }
+        },
+        {
+            path: "/group",
+            name: "group",
+            component: group,
+        },
     ],
 });
 export default router;

@@ -2,7 +2,7 @@
   <b-menu :activable="false" :accordion="false">
     <b-menu-list label="Szuflada">
       <b-menu-item label="Koła naukowe">
-        <b-menu-item label="Koło 1"></b-menu-item>
+        <b-menu-item label="Koło 1" tag="router-link" to="/group"></b-menu-item>
         <b-menu-item label="Koło 2"></b-menu-item>
       </b-menu-item>
       <b-menu-item label="Projekty">
