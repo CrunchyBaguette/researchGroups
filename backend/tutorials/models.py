@@ -9,8 +9,11 @@ class Tutorial(models.Model):
     is_draft = models.BooleanField(default=False)
     created = models.DateField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="owner")
+    owner = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, related_name="owner"
+    )
     editors = models.ManyToManyField(User, related_name="editor")
+    is_public = models.BooleanField(default=False)
 
     class Types(models.TextChoices):
         DEFAULT = "def", "Default"
