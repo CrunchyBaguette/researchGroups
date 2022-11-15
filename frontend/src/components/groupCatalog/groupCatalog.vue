@@ -3,23 +3,24 @@
     <p class="title">Katalog kół naukowych</p>
     <div id="column-container" class="columns" v-if="loaded">
       <div id="c1" class="column is-two-thirds">
-        <div
-          v-for="(researchGroup, index) in researchGroups"
-          :key="researchGroup"
-        >
-          <groupTile
-            v-if="index % 2 == 0"
-            :groupName="researchGroup.name"
-            style="float: left; margin: 10px"
-          />
-          <groupTile
-            v-else
-            :groupName="researchGroup.name"
-            style="float: right; margin: 10px"
-          />
+        <div class="columns">
+          <div
+            class="column"
+            v-for="researchGroupList in this.splitToTwoColumns(researchGroups)"
+            :key="researchGroupList"
+          >
+            <groupTile
+              v-for="researchGroup in researchGroupList"
+              :key="researchGroup"
+              :groupName="researchGroup.name"
+              style="margin-top: 10px"
+            />
+          </div>
         </div>
       </div>
-      <div id="c2" class="column"></div>
+      <div id="c2" class="column">
+        <groupInfoPanel />
+      </div>
     </div>
   </div>
 </template>
@@ -27,11 +28,13 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import groupTile from "./groupTile.vue";
+import groupInfoPanel from "./groupInfoPanel.vue";
 
 export default {
   name: "groupCatalog",
   components: {
     groupTile,
+    groupInfoPanel,
   },
 
   data() {
@@ -42,6 +45,20 @@ export default {
 
   methods: {
     ...mapActions("researchGroup", ["getResearchGroups"]),
+    splitToTwoColumns(groups) {
+      let leftColumn = [];
+      let rightColumn = [];
+
+      for (let i = 0; i < groups.length; i++) {
+        if (i % 2 == 0) {
+          leftColumn.push(groups[i]);
+        } else {
+          rightColumn.push(groups[i]);
+        }
+      }
+
+      return [leftColumn, rightColumn];
+    },
   },
 
   computed: {
