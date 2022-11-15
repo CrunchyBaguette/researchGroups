@@ -66,9 +66,9 @@ class ResearchGroupPostComment(models.Model):
     post = models.ForeignKey(ResearchGroupPost, on_delete=models.CASCADE)
 
 
-class ProjectDisk(Link):
+class ResearchGroupDisk(Link):
     project = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
 
 
-class ProjectLink(Link):
+class ResearchGroupLink(Link):
     project = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
