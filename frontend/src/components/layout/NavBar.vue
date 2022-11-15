@@ -8,6 +8,7 @@
         />
       </b-navbar-item>
     </template>
+
     <template #start>
       <b-navbar-item :to="{ name: 'groupCatalog' }" tag="router-link">
         Koła naukowe
@@ -19,8 +20,8 @@
         Poradniki
       </b-navbar-item>
     </template>
-
-    <template #end>
+    
+    <template #end v-if="!loginOrRegister">
       <b-navbar-item tag="div">
         <div class="buttons">
           <b-button
@@ -42,6 +43,7 @@
 <script>
 export default {
   name: "NavBar",
+  props: ['loginOrRegister'],
 };
 </script>
 
