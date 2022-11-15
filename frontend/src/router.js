@@ -7,6 +7,7 @@ import projectCatalog from "@/components/projectCatalog/projectCatalog"
 import tutorialCatalog from "@/components/tutorialCatalog/tutorialCatalog"
 import loginPage from "@/components/user/loginPage"
 import registerPage from "@/components/user/registerPage"
+import passwordReminder from "@/components/user/passwordReminder"
 
 Vue.use(Router);
 
@@ -42,6 +43,11 @@ const router = new Router({
             name: "login",
             component: loginPage,
         },
+        {
+            path: "/login/password-reminder",
+            name: "passwordReminder",
+            component: passwordReminder,
+        }
     ],
 });
 export default router;

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-from ..tutorials.models import Tutorial
+from backend.tutorials.models import Tutorial
+from backend.common.models import Link
+
 
 # Create your models here.
 
@@ -46,3 +48,27 @@ class ResearchGroupGuide(models.Model):
     is_public = models.BooleanField(default=False)
     research_group = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
     guide = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
+
+
+class ResearchGroupPost(models.Model):
+    title = models.CharField(max_length=120, blank=False)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    text = models.TextField(blank=True)
+    added = models.DateTimeField(auto_now=True)
+    edited = models.DateTimeField(auto_now_add=True)
+    research_group = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
+
+
+class ResearchGroupPostComment(models.Model):
+    test = models.TextField(blank=False)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    added = models.DateTimeField(auto_now=True)
+    post = models.ForeignKey(ResearchGroupPost, on_delete=models.CASCADE)
+
+
+class ResearchGroupDisk(Link):
+    project = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
+
+
+class ResearchGroupLink(Link):
+    project = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)

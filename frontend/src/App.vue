@@ -2,7 +2,10 @@
   <div id="app">
     <div class="columns" style="height: 100%">
       <div class="column">
-        <NavBar />
+        <div>
+          
+          <NavBar :loginOrRegister="this.isLoginOrRegister()" />
+        </div>
         <div class="columns" style="height: 100%">
           <div
             id="sidebar"
@@ -34,7 +37,7 @@ export default {
   },
   methods: {
     isLoginOrRegister() {
-      return this.$route.name == "login" || this.$route.name == "register";
+      return this.$route.name == "login" || this.$route.name == "register" || this.$route.name == "passwordReminder";
     },
   },
 };

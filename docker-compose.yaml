@@ -8,6 +8,8 @@ services:
     build: .
     ports:
       - "8000:8000"
+    environment:
+      DJANGO_DATABASE: docker
     depends_on:
       postgres:
         condition: service_healthy

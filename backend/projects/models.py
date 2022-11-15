@@ -1,7 +1,8 @@
 from django.db import models
-from ..tutorials.models import Tutorial
-from ..research_groups.models import ResearchGroup
 from django.contrib.auth.models import User
+from backend.tutorials.models import Tutorial
+from backend.research_groups.models import ResearchGroup
+from backend.common.models import Link
 
 
 # Create your models here.
@@ -45,3 +46,27 @@ class ProjectUser(models.Model):
     )
     created = models.DateField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
+
+
+class ProjectPost(models.Model):
+    title = models.CharField(max_length=120, blank=False)
+    text = models.TextField(blank=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    added = models.DateTimeField(auto_now=True)
+    edited = models.DateTimeField(auto_now_add=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+
+class ProjectPostComment(models.Model):
+    test = models.TextField(blank=False)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    added = models.DateTimeField(auto_now=True)
+    post = models.ForeignKey(ProjectPost, on_delete=models.CASCADE)
+
+
+class ProjectDisk(Link):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+
+class ProjectLink(Link):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
