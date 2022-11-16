@@ -8,7 +8,9 @@ import tutorialCatalog from "@/components/tutorialCatalog/tutorialCatalog"
 import loginPage from "@/components/user/loginPage"
 import registerPage from "@/components/user/registerPage"
 import passwordReminder from "@/components/user/passwordReminder"
-import group from "@/components/groupCatalog/group"
+import groupPanel from "@/components/groupCatalog/groupPanel"
+import groupTutorials from "@/components/tutorialCatalog/groupTutorials"
+import forum from "@/components/forum/forum"
 
 Vue.use(Router);
 
@@ -25,6 +27,11 @@ const router = new Router({
             component: groupCatalog,
         },
         {
+            path: "/group-panel",
+            name: "groupPanel",
+            component: groupPanel,
+        },
+        {
             path: "/project-catalog",
             name: "projectCatalog",
             component: projectCatalog,
@@ -33,6 +40,16 @@ const router = new Router({
             path: "/tutorial-catalog",
             name: "tutorialCatalog",
             component: tutorialCatalog,
+        },
+        {
+            path: "/group-tutorials",
+            name: "groupTutorials",
+            component: groupTutorials,
+        },
+        {
+            path: "/forum",
+            name: "forum",
+            component: forum,
         },
         {
             path: "/register",
@@ -49,11 +66,7 @@ const router = new Router({
             name: "passwordReminder",
             component: passwordReminder,
         },
-        {
-            path: "/group",
-            name: "group",
-            component: group,
-        },
+
     ],
 });
 export default router;
