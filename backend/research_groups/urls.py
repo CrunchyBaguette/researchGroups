@@ -7,6 +7,4 @@ router = routers.DefaultRouter()
 
 router.register("research-group", ResearchGroupViewSet)
 
-urlpatterns = [
-    path("", include(router.urls)),
-]
+urlpatterns = router.urls
