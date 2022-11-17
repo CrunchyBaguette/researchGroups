@@ -206,11 +206,9 @@ export default {
 
 <template>
   <modal
+      title="Wiadomość"
       @close="$emit('close')">
       <div slot="body">
-        <h1 class="title">Wiadomość</h1>
-    
-        <br>
 
         <!-- <form @submit.prevent="submitForm"> -->
         <form @submit.prevent="onSubmit">
@@ -244,7 +242,7 @@ export default {
 </template>
 
 <script>
-import modal from '@/components/layout/Modal.vue'
+import modal from '@/components/popup/Modal.vue'
 
 export default {
   name: "Popup",
@@ -282,5 +280,10 @@ export default {
 </script>
 
 <style>
+/* .title {
+  line-height: .8;
+  margin-bottom: 0px;
+} */
+
 
 </style>

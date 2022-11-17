@@ -17,6 +17,7 @@
           </div>
           <div class="column">
             <div id="content">
+              <button class="btn btnPrimary" @click="Popup = !Popup">Modal with form + validate</button>
               <Popup 
                   v-if="Popup"
                   @close="Popup = false"/>
@@ -32,7 +33,7 @@
 <script>
 import NavBar from "./components/layout/NavBar.vue";
 import SideBar from "./components/layout/SideBar.vue";
-import Popup from "./components/layout/Popup.vue";
+import Popup from "./components/popup/Popup.vue";
 
 export default {
   name: "App",
@@ -40,6 +41,11 @@ export default {
     NavBar,
     SideBar,
     Popup,
+  },
+  data() {
+    return {
+      Popup: false,
+    }
   },
   methods: {
     isLoginOrRegister() {
