@@ -2,12 +2,12 @@
   <div id="group-tile">
     <div class="groupTileContainer">
       <div class="groupTileTitleContainer">
-        <p class="groupTileTitle">{{ groupName }}</p>
-        <p class="groupTileCategory">Category</p>
+        <p class="groupTileTitle">{{ group.name }}</p>
+        <p class="groupTileCategory">{{ group.category }}</p>
       </div>
       <div class="groupTileDescContainer">
         <p class="groupTileDesc">
-          DescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDesc
+          {{ group.description }}
         </p>
       </div>
     </div>
@@ -19,7 +19,7 @@ export default {
   name: "groupTile",
 
   props: {
-    groupName: { type: String },
+    group: { type: Object },
   },
 };
 </script>
@@ -27,8 +27,8 @@ export default {
 <style>
 #group-tile {
   border-radius: 25px;
-  background-color: yellow;
-  color: blue;
+  background-color: rgb(196, 196, 196);
+  color: black;
   border: 5px solid black;
   width: 100%;
   height: 150px;
@@ -56,6 +56,7 @@ export default {
 }
 
 .groupTileCategory {
+  color: rgb(139, 139, 139);
   padding-right: 5px;
   text-align: right;
   font-weight: bold;

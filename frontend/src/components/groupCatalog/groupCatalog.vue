@@ -7,19 +7,20 @@
           <div
             class="column"
             v-for="researchGroupList in this.splitToTwoColumns(researchGroups)"
-            :key="researchGroupList"
+            :key="researchGroupList[0].name"
           >
             <groupTile
               v-for="researchGroup in researchGroupList"
-              :key="researchGroup"
-              :groupName="researchGroup.name"
-              style="margin-top: 10px"
+              :key="researchGroup.name"
+              :group="researchGroup"
+              style="margin-top: 10px; cursor: pointer"
+              @click.native="cliced(researchGroup)"
             />
           </div>
         </div>
       </div>
       <div id="c2" class="column">
-        <groupInfoPanel />
+        <groupInfoPanel :researchGroup="chosenResearchGroup" />
       </div>
     </div>
   </div>
@@ -40,6 +41,7 @@ export default {
   data() {
     return {
       loaded: false,
+      chosenResearchGroup: null,
     };
   },
 
@@ -58,6 +60,11 @@ export default {
       }
 
       return [leftColumn, rightColumn];
+    },
+
+    cliced(researchGroup) {
+      console.log(researchGroup.id);
+      this.chosenResearchGroup = researchGroup;
     },
   },
 
@@ -81,12 +88,15 @@ export default {
 }
 
 #c1 {
-  background-color: aquamarine;
+  border: 5px solid black;
+  background-color: white;
   overflow: auto;
 }
 
 #c2 {
-  background-color: rgb(255, 73, 204);
+  border: 5px solid black;
+  background-color: rgb(196, 196, 196);
+  overflow: auto;
 }
 
 #column-container {
