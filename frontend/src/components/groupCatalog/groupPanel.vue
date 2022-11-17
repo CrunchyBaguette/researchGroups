@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1 class="title">Koło naukowe X</h1>
+        <h1 class="title" id="title">Koło naukowe X</h1>
         <p class="p-category">Informatyka</p>
         <br>
         <div class="columns">
@@ -33,13 +33,19 @@
               </b-menu-list>
             </b-menu>
           </div>
+          <Popup/>
         </div>
     </div>
 </template>
 
 <script>
+// import Popup from "./components/popup/Popup.vue";
+
 export default {
   name: "groupPanel",
+  // components: {
+  //   Popup,
+  // },
   data() {
     return {
       aboutUs: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci sit, dolor rerum repudiandae accusamus porro ea cum! Corrupti laboriosam facere debitis libero deserunt minus at, iure consequuntur eaque nesciunt nostrum exercitationem praesentium, molestias aliquam perferendis rem enim porro illum recusandae possimus nobis inventore. Ut placeat, exercitationem quas officia laudantium esse nobis blanditiis doloremque est eius quia fugit architecto ea deleniti animi consequuntur quis molestiae nulla commodi non facere quae distinctio aperiam? Esse dolorum ex illum tempora, neque labore explicabo pariatur odio accusamus impedit nesciunt eius similique quaerat consequuntur laudantium. Eveniet nulla omnis eligendi velit ut. Officia cupiditate fugit assumenda aliquam minima cumque perspiciatis dignissimos sapiente non. Ea repellendus sequi beatae esse illum, nulla voluptatem, ratione dolorum ducimus maxime ab minus veritatis optio illo quis amet voluptate obcaecati modi voluptatibus accusantium. Repudiandae laudantium nesciunt non omnis obcaecati quis iusto, dolorem laboriosam animi labore unde, quasi cumque libero? Sunt excepturi iste ipsum suscipit ex eveniet rerum! Magnam numquam impedit voluptatum culpa esse recusandae non optio laboriosam ipsum odit dicta pariatur rerum nobis, iure nostrum adipisci. At tempore quisquam non! Vero reprehenderit nostrum officiis quasi. Eaque quibusdam quaerat adipisci veritatis commodi pariatur beatae tenetur quae. Accusamus quo excepturi nam repellendus quis laborum quas suscipit? Aperiam incidunt dolore voluptas saepe praesentium quibusdam! Corrupti quas quaerat repellat, quia similique velit molestias. Recusandae sapiente sit quisquam laborum deleniti veritatis repellendus, magnam praesentium delectus inventore eum. Natus adipisci iusto ducimus error ipsum, ea neque, aliquid inventore odio cupiditate libero, dolor nulla? Cum ipsa totam officia obcaecati fugit, vel quae reprehenderit qui ducimus explicabo. Omnis ipsam doloremque cumque rem. Placeat voluptates vero eum sapiente quo, minus provident laborum saepe maiores quae necessitatibus alias ratione sint? Sed facere aspernatur ratione blanditiis! Porro commodi tempore voluptates eaque. Sunt est aspernatur sint error veritatis iusto aliquam voluptate quaerat rerum unde accusantium iste natus incidunt illo velit tempora dolorum ipsa et nostrum optio ratione nobis, temporibus qui! Ipsa, omnis officiis eveniet a cupiditate voluptas eos ducimus eius nostrum ab quos recusandae autem dicta possimus maxime aut quas dolor doloribus quia. Pariatur numquam doloribus officia voluptates ut quasi provident illum itaque ab quod! Obcaecati magnam molestiae nisi similique, amet praesentium reprehenderit itaque velit, consequuntur quos nam qui, architecto excepturi repudiandae ratione! Esse consequuntur, dolor laboriosam eaque, neque fugit a quam incidunt eos placeat quae nesciunt provident. Itaque veritatis non labore repellendus recusandae excepturi placeat. Itaque dolorem eveniet, assumenda explicabo ex delectus voluptatum beatae?',
@@ -120,8 +126,13 @@ export default {
       const button = document.createElement('button');
       button.textContent = 'Wyślij emaila';
       button.classList.add('btn-email');
+      // button.onclick = "showPopup";
       div.appendChild(button);
       container.append(h2, p, br, div);
+    },
+    showPopup() {
+      //const div = document.createElement('div');
+      //Popup
     }
   }
 };
@@ -139,7 +150,18 @@ export default {
 } 
 
 .title {
+  /* padding-bottom: 8px; 
+  text-decoration: none; */
   text-align: center;
+  /* color: #333;
+  font-size: 2.15rem;
+  font-weight: 650; 
+  line-height: 1.125; */
+}
+
+#title {
+  line-height: 1.6;
+  margin-bottom: 0px;
 }
 
 .p-category {
@@ -175,12 +197,6 @@ export default {
   border: 5px solid rgb(203, 203, 203);
 }
 
-@media screen and (min-width: 1408px) {
-.container:not(.is-max-desktop):not(.is-max-widescreen) {
-    max-width: 1644px !important;
-}
-}
-
 .btn-email {
   width: 50%;
   background-color: #7957d5;
@@ -206,6 +222,12 @@ export default {
   font-size: 1.5rem !important;
   line-height: 1.2;
   
+}
+
+@media screen and (min-width: 1408px) {
+.container:not(.is-max-desktop):not(.is-max-widescreen) {
+    max-width: 1644px !important;
+}
 }
 
 </style>
