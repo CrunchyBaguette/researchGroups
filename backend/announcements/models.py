@@ -12,7 +12,6 @@ class Announcement(models.Model):
     research_group_id = models.ForeignKey(
         ResearchGroup, on_delete=models.SET_NULL, null=True
     )
-    is_public = models.BooleanField(default=False)
 
     class Type(models.TextChoices):
         DEFAULT = "def", "Default"
