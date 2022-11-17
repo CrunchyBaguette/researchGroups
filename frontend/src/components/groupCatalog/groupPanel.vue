@@ -12,7 +12,6 @@
             <button type="button" class="button" id="btn" v-on:click="showMembers">Członkowie</button>
             <button type="button" class="button" id="btn" v-on:click="showContact">Kontakt</button>
             <b-button id="btn" tag="router-link" to="/group-tutorials">Materiały dydaktyczne</b-button>
-            <button type="button" class="button" id="btn" v-on:click="showProjectForYou">Projekt dla Ciebie</button>
           </div>
           <div class="column is-7" id="centerDiv">
             <h2 class="centerDivHeader">O nas</h2>
@@ -33,7 +32,7 @@
               </b-menu-list>
             </b-menu>
           </div>
-          <Popup/>
+          <!-- <Popup/> -->
         </div>
     </div>
 </template>
@@ -52,7 +51,6 @@ export default {
       whatWeDo: '',
       members: '',
       contact: '',
-      projectForYou: '',
       errors: []
     }
   },
@@ -63,8 +61,6 @@ export default {
     showAboutUs() {
       //this.aboutUs = 'O nas Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci sit, dolor rerum repudiandae accusamus porro ea cum! Corrupti laboriosam facere debitis libero deserunt minus at, iure consequuntur eaque nesciunt nostrum exercitationem praesentium, molestias aliquam perferendis rem enim porro illum recusandae possimus nobis inventore. Ut placeat, exercitationem quas officia laudantium esse nobis blanditiis doloremque est eius quia fugit architecto ea deleniti animi consequuntur quis molestiae nulla commodi non facere quae distinctio aperiam? Esse dolorum ex illum tempora, neque labore explicabo pariatur odio accusamus impedit nesciunt eius similique quaerat consequuntur laudantium. Eveniet nulla omnis eligendi velit ut. Officia cupiditate fugit assumenda aliquam minima cumque perspiciatis dignissimos sapiente non. Ea repellendus sequi beatae esse illum, nulla voluptatem, ratione dolorum ducimus maxime ab minus veritatis optio illo quis amet voluptate obcaecati modi voluptatibus accusantium. Repudiandae laudantium nesciunt non omnis obcaecati quis iusto, dolorem laboriosam animi labore unde, quasi cumque libero? Sunt excepturi iste ipsum suscipit ex eveniet rerum! Magnam numquam impedit voluptatum culpa esse recusandae non optio laboriosam ipsum odit dicta pariatur rerum nobis, iure nostrum adipisci. At tempore quisquam non! Vero reprehenderit nostrum officiis quasi. Eaque quibusdam quaerat adipisci veritatis commodi pariatur beatae tenetur quae. Accusamus quo excepturi nam repellendus quis laborum quas suscipit? Aperiam incidunt dolore voluptas saepe praesentium quibusdam! Corrupti quas quaerat repellat, quia similique velit molestias. Recusandae sapiente sit quisquam laborum deleniti veritatis repellendus, magnam praesentium delectus inventore eum. Natus adipisci iusto ducimus error ipsum, ea neque, aliquid inventore odio cupiditate libero, dolor nulla? Cum ipsa totam officia obcaecati fugit, vel quae reprehenderit qui ducimus explicabo. Omnis ipsam doloremque cumque rem. Placeat voluptates vero eum sapiente quo, minus provident laborum saepe maiores quae necessitatibus alias ratione sint? Sed facere aspernatur ratione blanditiis! Porro commodi tempore voluptates eaque. Sunt est aspernatur sint error veritatis iusto aliquam voluptate quaerat rerum unde accusantium iste natus incidunt illo velit tempora dolorum ipsa et nostrum optio ratione nobis, temporibus qui! Ipsa, omnis officiis eveniet a cupiditate voluptas eos ducimus eius nostrum ab quos recusandae autem dicta possimus maxime aut quas dolor doloribus quia. Pariatur numquam doloribus officia voluptates ut quasi provident illum itaque ab quod! Obcaecati magnam molestiae nisi similique, amet praesentium reprehenderit itaque velit, consequuntur quos nam qui, architecto excepturi repudiandae ratione! Esse consequuntur, dolor laboriosam eaque, neque fugit a quam incidunt eos placeat quae nesciunt provident. Itaque veritatis non labore repellendus recusandae excepturi placeat. Itaque dolorem eveniet, assumenda explicabo ex delectus voluptatum beatae?'
       const container = document.getElementById('centerDiv');
-      // container.replaceChildren();
-      // container.insertAdjacentText('beforeend', this.aboutUs);
       container.replaceChildren();
 
       const p = document.createElement('p');
@@ -99,7 +95,7 @@ export default {
       container.append(h2, p);
     },
     showContact() {
-      this.contact = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci sit, dolor'
+      this.contact = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci sit, dolor. Być może stworzymy projekt dla Ciebie!'
       const container = document.getElementById('centerDiv');
       container.replaceChildren();
       
@@ -108,31 +104,30 @@ export default {
       const h2 = document.createElement('h2');
       h2.textContent = 'Kontakt';
       h2.classList.add('centerDivHeader');
-      container.append(h2, p);
-    },
-    showProjectForYou() {
-      this.projectForYou = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Napisz do nas maila, a na pewno odpowiemy'
-      const container = document.getElementById('centerDiv');
-      container.replaceChildren();
-
-      const p = document.createElement('p');
-      p.textContent = this.projectForYou;
-      const h2 = document.createElement('h2');
-      h2.textContent = 'Stworzymy projekt dla Ciebie';
-      h2.classList.add('centerDivHeader');
       const br = document.createElement('br');
-      const div = document.createElement('div');
-      div.classList.add('div-email');
-      const button = document.createElement('button');
-      button.textContent = 'Wyślij emaila';
-      button.classList.add('btn-email');
-      // button.onclick = "showPopup";
-      div.appendChild(button);
-      container.append(h2, p, br, div);
+      //const div = document.createElement('div');
+      //div.classList.add('div-email');
+      // const button = document.createElement('button');
+      // button.textContent = 'WYŚLIJ EMAILA';
+      // button.classList.add('btn-email');
+      // div.appendChild(button);
+      // container.append(h2, p, br, div);
+      const pop = document.createElement('div');
+      pop.onclick = "showPopup";
+      pop.textContent = "WYŚLIJ EMAILA";
+      pop.classList.add('popup'); 
+      const popContent = document.createElement('span');
+      popContent.textContent = "Formularz";
+      popContent.classList.add("popuptext");
+      pop.appendChild(popContent);
+      container.append(h2, p, br, pop);
+      // innerHtml
     },
     showPopup() {
       //const div = document.createElement('div');
       //Popup
+      var popContent = document.getElementsByClassName("popuptext");
+      popContent.classList.toggle("show");
     }
   }
 };
@@ -228,6 +223,63 @@ export default {
 .container:not(.is-max-desktop):not(.is-max-widescreen) {
     max-width: 1644px !important;
 }
+}
+
+
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
 }
 
 </style>

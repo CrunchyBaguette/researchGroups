@@ -13,9 +13,13 @@
             v-if="!this.isLoginOrRegister()"
           >
             <SideBar />
+            <Popup />
           </div>
           <div class="column">
             <div id="content">
+              <Popup 
+                  v-if="Popup"
+                  @close="Popup = false"/>
               <router-view />
             </div>
           </div>
@@ -28,12 +32,14 @@
 <script>
 import NavBar from "./components/layout/NavBar.vue";
 import SideBar from "./components/layout/SideBar.vue";
+import Popup from "./components/layout/Popup.vue";
 
 export default {
   name: "App",
   components: {
     NavBar,
     SideBar,
+    Popup,
   },
   methods: {
     isLoginOrRegister() {
