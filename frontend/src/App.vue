@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div id="app">
     <div class="columns" style="height: 100%">
       <div class="column">
@@ -33,13 +33,15 @@
 <script>
 import NavBar from "./components/layout/NavBar.vue";
 import SideBar from "./components/layout/SideBar.vue";
-import Popup from "./components/popup/Popup.vue";
+import Modal from "@/components/popup/Modal.vue";
+import Popup from "@/components/popup/Popup.vue";
 
 export default {
   name: "App",
   components: {
     NavBar,
     SideBar,
+    Modal,
     Popup,
   },
   data() {
@@ -92,4 +94,31 @@ body {
   word-wrap: anywhere;
   white-space: normal;
 }
-</style>
+
+.demo {
+    text-align: center;
+}
+
+ul.func-list {
+    margin-bottom: 30px;
+
+    
+}
+
+ul.func-list li {
+        margin-bottom: 20px;
+}
+
+.wrapper-content {
+    padding-top: 80px;
+}
+
+.modal__btn-list {
+    display: flex;
+    justify-content: center;
+}
+
+.modal__btn-list .btn {
+        margin: 0 20px;
+    }
+</style> -->

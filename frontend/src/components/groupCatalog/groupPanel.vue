@@ -226,7 +226,7 @@ export default {
 }
 
 
-.popup {
+/* .popup {
   position: relative;
   display: inline-block;
   cursor: pointer;
@@ -237,6 +237,7 @@ export default {
 }
 
 /* The actual popup (appears on top) */
+/*
 .popup .popuptext {
   visibility: hidden;
   width: 160px;
@@ -253,6 +254,7 @@ export default {
 }
 
 /* Popup arrow */
+/*
 .popup .popuptext::after {
   content: "";
   position: absolute;
@@ -263,15 +265,17 @@ export default {
   border-style: solid;
   border-color: #555 transparent transparent transparent;
 }
-
+*/
 /* Toggle this class when clicking on the popup container (hide and show the popup) */
+/*
 .popup .show {
   visibility: visible;
   -webkit-animation: fadeIn 1s;
   animation: fadeIn 1s;
 }
-
+*/
 /* Add animation (fade in the popup) */
+/*
 @-webkit-keyframes fadeIn {
   from {opacity: 0;}
   to {opacity: 1;}
@@ -280,6 +284,7 @@ export default {
 @keyframes fadeIn {
   from {opacity: 0;}
   to {opacity:1 ;}
-}
+} 
+*/
 
 </style>
