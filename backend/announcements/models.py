@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from ..research_groups.models import ResearchGroup
+from backend.research_groups.models import ResearchGroup
 
 
 # Create your models here.
@@ -12,3 +12,8 @@ class Announcement(models.Model):
     research_group_id = models.ForeignKey(
         ResearchGroup, on_delete=models.SET_NULL, null=True
     )
+
+    class Type(models.TextChoices):
+        DEFAULT = "def", "Default"
+
+    ann_type = models.CharField(max_length=20, choices=Type.choices, default=Type.DEFAULT)
