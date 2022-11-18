@@ -4,13 +4,18 @@
     <div id="column-container" class="columns" v-if="loaded">
       <div id="c1" class="column is-two-thirds">
         <div class="columns">
-          <div
-            class="column"
-            v-for="researchGroupList in this.splitToTwoColumns(researchGroups)"
-            :key="researchGroupList[0].name"
-          >
+          <div class="column">
             <groupTile
-              v-for="researchGroup in researchGroupList"
+              v-for="researchGroup in this.splitToTwoColumns(researchGroups)[0]"
+              :key="researchGroup.name"
+              :group="researchGroup"
+              style="margin-top: 10px; cursor: pointer"
+              @click.native="cliced(researchGroup)"
+            />
+          </div>
+          <div class="column">
+            <groupTile
+              v-for="researchGroup in this.splitToTwoColumns(researchGroups)[1]"
               :key="researchGroup.name"
               :group="researchGroup"
               style="margin-top: 10px; cursor: pointer"
