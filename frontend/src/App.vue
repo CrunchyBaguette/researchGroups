@@ -13,23 +13,9 @@
             v-if="!this.isLoginOrRegister()"
           >
             <SideBar />
-            <Popup />
           </div>
           <div class="column">
             <div id="content">
-              <div class="wrapper">
-                <div class="wrapper-content">
-                    <div class="container">  
-                        <div class="modal__btn-list">
-                            <button class="btn btnPrimary" @click="modalValidate = !modalValidate">Modal with form + validate</button>
-                        </div>
-                        <modalValidate 
-                            v-if="modalValidate"
-                            @close="modalValidate = false"/>
-
-                      </div>
-                </div>
-              </div>
               <router-view />
             </div>
           </div>
@@ -42,19 +28,12 @@
 <script>
 import NavBar from "./components/layout/NavBar.vue";
 import SideBar from "./components/layout/SideBar.vue";
-import Popup from "@/components/popup/Popup.vue";
 
 export default {
   name: "App",
   components: {
     NavBar,
     SideBar,
-    Popup,
-  },
-  data() {
-    return {
-      Popup: false,
-    }
   },
   methods: {
     isLoginOrRegister() {
@@ -102,7 +81,7 @@ body {
   white-space: normal;
 }
 
-.wrapper-content {
+/* .wrapper-content {
     padding-top: 80px;
 }
 
@@ -113,6 +92,6 @@ body {
 
 .modal__btn-list .btn {
     margin: 0 20px;
-}
+} */
 
 </style> 
