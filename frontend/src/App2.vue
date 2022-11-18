@@ -1,31 +1,22 @@
 <template>
-    <div class="wrapper">
-        <div class="wrapper-content">
-            <section>
-                <div class="container">
-                    
-                    <div class="modal__btn-list">
-                        <button class="btn btnPrimary" @click="modalValidate = !modalValidate">Modal with form + validate</button>
-                    </div>
-
-                    <!-- Modal with validate -->
-                    <modalValidate 
-                        v-if="modalValidate"
-                        @close="modalValidate = false"/>
-
-                </div>
-            </section>
+    
+    <div class="container">  
+        <div class="modal__btn-list">
+            <button class="btn btnPrimary" @click="modalValidate = !modalValidate">Wyślij wiadomość</button>
         </div>
+        <modalValidate 
+            v-if="modalValidate"
+            @close="modalValidate = false"/>
     </div>
 </template>
 
 <script>
-import modal from '@/components/popup/Modal.vue'
 import modalValidate from '@/components/popup/Popup.vue'
 
 export default {
+    name: "App",
     components: {
-        modal, modalValidate
+        modalValidate
     },
     data () {
         return {
@@ -37,18 +28,16 @@ export default {
 
 <style>
 
-.wrapper-content {
+.container {
     padding-top: 80px;
 }
 
 .modal__btn-list {
     display: flex;
-    justify-content: center;
-
-    
+    justify-content: center;  
 }
 
 .modal__btn-list .btn {
-        margin: 0 20px;
+    margin: 0 20px;
 }
 </style>

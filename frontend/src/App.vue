@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div id="app">
     <div class="columns" style="height: 100%">
       <div class="column">
@@ -17,10 +17,19 @@
           </div>
           <div class="column">
             <div id="content">
-              <button class="btn btnPrimary" @click="Popup = !Popup">Modal with form + validate</button>
-              <Popup 
-                  v-if="Popup"
-                  @close="Popup = false"/>
+              <div class="wrapper">
+                <div class="wrapper-content">
+                    <div class="container">  
+                        <div class="modal__btn-list">
+                            <button class="btn btnPrimary" @click="modalValidate = !modalValidate">Modal with form + validate</button>
+                        </div>
+                        <modalValidate 
+                            v-if="modalValidate"
+                            @close="modalValidate = false"/>
+
+                      </div>
+                </div>
+              </div>
               <router-view />
             </div>
           </div>
@@ -33,7 +42,6 @@
 <script>
 import NavBar from "./components/layout/NavBar.vue";
 import SideBar from "./components/layout/SideBar.vue";
-import Modal from "@/components/popup/Modal.vue";
 import Popup from "@/components/popup/Popup.vue";
 
 export default {
@@ -41,7 +49,6 @@ export default {
   components: {
     NavBar,
     SideBar,
-    Modal,
     Popup,
   },
   data() {
@@ -95,30 +102,17 @@ body {
   white-space: normal;
 }
 
-.demo {
-    text-align: center;
-}
-
-ul.func-list {
-    margin-bottom: 30px;
-
-    
-}
-
-ul.func-list li {
-        margin-bottom: 20px;
-}
-
 .wrapper-content {
     padding-top: 80px;
 }
 
 .modal__btn-list {
     display: flex;
-    justify-content: center;
+    justify-content: center;  
 }
 
 .modal__btn-list .btn {
-        margin: 0 20px;
-    }
-</style> -->
+    margin: 0 20px;
+}
+
+</style> 
