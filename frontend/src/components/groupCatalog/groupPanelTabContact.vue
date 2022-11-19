@@ -4,11 +4,11 @@
         <div class="inner">
             {{ content }}
             <div class="container-send-email">  
-            <button class="button" id="btnSendEmail" @click="popupEmail = !popupEmail">Wyślij wiadomość</button>
-            
-            <popupEmail 
-                v-if="popupEmail"
-                @close="popupEmail = false"/>
+                <button class="button" id="btnSendEmail" @click="popupEmail = !popupEmail">WYŚLIJ WIADOMOŚĆ</button>
+                
+                <popupEmail 
+                    v-if="popupEmail"
+                    @close="popupEmail = false"/>
             </div>
         </div>
     </div>
@@ -53,6 +53,7 @@ data() {
 #btnSendEmail {
   display: flex;
   width: 50%;
+  font-size: 20px;
   background-color: #7957d5;
   border-color: transparent;
   font-weight: bold;

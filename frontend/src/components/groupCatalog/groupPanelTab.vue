@@ -34,6 +34,7 @@ props: {
     height: 93%; 
     width: 100%; 
     overflow: auto;
+    font-size: 20px;
 }
 
 </style>
