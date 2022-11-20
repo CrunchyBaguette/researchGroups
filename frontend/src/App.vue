@@ -13,7 +13,7 @@
           >
             <SideBar />
           </div>
-          <div class="column" style="background-color: rgb(165, 255, 179)">
+          <div class="column" style="background-color: #fad6a5">
             <div id="content">
               <router-view />
             </div>
@@ -96,5 +96,4 @@ body {
 .modal__btn-list .btn {
     margin: 0 20px;
 } */
-
 </style> 
