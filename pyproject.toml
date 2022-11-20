@@ -13,16 +13,11 @@ djangorestframework = "^3.14.0"
 markdown = "^3.4.1"
 django-filter = "^22.1"
 django-cors-headers = "^3.13.0"
-python-dotenv = "^0.21.0"
-django-email-log = "^1.2.0"
+django-extensions = "^3.2.1"
+faker = "^15.3.2"
+pandas = "^1.5.1"
+sqlalchemy = "^1.4.44"
 
-
-[tool.poetry.group.dev.dependencies]
-black = {version = "^22.10.0", allow-prereleases = true}
-
-[tool.poetry.group.test.dependencies]
-pytest-django = "^4.5.2"
-pytest-order = "^1.0.1"
 
 [build-system]
 requires = ["poetry-core"]
