@@ -83,4 +83,18 @@ body {
   word-wrap: anywhere;
   white-space: normal;
 }
-</style>
+
+/* .wrapper-content {
+    padding-top: 80px;
+}
+
+.modal__btn-list {
+    display: flex;
+    justify-content: center;  
+}
+
+.modal__btn-list .btn {
+    margin: 0 20px;
+} */
+
+</style> 
