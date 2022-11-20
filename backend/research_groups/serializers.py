@@ -11,13 +11,7 @@ class ResearchGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ResearchGroup
-        fields = [
-            "id",
-            "name",
-            "about_us",
-            "category",
-            "members",
-        ]
+        fields = "__all__"
 
     def create(self, validated_data):
         print(validated_data)

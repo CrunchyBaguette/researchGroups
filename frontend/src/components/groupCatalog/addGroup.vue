@@ -166,14 +166,23 @@ export default {
           about_us: this.groupAboutUs,
           category: this.groupCategory,
           members: this.groupMembers,
-        });
+        })
+          .then(() => {
+            this.$buefy.toast.open({
+              message: "Pomyślnie dodano koło naukowe",
+              type: "is-success",
+            });
 
-        this.$buefy.toast.open({
-          message: "Pomyślnie dodano koło naukowe!",
-          type: "is-success",
-        });
-
-        this.$router.replace(this.$route.query.redirect || "/group-catalog");
+            this.$router.replace(
+              this.$route.query.redirect || "/group-catalog"
+            );
+          })
+          .catch((err) => {
+            this.$buefy.toast.open({
+              message: "Błąd przy dodawaniu koła naukowego",
+              type: "is-danger",
+            });
+          });
 
         this.groupName = "";
         this.groupAboutUs = "";
