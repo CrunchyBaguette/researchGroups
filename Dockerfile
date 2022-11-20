@@ -19,7 +19,6 @@ ENV YOUR_ENV=${YOUR_ENV} \
 RUN pip3 install "poetry==$POETRY_VERSION"
 
 COPY poetry.lock pyproject.toml manage.py /researchGroups/
-COPY .env /researchGroups/
 
 RUN poetry config virtualenvs.create false \
   && poetry install $(test "$YOUR_ENV" == production && echo "--no-dev") --no-interaction --no-ansi --only main
