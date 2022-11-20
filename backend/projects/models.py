@@ -58,7 +58,7 @@ class ProjectPost(models.Model):
 
 
 class ProjectPostComment(models.Model):
-    test = models.TextField(blank=False)
+    text = models.TextField(blank=False)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     added = models.DateTimeField(auto_now=True)
     post = models.ForeignKey(ProjectPost, on_delete=models.CASCADE)
