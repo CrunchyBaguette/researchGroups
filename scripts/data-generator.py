@@ -3,7 +3,10 @@ import pandas as pd
 from sqlalchemy import create_engine
 from collections import defaultdict
 
+# Aby wywołać generator trzeba w folderze researchGroup wpisać "python manage.py runscript data-generator"
+# falga do printowania danych do konsoli
 is_printing = False
+
 number_of_links = 10
 number_of_announcements = 10
 number_of_projects = 10
