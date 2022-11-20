@@ -181,14 +181,13 @@ export default {
       }
     },
     addToMemberList(memberEmail) {
-      // if (
-      //   !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-      //     memberEmail
-      //   )
-      // ) {
-      //   this.invalidEmailMessage = "Podaj poprawny E-mail";
-      // } else
-      if (this.groupMembers.includes(memberEmail)) {
+      if (
+        !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+          memberEmail
+        )
+      ) {
+        this.invalidEmailMessage = "Podaj poprawny E-mail";
+      } else if (this.groupMembers.includes(memberEmail)) {
         this.invalidEmailMessage = "Już podano dany E-mail";
       } else {
         this.groupMembers.push(memberEmail);
