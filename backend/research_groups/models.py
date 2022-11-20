@@ -9,7 +9,6 @@ from backend.common.models import Link
 
 class ResearchGroup(models.Model):
     name = models.CharField(max_length=120, null=False, blank=False)
-    description = models.TextField(null=False, blank=True)
     about_us = models.TextField(null=False, blank=True)
     what_we_do = models.TextField(null=False, blank=True)
     contact = models.TextField(null=False, blank=True)

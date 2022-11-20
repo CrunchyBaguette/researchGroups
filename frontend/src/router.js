@@ -3,12 +3,13 @@ import Router from 'vue-router'
 
 import announcements from "@/components/announcements/announcements"
 import groupCatalog from "@/components/groupCatalog/groupCatalog"
+import addGroup from "@/components/groupCatalog/addGroup"
 import projectCatalog from "@/components/projectCatalog/projectCatalog"
 import tutorialCatalog from "@/components/tutorialCatalog/tutorialCatalog"
 import loginPage from "@/components/user/loginPage"
 import registerPage from "@/components/user/registerPage"
 import passwordReminder from "@/components/user/passwordReminder"
-import groupPanel from "@/components/groupCatalog/groupPanel"
+import groupPanel from "@/components/groupPanel/groupPanel"
 import groupTutorials from "@/components/tutorialCatalog/groupTutorials"
 import forum from "@/components/forum/forum"
 
@@ -25,6 +26,11 @@ const router = new Router({
             path: "/group-catalog",
             name: "groupCatalog",
             component: groupCatalog,
+        },
+        {
+            path: "/add-group",
+            name: "addGroup",
+            component: addGroup,
         },
         {
             path: "/group-panel",

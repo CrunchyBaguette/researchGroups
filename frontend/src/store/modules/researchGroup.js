@@ -19,11 +19,22 @@ const actions = {
             }).catch((err) => reject(err));
         });
     },
+    addResearchGroup({ commit }, group) {
+        return new Promise((resolve, reject) => {
+            researchGroupService.postGroup(group).then((response) => {
+                commit("addResearchGroup", group);
+                resolve(response);
+            }).catch((err) => reject(err));
+        });
+    }
 };
 
 const mutations = {
     setResearchGroups(state, data) {
         state.researchGroups = data;
+    },
+    addResearchGroup(state, group) {
+        state.researchGroups.push(group)
     }
 };
 

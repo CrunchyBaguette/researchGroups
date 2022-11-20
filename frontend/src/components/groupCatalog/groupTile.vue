@@ -1,5 +1,5 @@
 <template>
-  <div id="group-tile">
+  <div id="group-tile" class="box">
     <div class="groupTileContainer">
       <div class="groupTileTitleContainer">
         <p class="groupTileTitle">{{ group.name }}</p>
@@ -7,7 +7,7 @@
       </div>
       <div class="groupTileDescContainer">
         <p class="groupTileDesc">
-          {{ group.description }}
+          {{ group.about_us }}
         </p>
       </div>
     </div>
@@ -26,10 +26,8 @@ export default {
 
 <style>
 #group-tile {
-  border-radius: 25px;
   background-color: rgb(196, 196, 196);
   color: black;
-  border: 5px solid black;
   width: 100%;
   height: 150px;
   text-align: center;
@@ -38,7 +36,6 @@ export default {
 .groupTileContainer {
   width: auto;
   height: 85%;
-  margin: 10px;
 }
 
 .groupTileTitleContainer {

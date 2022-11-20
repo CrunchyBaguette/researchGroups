@@ -1,72 +1,60 @@
 <template>
-  <div class="register-container">
+  <div class="box register-container">
     <h1 class="title">Rejestracja</h1>
-  
-    <br>
 
     <form @submit.prevent="submitForm">
       <b-field label="Imię">
-          <b-input v-model="name"
-              maxlength="30"
-              required>
-          </b-input>
+        <b-input v-model="name" maxlength="30" required> </b-input>
       </b-field>
 
       <b-field label="Nazwisko">
-          <b-input v-model="surname"
-              maxlength="30"
-              required>
-          </b-input>
+        <b-input v-model="surname" maxlength="30" required> </b-input>
       </b-field>
 
       <b-field label="Email">
-          <b-input type="email" v-model="email"
-              maxlength="30"
-              required>
-          </b-input>
+        <b-input type="email" v-model="email" maxlength="30" required>
+        </b-input>
       </b-field>
 
       <b-field label="Login">
-          <b-input v-model="login"
-              maxlength="30" 
-              required>
-          </b-input>
+        <b-input v-model="login" maxlength="30" required> </b-input>
       </b-field>
 
       <b-field label="Hasło">
-          <b-input type="password" v-model="password"
-              password-reveal
-              minlength="8"
-              maxlength="30"
-              required>
-          </b-input>
+        <b-input
+          type="password"
+          v-model="password"
+          password-reveal
+          minlength="8"
+          maxlength="30"
+          required
+        >
+        </b-input>
       </b-field>
 
       <b-field label="Powtórz hasło">
-          <b-input type="password" v-model="repeatedPassword" 
-              password-reveal
-              minlength="8"
-              maxlength="30"
-              required>
-          </b-input>
+        <b-input
+          type="password"
+          v-model="repeatedPassword"
+          password-reveal
+          minlength="8"
+          maxlength="30"
+          required
+        >
+        </b-input>
       </b-field>
 
       <div class="notification is-danger" v-if="errors.length">
         <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
       </div>
 
-      <br>
-      
       <button id="btnRegister" class="button">ZAREJESTRUJ SIĘ</button>
 
-      <br>
-
       <router-link :to="{ name: 'login' }" id="link">
-          Masz już konto? &nbsp;<p class="p-login">Zaloguj się. </p>
+        Masz już konto? &nbsp;
+        <p class="p-login">Zaloguj się.</p>
       </router-link>
-
-    </form> 
-
+    </form>
   </div>
 </template>
 
@@ -78,22 +66,22 @@ export default {
   name: "registerPage",
   data() {
     return {
-      name: '',
-      surname: '',
-      email: '',
-      login: '',
-      password: '',
-      repeatedPassword: '',
-      errors: []
-    }
+      name: "",
+      surname: "",
+      email: "",
+      login: "",
+      password: "",
+      repeatedPassword: "",
+      errors: [],
+    };
   },
   mounted() {
-      document.title = 'Zarejestruj się'
+    document.title = "Zarejestruj się";
   },
   methods: {
     submitForm() {
-      this.errors = []
-      
+      this.errors = [];
+
       // if (this.surname === '') {
       //   this.errors.push('Nie podałeś nazwiska!')
       // }
@@ -107,7 +95,7 @@ export default {
       //   this.errors.push('Nie podałeś hasła!')
       // }
       if (this.password !== this.repeatedPassword) {
-        this.errors.push('Hasła się nie zgadzają!')
+        this.errors.push("Hasła się nie zgadzają!");
       }
 
       if (!this.errors.length) {
@@ -147,8 +135,8 @@ export default {
           })
           */
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -161,7 +149,7 @@ export default {
 
 .register-container {
   margin: 0 auto;
-  max-width: 320px;
+  max-width: 400px;
 }
 
 .title {
@@ -179,7 +167,7 @@ export default {
   border-color: transparent;
   font-weight: bold;
   color: white;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 #btnRegister:hover {
@@ -194,7 +182,7 @@ export default {
   line-height: 1.5;
   color: #4a4a4a;
   border: none;
-  transition: .3s;
+  transition: 0.3s;
   cursor: pointer;
 }
 
@@ -212,6 +200,4 @@ export default {
 .label {
     
 } */
-
-
 </style>
