@@ -22,7 +22,7 @@
     </template>
 
     <template #end v-if="!loginOrRegister">
-      <b-navbar-item tag="div">
+      <b-navbar-item tag="div" v-if="!isAuthenticated">
         <div class="buttons">
           <b-button
             type="is-primary"
@@ -36,14 +36,40 @@
           >
         </div>
       </b-navbar-item>
+      <b-navbar-item tag="div" v-else>
+        <p style="margin-right: 10px; font-weight: bold">
+          Witaj {{ authUser.username }}!
+        </p>
+        <div class="buttons">
+          <b-button type="is-primary" @click="logout()">
+            <strong>Wyloguj</strong>
+          </b-button>
+        </div>
+      </b-navbar-item>
     </template>
   </b-navbar>
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "NavBar",
   props: ["loginOrRegister"],
+
+  methods: {
+    ...mapActions("auth", ["logOut"]),
+    logout() {
+      this.logOut();
+      if (this.$route.path != "/") {
+        this.$router.replace(this.$route.query.redirect || "/");
+      }
+    },
+  },
+
+  computed: {
+    ...mapGetters("auth", ["isAuthenticated", "authUser"]),
+  },
 };
 </script>
 

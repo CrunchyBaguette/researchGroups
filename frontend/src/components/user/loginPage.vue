@@ -61,6 +61,7 @@
 
 <script>
 //import axios from 'axios'
+import { mapActions } from "vuex";
 
 export default {
   name: "loginPage",
@@ -76,6 +77,7 @@ export default {
     document.title = "Zaloguj się";
   },
   methods: {
+    ...mapActions("auth", ["getTokenPairs"]),
     async submitLoginForm() {
       this.loginBtnErrors = [];
       // if (this.login === '') {
@@ -87,6 +89,27 @@ export default {
       // axios.defaults.headers.common["Authorization"] = ""
       // localStorage.removeItem("token")
       if (!this.loginBtnErrors.length) {
+        this.getTokenPairs({
+          username: this.login,
+          password: this.password,
+        })
+          .then(() => {
+            this.$buefy.toast.open({
+              message: "Zalogowano pomyślnie",
+              type: "is-success",
+            });
+
+            this.$router.replace(this.$route.query.redirect || "/");
+          })
+          .catch((err) => {
+            this.$buefy.toast.open({
+              message:
+                "Błąd przy logowaniu (" +
+                (err.response ? err.response.status : 500) +
+                ")",
+              type: "is-danger",
+            });
+          });
         /*
         const formData = {
           login: this.username,
