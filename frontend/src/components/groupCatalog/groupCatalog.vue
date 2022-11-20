@@ -1,8 +1,19 @@
 <template>
   <div id="content">
-    <p class="title">Katalog kół naukowych</p>
+    <div style="width: 100%">
+      <p class="title" style="float: left">Katalog kół naukowych</p>
+      <b-button
+        tag="router-link"
+        :to="{ name: 'addGroup' }"
+        rounded
+        size="is-medium"
+        style="float: right; margin-top: 10px; margin-right: 20px"
+        type="is-success"
+        >Dodaj nowe koło naukowe</b-button
+      >
+    </div>
     <div id="column-container" class="columns" v-if="loaded">
-      <div id="c1" class="column is-two-thirds">
+      <div id="c1" class="box column is-two-thirds">
         <div class="columns">
           <div class="column">
             <groupTile
@@ -10,7 +21,7 @@
               :key="researchGroup.name"
               :group="researchGroup"
               style="margin-top: 10px; cursor: pointer"
-              @click.native="cliced(researchGroup)"
+              @click.native="chooseGroup(researchGroup)"
             />
           </div>
           <div class="column">
@@ -19,12 +30,12 @@
               :key="researchGroup.name"
               :group="researchGroup"
               style="margin-top: 10px; cursor: pointer"
-              @click.native="cliced(researchGroup)"
+              @click.native="chooseGroup(researchGroup)"
             />
           </div>
         </div>
       </div>
-      <div id="c2" class="column">
+      <div id="c2" class="box column">
         <groupInfoPanel :researchGroup="chosenResearchGroup" />
       </div>
     </div>
@@ -67,7 +78,7 @@ export default {
       return [leftColumn, rightColumn];
     },
 
-    cliced(researchGroup) {
+    chooseGroup(researchGroup) {
       console.log(researchGroup.id);
       this.chosenResearchGroup = researchGroup;
     },
@@ -93,13 +104,13 @@ export default {
 }
 
 #c1 {
-  border: 5px solid black;
   background-color: white;
   overflow: auto;
 }
 
 #c2 {
-  border: 5px solid black;
+  margin-left: 10px;
+  margin-bottom: 1.5rem;
   background-color: rgb(196, 196, 196);
   overflow: auto;
 }

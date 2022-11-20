@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import announcements from "@/components/announcements/announcements"
 import groupCatalog from "@/components/groupCatalog/groupCatalog"
+import addGroup from "@/components/groupCatalog/addGroup"
 import projectCatalog from "@/components/projectCatalog/projectCatalog"
 import tutorialCatalog from "@/components/tutorialCatalog/tutorialCatalog"
 import loginPage from "@/components/user/loginPage"
@@ -22,6 +23,11 @@ const router = new Router({
             path: "/group-catalog",
             name: "groupCatalog",
             component: groupCatalog,
+        },
+        {
+            path: "/add-group",
+            name: "addGroup",
+            component: addGroup,
         },
         {
             path: "/project-catalog",

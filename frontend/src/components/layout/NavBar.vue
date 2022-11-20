@@ -20,7 +20,7 @@
         Poradniki
       </b-navbar-item>
     </template>
-    
+
     <template #end v-if="!loginOrRegister">
       <b-navbar-item tag="div">
         <div class="buttons">
@@ -43,7 +43,7 @@
 <script>
 export default {
   name: "NavBar",
-  props: ['loginOrRegister'],
+  props: ["loginOrRegister"],
 };
 </script>
 
