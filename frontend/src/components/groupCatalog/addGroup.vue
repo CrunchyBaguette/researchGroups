@@ -179,7 +179,10 @@ export default {
           })
           .catch((err) => {
             this.$buefy.toast.open({
-              message: "Błąd przy dodawaniu koła naukowego",
+              message:
+                "Błąd przy dodawaniu koła naukowego (" +
+                (err.response ? err.response.status : 500) +
+                ")",
               type: "is-danger",
             });
           });
