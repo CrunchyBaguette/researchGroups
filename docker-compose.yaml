@@ -1,4 +1,4 @@
-version: "1"
+version: "3"
 
 services:
   backend:
@@ -6,13 +6,16 @@ services:
     container_name: backend
     command: "poetry run python3 ./manage.py runserver 0.0.0.0:8000"
     build: .
+    env_file: .env
     ports:
       - "8000:8000"
     environment:
-      DJANGO_DATABASE: docker
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_USER: ${DATABASE_USER}
+      DATABASE_HOST: postgres
     depends_on:
-      postgres:
-        condition: service_healthy
+      - postgres
     profiles:
       - prod
       - debug
@@ -22,12 +25,13 @@ services:
     container_name: postgres
     restart: always
     user: postgres
+    env_file: .env
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: "backend"
-      POSTGRES_PASSWORD: "pleasechangeme"
-      POSTGRES_USER: "admin"
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_USER: ${DATABASE_USER}
     expose:
       - 5432
     healthcheck:
@@ -67,8 +71,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
       PGADMIN_DEFAULT_PASSWORD: admin
     depends_on:
-      postgres:
-        condition: service_healthy
+     - postgres
     volumes:
       - pgadmin-data:/var/lib/pgadmin'
     profiles:
