@@ -1,13 +1,22 @@
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
 from backend.research_groups.serializers import ResearchGroupSerializer
 from backend.research_groups.models import ResearchGroup
 from django.contrib.auth.models import User
 
+from backend.common.views import PermissionPolicyMixin
+
 # Create your views here.
-class ResearchGroupViewSet(viewsets.ModelViewSet):
+class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     queryset = ResearchGroup.objects.all()
     serializer_class = ResearchGroupSerializer
+    permission_classes_per_method = {
+        "create": [
+            IsAuthenticated,
+        ]
+    }
 
     def create(self, request, *args, **kwargs):
         # Obecnie, w przypadku gdy nie ma użytkownika z podanym mailem, tworzony jest
