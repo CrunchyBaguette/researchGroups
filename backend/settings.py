@@ -11,15 +11,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-<<<<<<< HEAD
-=======
 load_dotenv("./.env")
 
->>>>>>> 77c7704d173b27ee3c874884351159ad57ca8c6b
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -34,24 +32,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-<<<<<<< HEAD
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
-
-    'rest_framework',
-    'backend.tutorials',
-    'backend.research_groups',
-    'backend.announcements',
-    'backend.projects',
-
-    'corsheaders',
-    'django_extensions',
-=======
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -68,7 +48,7 @@ INSTALLED_APPS = [
     "backend.projects",
     "backend.users",
     "corsheaders",
->>>>>>> 77c7704d173b27ee3c874884351159ad57ca8c6b
+    "django_extensions",
 ]
 
 REST_FRAMEWORK = {
@@ -118,23 +98,6 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-<<<<<<< HEAD
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'backend',
-        'USER': 'admin',
-        'PASSWORD': 'pleasechangeme',
-        'HOST': 'localhost',
-        'PORT': '5432'
-    },
-    'docker': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'backend',
-        'USER': 'admin',
-        'PASSWORD': 'pleasechangeme',
-        'HOST': 'postgres',
-        'PORT': '5432'
-=======
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": os.environ["DATABASE_NAME"],
@@ -142,12 +105,11 @@ DATABASES = {
         "PASSWORD": os.environ["DATABASE_PASSWORD"],
         "HOST": os.getenv("DATABASE_HOST", "localhost"),
         "PORT": os.getenv("DATABASE_PORT", "5432"),
->>>>>>> 77c7704d173b27ee3c874884351159ad57ca8c6b
     }
 }
 
-default_database = os.environ.get('DJANGO_DATABASE', 'default')
-DATABASES['default'] = DATABASES[default_database]
+default_database = os.environ.get("DJANGO_DATABASE", "default")
+DATABASES["default"] = DATABASES[default_database]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -172,11 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-<<<<<<< HEAD
-TIME_ZONE = 'UTC'
-=======
 TIME_ZONE = "Europe/Warsaw"
->>>>>>> 77c7704d173b27ee3c874884351159ad57ca8c6b
 
 USE_I18N = True
 
@@ -190,9 +148,6 @@ STATIC_URL = "static/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
-<<<<<<< HEAD
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-=======
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 EMAIL_BACKEND = "email_log.backends.EmailBackend"
@@ -201,4 +156,3 @@ EMAIL_HOST = os.environ["EMAIL_HOST"]
 EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
 EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
 EMAIL_PORT = os.environ["EMAIL_PORT"]
->>>>>>> 77c7704d173b27ee3c874884351159ad57ca8c6b

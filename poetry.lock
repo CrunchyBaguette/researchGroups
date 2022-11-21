@@ -49,6 +49,17 @@ python-versions = "*"
 Django = ">=2.2.0"
 
 [[package]]
+name = "django-extensions"
+version = "3.2.1"
+description = "Extensions for Django"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+Django = ">=3.2"
+
+[[package]]
 name = "django-filter"
 version = "22.1"
 description = "Django-filter is a reusable Django application for allowing users to filter querysets dynamically."
@@ -261,7 +272,7 @@ python-versions = ">=2"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "ad556d5e42614a99f3fa185e44b7e35ce63dce64b0c4f4ee95aafbf9c591d275"
+content-hash = "8a3142291a48bd541e8639b3cea63c3daaec6c67cfc75ce4987f4cecfd9ec33e"
 
 [metadata.files]
 asgiref = [
@@ -279,6 +290,10 @@ django-cors-headers = [
 django-email-log = [
     {file = "django-email-log-1.2.0.tar.gz", hash = "sha256:8afe645ab8026face03ed01779afbd2c6ef7ed7129350c099010279d26855550"},
     {file = "django_email_log-1.2.0-py3-none-any.whl", hash = "sha256:bb1cee0c7b136e84d8672fe9c77ae50bf86b3a4c59e3a28044a559826e242b6f"},
+]
+django-extensions = [
+    {file = "django-extensions-3.2.1.tar.gz", hash = "sha256:2a4f4d757be2563cd1ff7cfdf2e57468f5f931cc88b23cf82ca75717aae504a4"},
+    {file = "django_extensions-3.2.1-py3-none-any.whl", hash = "sha256:421464be390289513f86cb5e18eb43e5dc1de8b4c27ba9faa3b91261b0d67e09"},
 ]
 django-filter = [
     {file = "django-filter-22.1.tar.gz", hash = "sha256:ed473b76e84f7e83b2511bb2050c3efb36d135207d0128dfe3ae4b36e3594ba5"},
