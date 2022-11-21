@@ -6,15 +6,17 @@
             <div class="div-title">
                 <h1 class="title" id="title">Koło naukowe X</h1>
                 <div id="col">
-                    <b-button class="btn-edit btn-edit-group-name">
-                        <!-- <img src="../../assets/edit-3.jpg" alt="Edytuj"> -->
+                    <b-button id="btnPencil">
+                      <mdicon name="lead-pencil"/>
                     </b-button>
                 </div>
             </div>
             <div class="div-title">
                 <p class="p-category">Informatyka</p>
                 <div id="col">
-                    <b-button class="btn-edit" id="btnEditGroupType"></b-button>
+                    <b-button id="btnPencil">
+                      <mdicon name="lead-pencil"/>
+                    </b-button>
                 </div>
             </div>
             <br />
@@ -230,27 +232,15 @@
     align-items: center;
   }
 
-  .btn-edit {
-    background-repeat: no-repeat;
-  }
-
-  .btn-edit-group-name {
-    background-position: 50% 3px;
-    background-size: contain;
-    background-image: url("../../assets/edit-3.jpg");
-  }
-
-  #btnEditGroupType {
-    padding-left: 5px;
-    height: 22px;
-    background-size: cover;
-    background-image: url("../../assets/edit-6.jpg");
-  }
-
   .div-title {
     display: flex; 
     flex-direction: row; 
     justify-content: center;
+  }
+
+  #btnPencil {
+    background: transparent;
+    border: none;
   }
   
   @media screen and (min-width: 1408px) {

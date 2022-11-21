@@ -4,7 +4,9 @@
         <div class="div-title">
             <h2 class="centerDivHeader">{{ title }}</h2>
             <div id="col">
-                <b-button class="btn-edit" id="btnEditGroupTab"></b-button>
+                <b-button id="btnPencil">
+                    <mdicon name="lead-pencil"/>
+                </b-button>
             </div>
         </div>
         <div class="inner">
@@ -88,21 +90,15 @@ data() {
     align-items: center;
 }
 
-.btn-edit {
-    background-repeat: no-repeat;
-}
-
-#btnEditGroupTab {
-    /* background-size: cover; */
-    height: 30px;
-    background-position: 50%;
-    background-image: url("../../assets/edit-7.jpg");
-}
-
 .div-title {
     display: flex; 
     flex-direction: row; 
     justify-content: center;
+}
+
+#btnPencil {
+    background: transparent;
+    border: none;
 }
 
 </style>
