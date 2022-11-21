@@ -10,6 +10,7 @@ import loginPage from "@/components/user/loginPage"
 import registerPage from "@/components/user/registerPage"
 import passwordReminder from "@/components/user/passwordReminder"
 import groupPanel from "@/components/groupPanel/groupPanel"
+import editGroup from "@/components/groupPanel/editGroup"
 import groupTutorials from "@/components/tutorialCatalog/groupTutorials"
 import forum from "@/components/forum/forum"
 
@@ -31,6 +32,11 @@ const router = new Router({
             path: "/add-group",
             name: "addGroup",
             component: addGroup,
+        },
+        {
+            path: "/edit-group",
+            name: "editGroup",
+            component: editGroup,
         },
         {
             path: "/group-panel",

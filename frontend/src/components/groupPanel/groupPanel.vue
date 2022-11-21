@@ -1,8 +1,25 @@
 <template>
   <div class="container">
-    <h1 class="title" id="title">Koło naukowe X</h1>
-    <p class="p-category">Informatyka</p>
-    <br />
+    <div class="columns">
+      <div class="column is-3">
+      </div>
+      <div class="column is-6">
+        <h1 class="title" id="title">Koło naukowe X</h1>
+        <p class="p-category">Informatyka</p>
+        <br />
+      </div>
+      <div class="column" id="col">
+        <b-button
+        id="title edit"
+        tag="router-link"
+        :to="{ name: 'editGroup' }"
+        rounded
+        size="is-medium"
+        type="is-success"
+        >Edytuj koło naukowe</b-button
+      >
+      </div>
+    </div>
     <div class="columns">
       <div class="box column is-3">
         <b-button id="btn" size="is-medium" tag="router-link" to="/forum"
@@ -203,6 +220,12 @@ export default {
 .div-email {
   display: flex;
   justify-content: center;
+}
+
+#col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media screen and (min-width: 1408px) {
