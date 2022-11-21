@@ -13,6 +13,7 @@ class ResearchGroupViewSet(viewsets.ModelViewSet):
         # Obecnie, w przypadku gdy nie ma użytkownika z podanym mailem, tworzony jest
         # nowy ale później można tu zaimplementować rozsyłanie maili
         members = request.data["members"]
+
         for member in members:
             if not User.objects.filter(email=member).exists():
                 User.objects.create_user(

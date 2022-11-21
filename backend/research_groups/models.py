@@ -59,7 +59,7 @@ class ResearchGroupPost(models.Model):
 
 
 class ResearchGroupPostComment(models.Model):
-    test = models.TextField(blank=False)
+    text = models.TextField(blank=False)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     added = models.DateTimeField(auto_now=True)
     post = models.ForeignKey(ResearchGroupPost, on_delete=models.CASCADE)
