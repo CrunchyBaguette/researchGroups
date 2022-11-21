@@ -13,16 +13,12 @@ djangorestframework = "^3.14.0"
 markdown = "^3.4.1"
 django-filter = "^22.1"
 django-cors-headers = "^3.13.0"
-<<<<<<< HEAD
-django-extensions = "^3.2.1"
-faker = "^15.3.2"
-pandas = "^1.5.1"
-sqlalchemy = "^1.4.44"
-=======
 python-dotenv = "^0.21.0"
 django-email-log = "^1.2.0"
 djangorestframework-simplejwt = "^5.2.2"
->>>>>>> 77c7704d173b27ee3c874884351159ad57ca8c6b
+Faker = "^15.3.2"
+pandas = "^1.5.1"
+SQLAlchemy = "^1.4.44"
 
 
 [build-system]
