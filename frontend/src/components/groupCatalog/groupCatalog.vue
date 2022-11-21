@@ -4,7 +4,7 @@
       <p class="title" style="float: left">Katalog kół naukowych</p>
       <b-button
         tag="router-link"
-        :to="{ name: 'addGroup' }"
+        :to="isAuthenticated ? { name: 'addGroup' } : { name: 'login' }"
         rounded
         size="is-medium"
         style="float: right; margin-top: 10px; margin-right: 20px"
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import groupTile from "./groupTile.vue";
 import groupInfoPanel from "./groupInfoPanel.vue";
 
@@ -88,6 +88,7 @@ export default {
     ...mapState({
       researchGroups: (state) => state.researchGroup.researchGroups,
     }),
+    ...mapGetters("auth", ["isAuthenticated"]),
   },
 
   mounted() {
