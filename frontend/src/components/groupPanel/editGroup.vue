@@ -4,9 +4,35 @@
         <div class="column is-3"></div>
         <div class="column is-6">
             <div class="div-title">
-                <h1 class="title" id="title">Koło naukowe X</h1>
+                <h1 class="title" id="title" v-if="!edit">{{ groupName }}</h1>
+                <div class="div-edit" v-else>
+                  <!-- <b-field label="Nazwa koła">
+                    <b-input v-model="groupName" maxlength="120" required>{{ groupName }}</b-input>
+                  </b-field> -->
+                  <b-field
+                  :message="invalidGroupName"
+                  :type="invalidGroupName ? 'is-danger' : ''"
+                  label="Nazwa koła"
+                >
+                  <b-input
+                    @focus="invalidGroupName = ''"
+                    v-model="groupName"
+                    placeholder="Nazwa koła"
+                    maxlength="120"
+                    required
+                  ></b-input>
+                  <p class="control">
+                    <b-button
+                      class="button is-primary is-success"
+                      @click="submitForm"
+                      >Dodaj członka</b-button
+                    >
+                  </p>
+                </b-field>
+                  <!-- <button id="btnSave" @click="submitForm">Zapisz</button>     -->
+                </div>
                 <div id="col">
-                    <b-button id="btnPencil">
+                    <b-button id="btnPencil" @click="handleClick">
                       <mdicon name="lead-pencil"/>
                     </b-button>
                 </div>
@@ -112,6 +138,10 @@
     },
     data() {
       return {
+        beforeEdit: 'Koło naukowe',
+        groupName: 'Koło naukowe',
+        edit: false,
+        invalidGroupName: "",
         selectedTabTitle: "Test",
         selectedTabContent:
           "Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci sit, dolor rerum repudiandae accusamus porro ea cum! Corrupti laboriosam facere debitis libero deserunt minus at, iure consequuntur eaque nesciunt nostrum exercitationem praesentium, molestias aliquam perferendis rem enim porro illum recusandae possimus nobis inventore. Ut placeat, exercitationem quas officia laudantium esse nobis blanditiis doloremque est eius quia fugit architecto ea deleniti animi consequuntur quis molestiae nulla commodi non facere quae distinctio aperiam? Esse dolorum ex illum tempora, neque labore explicabo pariatur odio accusamus impedit nesciunt eius similique quaerat consequuntur laudantium. Eveniet nulla omnis eligendi velit ut. Officia cupiditate fugit assumenda aliquam minima cumque perspiciatis dignissimos sapiente non. Ea repellendus sequi beatae esse illum, nulla voluptatem, ratione dolorum ducimus maxime ab minus veritatis optio illo quis amet voluptate obcaecati modi voluptatibus accusantium. Repudiandae laudantium nesciunt non omnis obcaecati quis iusto, dolorem laboriosam animi labore unde, quasi cumque libero? Sunt excepturi iste ipsum suscipit ex eveniet rerum! Magnam numquam impedit voluptatum culpa esse recusandae non optio laboriosam ipsum odit dicta pariatur rerum nobis, iure nostrum adipisci. At tempore quisquam non! Vero reprehenderit nostrum officiis quasi. Eaque quibusdam quaerat adipisci veritatis commodi pariatur beatae tenetur quae. Accusamus quo excepturi nam repellendus quis laborum quas suscipit? Aperiam incidunt dolore voluptas saepe praesentium quibusdam! Corrupti quas quaerat repellat, quia similique velit molestias. Recusandae sapiente sit quisquam laborum deleniti veritatis repellendus, magnam praesentium delectus inventore eum. Natus adipisci iusto ducimus error ipsum, ea neque, aliquid inventore odio cupiditate libero, dolor nulla? Cum ipsa totam officia obcaecati fugit, vel quae reprehenderit qui ducimus explicabo. Omnis ipsam doloremque cumque rem. Placeat voluptates vero eum sapiente quo, minus provident laborum saepe maiores quae necessitatibus alias ratione sint? Sed facere aspernatur ratione blanditiis! Porro commodi tempore voluptates eaque. Sunt est aspernatur sint error veritatis iusto aliquam voluptate quaerat rerum unde accusantium iste natus incidunt illo velit tempora dolorum ipsa et nostrum optio ratione nobis, temporibus qui! Ipsa, omnis officiis eveniet a cupiditate voluptas eos ducimus eius nostrum ab quos recusandae autem dicta possimus maxime aut quas dolor doloribus quia. Pariatur numquam doloribus officia voluptates ut quasi provident illum itaque ab quod! Obcaecati magnam molestiae nisi similique, amet praesentium reprehenderit itaque velit, consequuntur quos nam qui, architecto excepturi repudiandae ratione! Esse consequuntur, dolor laboriosam eaque, neque fugit a quam incidunt eos placeat quae nesciunt provident. Itaque veritatis non labore repellendus recusandae excepturi placeat. Itaque dolorem eveniet, assumenda explicabo ex delectus voluptatum beatae?",
@@ -141,6 +171,15 @@
         this.selectedTabContent =
           "Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci sit, dolor. Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci sit, dolor rerum repudiandae accusamus porro ea cum! Corrupti laboriosam facere debitis libero deserunt minus at, iure consequuntur eaque nesciunt nostrum exercitationem praesentium, molestias aliquam perferendis rem enim porro illum recusandae possimus nobis inventore. Ut placeat, exercitationem quas officia laudantium esse nobis blanditiis doloremque est eius quia fugit architecto ea deleniti animi consequuntur quis molestiae nulla commodi non facere quae distinctio aperiam? Esse dolorum ex illum tempora, neque labore explicabo pariatur odio accusamus impedit nesciunt eius similique quaerat consequuntur laudantium. Eveniet nulla omnis eligendi velit ut. Officia cupiditate fugit assumenda aliquam minima cumque perspiciatis dignissimos sapiente non. Ea repellendus sequi beatae esse illum, nulla voluptatem, ratione dolorum ducimus maxime ab minus veritatis optio illo quis amet voluptate obcaecati modi voluptatibus accusantium. Repudiandae laudantium nesciunt non omnis obcaecati quis iusto, dolorem laboriosam animi labore unde, quasi cumque libero? Sunt excepturi iste ipsum suscipit ex eveniet rerum! Magnam numquam impedit voluptatum culpa esse recusandae non optio laboriosam ipsum odit dicta pariatur rerum nobis, iure nostrum adipisci. At tempore quisquam non! Vero reprehenderit nostrum officiis quasi. Eaque quibusdam quaerat adipisci veritatis commodi pariatur beatae tenetur quae. Accusamus quo excepturi nam repellendus quis laborum quas suscipit? Aperiam incidunt dolore voluptas saepe praesentium quibusdam! Corrupti quas quaerat repellat, quia similique velit molestias. Recusandae sapiente sit quisquam laborum deleniti veritatis repellendus, magnam praesentium delectus inventore eum. Natus adipisci iusto ducimus error ipsum, ea neque, aliquid inventore odio cupiditate libero, dolor nulla? Cum ipsa totam officia obcaecati fugit, vel quae reprehenderit qui ducimus explicabo. Omnis ipsam doloremque cumque rem. Placeat voluptates vero eum sapiente quo, minus provident laborum saepe maiores quae necessitatibus alias ratione sint? Sed facere aspernatur ratione blanditiis! Porro commodi tempore voluptates eaque. Sunt est aspernatur sint error veritatis iusto aliquam voluptate quaerat rerum unde accusantium iste natus incidunt illo velit tempora dolorum ipsa et nostrum optio ratione nobis, temporibus qui! Ipsa, omnis officiis eveniet a cupiditate voluptas eos ducimus eius nostrum ab quos recusandae autem dicta possimus maxime aut quas dolor doloribus quia. Pariatur numquam doloribus officia voluptates ut quasi provident illum itaque ab quod! Obcaecati magnam molestiae nisi similique, amet praesentium reprehenderit itaque velit, consequuntur quos nam qui, architecto excepturi repudiandae ratione! Esse consequuntur, dolor laboriosam eaque, neque fugit a quam incidunt eos placeat quae nesciunt provident. Itaque veritatis non labore repellendus recusandae excepturi placeat. Itaque dolorem eveniet, assumenda explicabo ex delectus voluptatum beatae? Być może stworzymy projekt dla Ciebie!";
       },
+      handleClick() {
+        this.edit = !this.edit;
+      },
+      submitForm() {
+        if (this.groupName == "") {
+          this.invalidGroupName = "Podaj nazwę koła";
+          this.invalidGroupName = "dsfs"
+        } 
+      }
     },
   };
   </script>
@@ -241,6 +280,30 @@
   #btnPencil {
     background: transparent;
     border: none;
+  }
+
+  .div-edit {
+    margin-right: 5px;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0px 0 1px rgb(10 10 10 / 2%);
+    color: #4a4a4a;
+    background-color: #fff;
+  }
+
+  #btnSave {
+    display: flex;
+    width: 100%;
+    background-color: #7957d5;
+    border-color: transparent;
+    font-weight: bold;
+    color: white;
+    transition: 0.3s;
+  }
+
+  #btnSave:hover {
+    background-color: #7957d5;
+    box-shadow: 0 0 5px #7957d5;
   }
   
   @media screen and (min-width: 1408px) {
