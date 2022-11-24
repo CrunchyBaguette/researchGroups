@@ -1,6 +1,9 @@
 from rest_framework import serializers
 
-from backend.research_groups.models import ResearchGroup
+from backend.research_groups.models import (
+    ResearchGroup,
+    ResearchGroupPost,
+)
 from django.contrib.auth.models import User
 
 
@@ -13,11 +16,20 @@ class ResearchGroupSerializer(serializers.ModelSerializer):
         model = ResearchGroup
         fields = "__all__"
 
-    def create(self, validated_data):
-        print(validated_data)
-        return super().create(validated_data)
+    def validate(self, attrs):
+        if len(attrs["members"]) == 0:
+            raise serializers.ValidationError(
+                "Research group must contain at least one member"
+            )
+        return attrs
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation["category"] = instance.get_category_display()
         return representation
+
+
+class ForumPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResearchGroupPost
+        fields = "__all__"

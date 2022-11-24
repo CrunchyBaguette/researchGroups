@@ -8,7 +8,7 @@ from backend.common.models import Link
 
 
 class ResearchGroup(models.Model):
-    name = models.CharField(max_length=120, null=False, blank=False)
+    name = models.CharField(max_length=120, null=False, blank=False, unique=True)
     about_us = models.TextField(null=False, blank=True)
     what_we_do = models.TextField(null=False, blank=True)
     contact = models.TextField(null=False, blank=True)
@@ -31,14 +31,11 @@ class ResearchGroupUser(models.Model):
     person = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Roles(models.TextChoices):
-        UNSPECIFIED = "un", "Unspecified"
         MEMBER = "mem", "Member"
         MODERATOR = "mod", "Moderator"
         CREATOR = "cr", "Creator"
 
-    role = models.CharField(
-        max_length=20, choices=Roles.choices, default=Roles.UNSPECIFIED
-    )
+    role = models.CharField(max_length=20, choices=Roles.choices, default=Roles.MEMBER)
     created = models.DateField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 
@@ -50,11 +47,11 @@ class ResearchGroupGuide(models.Model):
 
 
 class ResearchGroupPost(models.Model):
-    title = models.CharField(max_length=120, blank=False)
+    title = models.CharField(max_length=120, blank=False, unique=True)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     text = models.TextField(blank=True)
-    added = models.DateTimeField(auto_now=True)
-    edited = models.DateTimeField(auto_now_add=True)
+    added = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True)
     research_group = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
 
 
