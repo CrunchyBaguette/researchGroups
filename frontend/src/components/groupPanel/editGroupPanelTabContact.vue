@@ -4,12 +4,15 @@
         <div class="div-title">
             <h2 class="centerDivHeader">{{ title }}</h2>
             <div id="col">
-                <b-button id="btnPencil">
+                <b-button
+                    id="btnPencil"
+                    @click="changeTabContent"
+                    v-if="!editTabContent">
                     <mdicon name="lead-pencil"/>
                 </b-button>
             </div>
         </div>
-        <div class="inner">
+        <div class="inner" v-if="!editTabContent">
             {{ content }}
             <div class="container-send-email">  
                 <button class="button" id="btnSendEmail" @click="popupEmail = !popupEmail">WYŚLIJ WIADOMOŚĆ</button>
@@ -19,6 +22,27 @@
                     @close="popupEmail = false"/>
             </div>
         </div>
+        <div v-else>
+            <b-field>
+                <b-input
+                    id="editableText" 
+                    type="textarea"
+                    size="is-medium"
+                    :value="changingContent">
+                </b-input>
+            </b-field>
+            <div id="btnsDiv">
+                <p class="control"> <!--sprawdzić styl potem -->
+                    <b-button
+                      id="btnSave"
+                      class="button is-primary is-success"
+                      @click="saveTabContent"
+                      >Zapisz</b-button
+                    >
+                </p>
+                <b-button>Anuluj</b-button>
+            </div>
+        </div>
     </div>
 </template>
   
@@ -26,19 +50,31 @@
 import popupEmail from '@/components/popup/PopupEmail.vue'
 
 export default {
-name: "editGroupPanelTabContact",
-props: {
-    title: {type: String},
-    content: {type: String} 
-},
-components: {
-    popupEmail,
-},
-data() {
-    return {
-        popupEmail: false,
-    }
-},
+    name: "editGroupPanelTabContact",
+    props: {
+        title: {type: String},
+        content: {type: String},
+        changingContent: {type: String}, 
+    },
+    components: {
+        popupEmail,
+    },
+    data() {
+        return {
+            popupEmail: false,
+            //beforeEditTabContent: '...', //przycisk anuluj
+            //changingContent: this.tabContent,
+            editTabContent: false,
+        }
+    },
+    methods: {
+        changeTabContent() {
+            this.editTabContent = !this.editTabContent;
+        },
+        saveTabContent() {
+            this.changeTabContent();
+        },    
+    }, 
 };
 </script>
 
@@ -99,6 +135,16 @@ data() {
 #btnPencil {
     background: transparent;
     border: none;
+}
+
+#btnsDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#editableText {
+    height: 560px;
 }
 
 </style>

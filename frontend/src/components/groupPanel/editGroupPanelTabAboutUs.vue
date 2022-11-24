@@ -15,7 +15,32 @@
             {{ content }}
         </div>
         <div v-else>
-            <b-field>
+            <b-field
+                  :message="aboutUsGiven"
+                  :type="aboutUsGiven ? 'is-danger' : ''"
+                >
+                <b-input
+                    @focus="aboutUsGiven = ''"
+                    placeholder="Wypełnij sekcję o nas"
+                    id="editableText" 
+                    type="textarea"
+                    size="is-medium"
+                    :value="changingContent"
+                  ></b-input>
+            
+            <div id="btnsDiv">
+                <p class="control"> <!-- sprawdzić styl potem -->
+                    <b-button
+                    id="btnSave"
+                    class="button is-primary is-success"
+                    @click="saveTabContent"
+                    >Zapisz</b-button
+                    >
+                </p>
+                <b-button>Anuluj</b-button>
+            </div>
+        </b-field>
+            <!-- <b-field>
                 <b-input
                     id="editableText" 
                     type="textarea"
@@ -24,7 +49,7 @@
                 </b-input>
             </b-field>
             <div id="btnsDiv">
-                <p class="control"> <!--sprawdzić styl potem -->
+                <p class="control"> sprawdzić styl potem
                     <b-button
                       id="btnSave"
                       class="button is-primary is-success"
@@ -32,46 +57,41 @@
                       >Zapisz</b-button
                     >
                 </p>
-                <p class="control">
-                      <b-button
-                        @click="cancelTabContent"
-                        >Anuluj</b-button
-                      >
-                </p>
-            </div>
+                <b-button>Anuluj</b-button>
+            </div> -->
         </div>
     </div>
 </template>
   
 <script>
 export default {
-    name: "editGroupPanelTab",
+    name: "editGroupPanelTabAboutUs",
     props: {
         title: {type: String},
         content: {type: String},
-        changingContent: {type: String},
+        changingContent: {type: String}, 
     },
     data() {
         return {
             //beforeEditTabContent: '...', //przycisk anuluj
             //changingContent: this.tabContent,
             editTabContent: false,
-            selectedTabContent: this.content,
-            selectedTabChangingContent: this.changingContent,
+            aboutUsGiven: "",
         }
     },
     methods: {
         changeTabContent() {
             this.editTabContent = !this.editTabContent;
-        },  
-        saveTabContent() {
-            this.selectedTabContent = this.selectedTabChangingContent;
-            this.changeTabContent();
         },
-        cancelTabContent() {
-            //this.edit
-            this.changeTabContent();
-        },  
+        saveTabContent() {
+            if (this.changingContent === "") {
+                this.aboutUsGiven = "Wypełnij sekcję o nas";
+                console.log('cos')
+            }
+            else {
+                this.changeTabContent();
+            }
+        },    
     }, 
     
 };
