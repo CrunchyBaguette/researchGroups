@@ -17,23 +17,21 @@
                       placeholder="Podaj nazwę koła"
                       maxlength="120"
                     ></b-input>
-                    <p class="control">
-                      <b-button
-                        id="btnSave"
-                        class="button is-primary is-success"
-                        @click="saveGroupName"
-                        >Zapisz</b-button
-                      >
-                    </p>
-                    <p class="control">
-                      <b-button
-                        @click="cancelGroupName"
-                        >Anuluj</b-button
-                      >
-                    </p>
                   </b-field>
+                  <div id="btnsDiv">
+                    <b-button
+                      id="btnSave"
+                      class="button is-primary is-success"
+                      @click="saveGroupName"
+                      >Zapisz</b-button
+                    >
+                    <b-button
+                      @click="cancelGroupName"
+                      >Anuluj</b-button
+                    >
+                  </div>
                 </div>
-                <div id="col">
+                <div id="btnsDiv">
                     <b-button
                       id="btnPencil"
                       @click="changeGroupName"
@@ -58,23 +56,21 @@
                       <option value="Chemia">Chemiczne</option>
 
                     </b-select>
-                    <p class="control">
-                          <b-button
-                            id="btnSave"
-                            class="button is-primary is-success"
-                            @click="saveGroupCategory"
-                            >Zapisz</b-button
-                          >
-                    </p>
-                    <p class="control">
+                  </b-field>
+                  <div id="btnsDiv">
+                      <b-button
+                        id="btnSave"
+                        class="button is-primary is-success"
+                        @click="saveGroupCategory"
+                        >Zapisz</b-button
+                      >
                       <b-button
                         @click="cancelGroupCategory"
                         >Anuluj</b-button
                       >
-                    </p>
-                  </b-field>
+                  </div>
                 </div>
-                <div id="col">
+                <div id="btnsDiv">
                     <b-button
                       id="btnPencil" 
                       @click="changeGroupCategory"
@@ -94,7 +90,7 @@
           >
           <br />
           <b-button id="btn" size="is-medium" v-on:click="showAboutUs"
-            >O nas</b-button
+            >O Nas</b-button
           >
           <b-button id="btn" size="is-medium" v-on:click="showWhatWeDo"
             >Czym się zajmujemy</b-button
@@ -117,7 +113,7 @@
           <div class="outer" v-if="selectedTabTitle === 'Czym się zajmujemy'">
             <div class="div-title">
               <h2 class="centerDivHeader">{{ selectedTabTitle }}</h2>
-              <div id="col">
+              <div id="btnsDiv">
                 <b-button
                     id="btnPencil"
                     @click="changeWhatWeDo"
@@ -140,20 +136,16 @@
                 </b-input>
               </b-field>
               <div id="btnsDiv">
-                <p class="control"> <!--sprawdzić styl potem -->
-                    <b-button
-                      id="btnSave"
-                      class="button is-primary is-success"
-                      @click="saveWhatWeDo"
-                      >Zapisz</b-button
-                    >
-                </p>
-                <p class="control">
-                      <b-button
-                        @click="cancelWhatWeDo"
-                        >Anuluj</b-button
-                      >
-                </p>
+                  <b-button
+                    id="btnSave"
+                    class="button is-primary is-success"
+                    @click="saveWhatWeDo"
+                    >Zapisz</b-button
+                  >
+                  <b-button
+                    @click="cancelWhatWeDo"
+                    >Anuluj</b-button
+                  >
               </div>
             </div>
           </div>
@@ -161,7 +153,7 @@
           <div class="outer" v-if="selectedTabTitle === 'Członkowie'">
             <div class="div-title">
               <h2 class="centerDivHeader">{{ selectedTabTitle }}</h2>
-              <div id="col">
+              <div id="btnsDiv">
                 <b-button
                     id="btnPencil"
                     @click="changeMembers"
@@ -184,20 +176,16 @@
                 </b-input>
               </b-field>
               <div id="btnsDiv">
-                <p class="control"> <!--sprawdzić styl potem -->
-                    <b-button
-                      id="btnSave"
-                      class="button is-primary is-success"
-                      @click="saveMembers"
-                      >Zapisz</b-button
-                    >
-                </p>
-                <p class="control">
-                      <b-button
-                        @click="cancelMembers"
-                        >Anuluj</b-button
-                      >
-                </p>
+                  <b-button
+                    id="btnSave"
+                    class="button is-primary is-success"
+                    @click="saveMembers"
+                    >Zapisz</b-button
+                  >
+                  <b-button
+                    @click="cancelMembers"
+                    >Anuluj</b-button
+                  >
               </div>
             </div>
           </div>
@@ -205,7 +193,7 @@
           <div class="outer" v-if="selectedTabTitle === 'O Nas'">
             <div class="div-title">
                 <h2 class="centerDivHeader">{{ selectedTabTitle }}</h2>
-                <div id="col">
+                <div id="btnsDiv">
                     <b-button
                         id="btnPencil"
                         @click="changeAboutUs"
@@ -229,30 +217,25 @@
                         type="textarea"
                         size="is-medium"
                       ></b-input>
-                
-                    <div id="btnsDiv">
-                        <p class="control"> <!-- sprawdzić styl potem -->
-                            <b-button
-                            id="btnSave"
-                            class="button is-primary is-success"
-                            @click="saveAboutUs"
-                            >Zapisz</b-button
-                            >
-                        </p>
-                        <p class="control">
-                          <b-button
-                            @click="cancelAboutUs"
-                            >Anuluj</b-button
-                          >
-                        </p>
-                    </div>
-                  </b-field>
+                </b-field>
+                <div id="btnsDiv">
+                    <b-button
+                    id="btnSave"
+                    class="button is-primary is-success"
+                    @click="saveAboutUs"
+                    >Zapisz</b-button
+                    >
+                    <b-button
+                      @click="cancelAboutUs"
+                      >Anuluj</b-button
+                    >
                 </div>
+              </div>
             </div>
             <div class="outer" v-if="selectedTabTitle === 'Kontakt'">
               <div class="div-title">
                   <h2 class="centerDivHeader">{{ selectedTabTitle }}</h2>
-                  <div id="col">
+                  <div id="btnsDiv">
                       <b-button
                           id="btnPencil"
                           @click="changeContact"
@@ -282,20 +265,16 @@
                       </b-input>
                   </b-field>
                   <div id="btnsDiv">
-                      <p class="control"> <!--sprawdzić styl potem -->
-                          <b-button
-                            id="btnSave"
-                            class="button is-primary is-success"
-                            @click="saveContact"
-                            >Zapisz</b-button
-                          >
-                      </p>
-                      <p class="control">
-                          <b-button
-                            @click="cancelContact"
-                            >Anuluj</b-button
-                          >
-                      </p>
+                      <b-button
+                        id="btnSave"
+                        class="button is-primary is-success"
+                        @click="saveContact"
+                        >Zapisz</b-button
+                      >
+                      <b-button
+                        @click="cancelContact"
+                        >Anuluj</b-button
+                      >
                   </div>
               </div>
           </div>
@@ -349,7 +328,7 @@
     },
     data() {
       return {
-        selectedTabTitle: '',
+        selectedTabTitle: 'O Nas',
 
         beforeEditGroupName: 'Koło naukowe', //aktualna nazwa koła z bazy
         groupName: 'Koło naukowe',
@@ -384,30 +363,17 @@
       document.title = "Edycja koła";
     },
     methods: {
-
-
-
       showAboutUs() {
         this.selectedTabTitle = "O Nas";
-        // this.selectedTabContent =
-        //   "O Nas Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci sit, dolor rerum repudiandae accusamus porro ea cum! Corrupti laboriosam facere debitis libero deserunt minus at, iure consequuntur eaque nesciunt nostrum exercitationem praesentium, molestias aliquam perferendis rem enim porro illum recusandae possimus nobis inventore. Ut placeat, exercitationem quas officia laudantium esse nobis blanditiis doloremque est eius quia fugit architecto ea deleniti animi consequuntur quis molestiae nulla commodi non facere quae distinctio aperiam? Esse dolorum ex illum tempora, neque labore explicabo pariatur odio accusamus impedit nesciunt eius similique quaerat consequuntur laudantium. Eveniet nulla omnis eligendi velit ut. Officia cupiditate fugit assumenda aliquam minima cumque perspiciatis dignissimos sapiente non. Ea repellendus sequi beatae esse illum, nulla voluptatem, ratione dolorum ducimus maxime ab minus veritatis optio illo quis amet voluptate obcaecati modi voluptatibus accusantium. Repudiandae laudantium nesciunt non omnis obcaecati quis iusto, dolorem laboriosam animi labore unde, quasi cumque libero? Sunt excepturi iste ipsum suscipit ex eveniet rerum! Magnam numquam impedit voluptatum culpa esse recusandae non optio laboriosam ipsum odit dicta pariatur rerum nobis, iure nostrum adipisci. At tempore quisquam non! Vero reprehenderit nostrum officiis quasi. Eaque quibusdam quaerat adipisci veritatis commodi pariatur beatae tenetur quae. Accusamus quo excepturi nam repellendus quis laborum quas suscipit? Aperiam incidunt dolore voluptas saepe praesentium quibusdam! Corrupti quas quaerat repellat, quia similique velit molestias. Recusandae sapiente sit quisquam laborum deleniti veritatis repellendus, magnam praesentium delectus inventore eum. Natus adipisci iusto ducimus error ipsum, ea neque, aliquid inventore odio cupiditate libero, dolor nulla? Cum ipsa totam officia obcaecati fugit, vel quae reprehenderit qui ducimus explicabo. Omnis ipsam doloremque cumque rem. Placeat voluptates vero eum sapiente quo, minus provident laborum saepe maiores quae necessitatibus alias ratione sint? Sed facere aspernatur ratione blanditiis! Porro commodi tempore voluptates eaque. Sunt est aspernatur sint error veritatis iusto aliquam voluptate quaerat rerum unde accusantium iste natus incidunt illo velit tempora dolorum ipsa et nostrum optio ratione nobis, temporibus qui! Ipsa, omnis officiis eveniet a cupiditate voluptas eos ducimus eius nostrum ab quos recusandae autem dicta possimus maxime aut quas dolor doloribus quia. Pariatur numquam doloribus officia voluptates ut quasi provident illum itaque ab quod! Obcaecati magnam molestiae nisi similique, amet praesentium reprehenderit itaque velit, consequuntur quos nam qui, architecto excepturi repudiandae ratione! Esse consequuntur, dolor laboriosam eaque, neque fugit a quam incidunt eos placeat quae nesciunt provident. Itaque veritatis non labore repellendus recusandae excepturi placeat. Itaque dolorem eveniet, assumenda explicabo ex delectus voluptatum beatae?";
-        // this.selectedTabChangingContent = this.selectedTabContent;
       },
       showWhatWeDo() {
         this.selectedTabTitle = "Czym się zajmujemy";
-        // this.selectedTabContent = this.whatWeDo;
-        // this.selectedTabChangingContent = this.selectedTabContent;
       },
       showMembers() {
         this.selectedTabTitle = "Członkowie";
-        // this.selectedTabContent = this.whatWeDo;
-        // this.selectedTabChangingContent = this.selectedTabContent;
       },
       showContact() {
         this.selectedTabTitle = "Kontakt";
-        // this.selectedTabContent =
-        //   "Kontakt Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci sit, dolor. Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci sit, dolor rerum repudiandae accusamus porro ea cum! Corrupti laboriosam facere debitis libero deserunt minus at, iure consequuntur eaque nesciunt nostrum exercitationem praesentium, molestias aliquam perferendis rem enim porro illum recusandae possimus nobis inventore. Ut placeat, exercitationem quas officia laudantium esse nobis blanditiis doloremque est eius quia fugit architecto ea deleniti animi consequuntur quis molestiae nulla commodi non facere quae distinctio aperiam? Esse dolorum ex illum tempora, neque labore explicabo pariatur odio accusamus impedit nesciunt eius similique quaerat consequuntur laudantium. Eveniet nulla omnis eligendi velit ut. Officia cupiditate fugit assumenda aliquam minima cumque perspiciatis dignissimos sapiente non. Ea repellendus sequi beatae esse illum, nulla voluptatem, ratione dolorum ducimus maxime ab minus veritatis optio illo quis amet voluptate obcaecati modi voluptatibus accusantium. Repudiandae laudantium nesciunt non omnis obcaecati quis iusto, dolorem laboriosam animi labore unde, quasi cumque libero? Sunt excepturi iste ipsum suscipit ex eveniet rerum! Magnam numquam impedit voluptatum culpa esse recusandae non optio laboriosam ipsum odit dicta pariatur rerum nobis, iure nostrum adipisci. At tempore quisquam non! Vero reprehenderit nostrum officiis quasi. Eaque quibusdam quaerat adipisci veritatis commodi pariatur beatae tenetur quae. Accusamus quo excepturi nam repellendus quis laborum quas suscipit? Aperiam incidunt dolore voluptas saepe praesentium quibusdam! Corrupti quas quaerat repellat, quia similique velit molestias. Recusandae sapiente sit quisquam laborum deleniti veritatis repellendus, magnam praesentium delectus inventore eum. Natus adipisci iusto ducimus error ipsum, ea neque, aliquid inventore odio cupiditate libero, dolor nulla? Cum ipsa totam officia obcaecati fugit, vel quae reprehenderit qui ducimus explicabo. Omnis ipsam doloremque cumque rem. Placeat voluptates vero eum sapiente quo, minus provident laborum saepe maiores quae necessitatibus alias ratione sint? Sed facere aspernatur ratione blanditiis! Porro commodi tempore voluptates eaque. Sunt est aspernatur sint error veritatis iusto aliquam voluptate quaerat rerum unde accusantium iste natus incidunt illo velit tempora dolorum ipsa et nostrum optio ratione nobis, temporibus qui! Ipsa, omnis officiis eveniet a cupiditate voluptas eos ducimus eius nostrum ab quos recusandae autem dicta possimus maxime aut quas dolor doloribus quia. Pariatur numquam doloribus officia voluptates ut quasi provident illum itaque ab quod! Obcaecati magnam molestiae nisi similique, amet praesentium reprehenderit itaque velit, consequuntur quos nam qui, architecto excepturi repudiandae ratione! Esse consequuntur, dolor laboriosam eaque, neque fugit a quam incidunt eos placeat quae nesciunt provident. Itaque veritatis non labore repellendus recusandae excepturi placeat. Itaque dolorem eveniet, assumenda explicabo ex delectus voluptatum beatae? Być może stworzymy projekt dla Ciebie!";
-        // this.selectedTabChangingContent = this.selectedTabContent;
       },
 
       changeGroupName() {
@@ -569,11 +535,11 @@
     justify-content: center;
   }
   
-  #col {
+  /* #col {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+  } */
 
   .div-title {
     display: flex; 
@@ -615,10 +581,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+  } 
 
   #editableText {
     height: 560px;
+    /* width: 800px !important; */
   }
   
   .centerDivHeader {
