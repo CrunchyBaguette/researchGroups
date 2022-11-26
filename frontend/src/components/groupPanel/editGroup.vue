@@ -81,7 +81,19 @@
               </div>
           <br />
         </div>
-        <div class="column"></div>
+        <div class="column" id="col">
+          <b-button
+          id="title"
+          tag="router-link"
+          :to="{ name: 'groupPanel' }"
+          rounded
+          size="is-medium"
+          type="is-success"
+          ><mdicon name="arrow-left"/> Wróć do panelu koła</b-button
+        >
+        </div>
+      <div class="columns">
+    </div>
       </div>
       <div class="columns">
         <div class="box column is-3">
@@ -626,6 +638,12 @@
     height: 93%; 
     width: 100%; 
     overflow: auto;
+  }
+
+  #col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   @media screen and (min-width: 1408px) {
