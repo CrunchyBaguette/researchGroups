@@ -79,7 +79,7 @@ class EmailBuilder:
 
         return email
 
-    def send(self, connection=None):
+    def send(self, connection=None) -> int:
         email = self.build_django_mail()
         if connection:
             email.connection = connection
