@@ -15,6 +15,7 @@ class Project(models.Model):
     funds = models.DecimalField(decimal_places=2, max_digits=20)
     guides = models.ManyToManyField(Tutorial, through="GuideProject")
     research_groups = models.ManyToManyField(ResearchGroup)
+    members = models.ManyToManyField(User, through="ProjectUser")
 
     class Category(models.TextChoices):
         DEFAULT = "def", "Default"

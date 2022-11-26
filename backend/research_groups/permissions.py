@@ -16,8 +16,10 @@ class IsResearchGroupMember(BasePermission):
 class IsResearchGroupModerator(BasePermission):
     """Grants permission if user is moderator of researchGroup"""
 
-    def has_permission(self, request: Request, view: APIView) -> bool:
-        is_moderator = ResearchGroup.objects.filter(
+    def has_object_permission(
+        self, request: Request, view: APIView, obj: ResearchGroup
+    ) -> bool:
+        is_moderator = obj.members.filter(
             members=request.user, researchgroupuser__role="mod"
         ).exists()
         return is_moderator
@@ -33,7 +35,7 @@ class IsResearchGroupOwner(BasePermission):
         return is_owner
 
 
-class IsGroupPostOwner(BasePermission):
+class IsGroupPostAuthor(BasePermission):
     """Grants permission if user is owner of a post on group"""
 
     def has_object_permission(
@@ -43,7 +45,7 @@ class IsGroupPostOwner(BasePermission):
         return is_owner
 
 
-class IsGroupPostCommentOwner(BasePermission):
+class IsGroupPostCommentAuthor(BasePermission):
     """Grants permission if user is owner of a comment on post on group"""
 
     def has_object_permission(
