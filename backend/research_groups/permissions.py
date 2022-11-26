@@ -8,8 +8,12 @@ from .models import ResearchGroup, ResearchGroupPost, ResearchGroupPostComment
 class IsResearchGroupMember(BasePermission):
     """Grants permission if user is member of researchGroup"""
 
-    def has_permission(self, request: Request, view: APIView) -> bool:
-        is_member = ResearchGroup.objects.filter(members=request.user).exists()  # type: ignore
+    def has_object_permission(
+            self, request: Request, view: APIView, obj: ResearchGroup
+    ) -> bool:
+        is_member = obj.members.filter(id=request.user.id).exists()  # type: ignore
+        print(obj.members.values())
+        print(f"{is_member = }")
         return is_member
 
 

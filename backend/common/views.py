@@ -1,6 +1,3 @@
-from django.shortcuts import render
-
-# Create your views here.
 class PermissionPolicyMixin:
     def check_permissions(self, request):
         try:

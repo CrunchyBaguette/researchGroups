@@ -84,8 +84,8 @@ class EmailBuilder:
             sent: int = email.send()
             connection.close()
             return sent
-        else:
-            return email.send()
+
+        return email.send()
 
 
 @dataclass
