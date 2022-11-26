@@ -9,7 +9,7 @@ class IsResearchGroupMember(BasePermission):
     """Grants permission if user is member of researchGroup"""
 
     def has_permission(self, request: Request, view: APIView) -> bool:
-        is_member = ResearchGroup.objects.filter(members=request.user).exists()
+        is_member = ResearchGroup.objects.filter(members=request.user).exists()  # type: ignore
         return is_member
 
 
@@ -19,7 +19,7 @@ class IsResearchGroupModerator(BasePermission):
     def has_object_permission(
         self, request: Request, view: APIView, obj: ResearchGroup
     ) -> bool:
-        is_moderator = obj.members.filter(
+        is_moderator = obj.members.filter(  # type: ignore
             members=request.user, researchgroupuser__role="mod"
         ).exists()
         return is_moderator
