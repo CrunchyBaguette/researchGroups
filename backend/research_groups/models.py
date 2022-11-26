@@ -12,8 +12,9 @@ class ResearchGroup(models.Model):
     about_us = models.TextField(null=False, blank=True)
     what_we_do = models.TextField(null=False, blank=True)
     contact = models.TextField(null=False, blank=True)
-    members = models.ManyToManyField(User, through="ResearchGroupUser")
+    members = models.ManyToManyField(User, through="ResearchGroupUser", related_name="members")
     guides = models.ManyToManyField(Tutorial, through="ResearchGroupGuide")
+    group_owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name="group_owner", default=None)
 
     class Category(models.TextChoices):
         MATH = "math", "Math"
