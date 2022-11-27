@@ -20,9 +20,7 @@ class Project(models.Model):
     class Category(models.TextChoices):
         DEFAULT = "def", "Default"
 
-    category = models.CharField(
-        max_length=20, choices=Category.choices, default=Category.DEFAULT
-    )
+    category = models.CharField(max_length=20, choices=Category.choices, default=Category.DEFAULT)
 
 
 class GuideProject(models.Model):
@@ -42,9 +40,7 @@ class ProjectUser(models.Model):
         MODERATOR = "mod", "Moderator"
         OWNER = "own", "Owner"
 
-    role = models.CharField(
-        max_length=20, choices=Roles.choices, default=Roles.UNSPECIFIED
-    )
+    role = models.CharField(max_length=20, choices=Roles.choices, default=Roles.UNSPECIFIED)
     created = models.DateField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 

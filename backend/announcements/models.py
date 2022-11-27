@@ -9,13 +9,9 @@ class Announcement(models.Model):
     text = models.TextField(null=False, blank=False)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(auto_now_add=True)
-    research_group_id = models.ForeignKey(
-        ResearchGroup, on_delete=models.SET_NULL, null=True
-    )
+    research_group_id = models.ForeignKey(ResearchGroup, on_delete=models.SET_NULL, null=True)
 
     class Type(models.TextChoices):
         DEFAULT = "def", "Default"
 
-    ann_type = models.CharField(
-        max_length=20, choices=Type.choices, default=Type.DEFAULT
-    )
+    ann_type = models.CharField(max_length=20, choices=Type.choices, default=Type.DEFAULT)
