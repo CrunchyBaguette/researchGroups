@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  pull_request: ~
+
+env:
+  PYTHONFAULTHANDLER: 1
+  PYTHONUNBUFFERED: 1
+  PYTHONHASHSEED: random
+  PYTHONDONTWRITEBYTECODE: 1
+  PIP_NO_CACHE_DIR: off
+  PIP_DISABLE_PIP_VERSION_CHECK: on
+  PIP_DEFAULT_TIMEOUT: 100
+  POETRY_VERSION: 1.2.1
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+          cache-dependency-path: '**/poetry.lock'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip3 install "poetry==$POETRY_VERSION"
+          poetry config virtualenvs.create false
+          poetry install --no-interaction --no-ansi
+      - name: Display Python version
+        run: |
+          poetry run python -c "import sys; print(sys.version)"
+      - name: Check format
+        run: |
+          poetry run black backend --check
+      - name: Lint with pylint
+        run: |
+          poetry run pylint backend
+      - name: Check with mypy
+        run: |
+          poetry run mypy backend
+      - name: Test with pytest
+        run: |
+          poetry run pytest
