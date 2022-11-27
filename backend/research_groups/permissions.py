@@ -12,8 +12,6 @@ class IsResearchGroupMember(BasePermission):
             self, request: Request, view: APIView, obj: ResearchGroup
     ) -> bool:
         is_member = obj.members.filter(id=request.user.id).exists()  # type: ignore
-        print(obj.members.values())
-        print(f"{is_member = }")
         return is_member
 
 
@@ -24,7 +22,7 @@ class IsResearchGroupModerator(BasePermission):
         self, request: Request, view: APIView, obj: ResearchGroup
     ) -> bool:
         is_moderator = obj.members.filter(  # type: ignore
-            members=request.user, researchgroupuser__role="mod"
+            id=request.user.id, researchgroupuser__role="mod"
         ).exists()
         return is_moderator
 
@@ -45,7 +43,7 @@ class IsGroupPostAuthor(BasePermission):
     def has_object_permission(
         self, request: Request, view: APIView, obj: ResearchGroupPost
     ) -> bool:
-        is_owner = obj.author == request.user
+        is_owner = obj.author.id == request.user.id
         return is_owner
 
 
@@ -55,5 +53,5 @@ class IsGroupPostCommentAuthor(BasePermission):
     def has_object_permission(
         self, request: Request, view: APIView, obj: ResearchGroupPostComment
     ) -> bool:
-        is_owner = obj.author == request.user
+        is_owner = obj.author.id == request.user.id
         return is_owner

@@ -8,8 +8,10 @@ from backend.projects.models import Project, ProjectPost, ProjectPostComment
 class IsProjectMember(BasePermission):
     """Grants permission if user is a project member"""
 
-    def has_permission(self, request: Request, view: APIView) -> bool:
-        is_member = Project.objects.filter(members=request.user).exists()  # type: ignore
+    def has_object_permission(
+            self, request: Request, view: APIView, obj: Project
+    ) -> bool:
+        is_member = Project.members.filter(id=request.user.id).exists()  # type: ignore
         return is_member
 
 
@@ -20,7 +22,7 @@ class IsProjectModerator(BasePermission):
         self, request: Request, view: APIView, obj: Project
     ) -> bool:
         is_moderator = obj.members.filter(  # type: ignore
-            members=request.user, researchgroupuser__role="mod"
+            id=request.user.id, researchgroupuser__role="mod"
         ).exists()
         return is_moderator
 
@@ -32,7 +34,7 @@ class IsProjectOwner(BasePermission):
         self, request: Request, view: APIView, obj: Project
     ) -> bool:
         is_owner = obj.members.filter(  # type: ignore
-            members=request.user, researchgroupuser__role="own"
+            id=request.user.id, researchgroupuser__role="own"
         ).exists()
         return is_owner
 
@@ -43,7 +45,7 @@ class IsProjectPostAuthor(BasePermission):
     def has_object_permission(
         self, request: Request, view: APIView, obj: ProjectPost
     ) -> bool:
-        is_author = obj.author == request.user
+        is_author = obj.author.id == request.user.id
         return is_author
 
 
@@ -53,5 +55,5 @@ class IsProjectCommentAuthor(BasePermission):
     def has_object_permission(
         self, request: Request, view: APIView, obj: ProjectPostComment
     ) -> bool:
-        is_author = obj.author == request.user
+        is_author = obj.author.id == request.user.id
         return is_author

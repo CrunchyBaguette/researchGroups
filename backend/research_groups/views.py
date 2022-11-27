@@ -1,8 +1,8 @@
+from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from backend.research_groups.serializers import ResearchGroupSerializer
 from backend.research_groups.models import ResearchGroup
-from django.contrib.auth.models import User
 
 from backend.common.views import PermissionPolicyMixin
 

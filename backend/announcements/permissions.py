@@ -11,5 +11,5 @@ class IsAnnouncementAuthor(BasePermission):
     def has_object_permission(
         self, request: Request, view: APIView, obj: Announcement
     ) -> bool:
-        is_author = obj.author == request.user
+        is_author = obj.author.id == request.user.id
         return is_author

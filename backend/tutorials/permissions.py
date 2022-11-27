@@ -11,7 +11,7 @@ class IsTutorialOwner(BasePermission):
     def has_object_permission(
         self, request: Request, view: APIView, obj: Tutorial
     ) -> bool:
-        is_owner = obj.owner == request.user
+        is_owner = obj.owner.id == request.user.id
         return is_owner
 
 
@@ -31,5 +31,5 @@ class IsRatingAuthor(BasePermission):
     def has_object_permission(
         self, request: Request, view: APIView, obj: Rating
     ) -> bool:
-        is_author = obj.author == request.user
+        is_author = obj.author.id == request.user.id
         return is_author
