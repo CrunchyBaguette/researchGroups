@@ -23,6 +23,7 @@ black = {version = "^22.10.0", allow-prereleases = true}
 mypy = "^0.991"
 djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^1.8.0"}
 pylint = "^2.15.6"
+pylint-django = "^2.5.3"
 
 [tool.poetry.group.test.dependencies]
 pytest-django = "^4.5.2"
