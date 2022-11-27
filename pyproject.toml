@@ -80,4 +80,4 @@ ignore = [
     "migrations",
     "urls.py"
 ]
-django-settings-module = "backend.settings"
+django-settings-module = "backend.test_settings"
