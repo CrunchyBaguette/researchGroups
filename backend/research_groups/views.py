@@ -13,7 +13,6 @@ from backend.research_groups.models import (
     ResearchGroupPost,
     ResearchGroupUser,
 )
-from django.contrib.auth.models import User
 
 from backend.common.views import PermissionPolicyMixin
 

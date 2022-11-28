@@ -1,13 +1,10 @@
 from rest_framework import serializers
-
+from backend.users.serializers import UserSerializer
 from backend.research_groups.models import (
     ResearchGroup,
     ResearchGroupPost,
     ResearchGroupUser,
 )
-
-from backend.research_groups.models import ResearchGroup
-from backend.users.serializers import UserSerializer
 
 
 class ResearchGroupSerializer(serializers.ModelSerializer):

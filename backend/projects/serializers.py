@@ -1,12 +1,10 @@
 from rest_framework import serializers
-
+from django.contrib.auth.models import User
 from backend.projects.models import (
     Project,
     ProjectPost,
     ProjectUser,
 )
-
-from django.contrib.auth.models import User
 
 
 class ProjectSerializer(serializers.ModelSerializer):
