@@ -10,9 +10,7 @@ from django.contrib.auth.models import User
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    members = serializers.SlugRelatedField(
-        many=True, slug_field="email", queryset=User.objects.all()
-    )
+    members = serializers.SlugRelatedField(many=True, slug_field="email", queryset=User.objects.all())
 
     class Meta:
         model = Project

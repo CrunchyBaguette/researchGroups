@@ -27,9 +27,7 @@ from .projects.urls import urlpatterns as projects_urls
 router = DefaultRouter()
 router.register("user", UserViewSet)
 
-api_urlpatterns = list(
-    chain.from_iterable([research_groups_urls, announcements_urls, projects_urls])
-)
+api_urlpatterns = list(chain.from_iterable([research_groups_urls, announcements_urls, projects_urls]))
 
 urlpatterns = [
     path("admin/", admin.site.urls),
