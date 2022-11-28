@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.contrib.auth.models import User
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from backend.research_groups.serializers import (
@@ -73,10 +73,6 @@ class ResearchGroupPostViewSet(viewsets.ModelViewSet):
                 {"researchGroup": ["'researchGroup' parameter is required."]},
                 status=400,
             )
-        postsQueryset = (
-            ResearchGroupPost.objects.filter(research_group=researchGroup)
-            .order_by("added")
-            .all()
-        )
+        postsQueryset = ResearchGroupPost.objects.filter(research_group=researchGroup).order_by("added").all()
         serializer = self.get_serializer(postsQueryset, many=True)
         return Response({"researchGroup": researchGroup, "posts": serializer.data})

@@ -6,7 +6,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = "__all__"
+        exclude = ["password", "is_active", "groups", "last_login", "user_permissions"]
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):

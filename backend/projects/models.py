@@ -16,13 +16,12 @@ class Project(models.Model):
     members = models.ManyToManyField(User, through="ProjectUser")
     guides = models.ManyToManyField(Tutorial, through="GuideProject")
     research_groups = models.ManyToManyField(ResearchGroup)
+    members = models.ManyToManyField(User, through="ProjectUser")
 
     class Category(models.TextChoices):
         DEFAULT = "def", "Default"
 
-    category = models.CharField(
-        max_length=20, choices=Category.choices, default=Category.DEFAULT
-    )
+    category = models.CharField(max_length=20, choices=Category.choices, default=Category.DEFAULT)
 
 
 class GuideProject(models.Model):

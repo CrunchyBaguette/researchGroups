@@ -12,8 +12,9 @@ class ResearchGroup(models.Model):
     about_us = models.TextField(null=False, blank=False)
     what_we_do = models.TextField(null=False, blank=True)
     contact = models.TextField(null=False, blank=True)
-    members = models.ManyToManyField(User, through="ResearchGroupUser")
+    members = models.ManyToManyField(User, through="ResearchGroupUser", related_name="members")
     guides = models.ManyToManyField(Tutorial, through="ResearchGroupGuide")
+    group_owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name="group_owner", default=None)
 
     class Category(models.TextChoices):
         MATH = "math", "Math"
@@ -21,9 +22,7 @@ class ResearchGroup(models.Model):
         CHEMISTRY = "chem", "Chemistry"
         DEFAULT = "def", "Default"
 
-    category = models.CharField(
-        max_length=20, choices=Category.choices, default=Category.DEFAULT
-    )
+    category = models.CharField(max_length=20, choices=Category.choices, default=Category.DEFAULT)
 
 
 class ResearchGroupUser(models.Model):

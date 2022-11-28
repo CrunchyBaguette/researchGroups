@@ -91,8 +91,6 @@ class ProjectPostViewSet(viewsets.ModelViewSet):
                 {"project": ["'project' parameter is required."]},
                 status=400,
             )
-        postsQueryset = (
-            ProjectPost.objects.filter(project=project).order_by("added").all()
-        )
+        postsQueryset = ProjectPost.objects.filter(project=project).order_by("added").all()
         serializer = self.get_serializer(postsQueryset, many=True)
         return Response({"project": project, "posts": serializer.data})
