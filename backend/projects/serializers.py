@@ -1,21 +1,21 @@
 from rest_framework import serializers
 
-from backend.research_groups.models import (
-    ResearchGroup,
-    ResearchGroupPost,
-    ResearchGroupUser,
+from backend.projects.models import (
+    Project,
+    ProjectPost,
+    ProjectUser,
 )
 
 from django.contrib.auth.models import User
 
 
-class ResearchGroupSerializer(serializers.ModelSerializer):
+class ProjectSerializer(serializers.ModelSerializer):
     members = serializers.SlugRelatedField(
         many=True, slug_field="email", queryset=User.objects.all()
     )
 
     class Meta:
-        model = ResearchGroup
+        model = Project
         fields = "__all__"
 
     def to_representation(self, instance):
@@ -24,13 +24,13 @@ class ResearchGroupSerializer(serializers.ModelSerializer):
         return representation
 
 
-class ResearchGroupUserSerializer(serializers.ModelSerializer):
+class ProjectUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ResearchGroupUser
+        model = ProjectUser
         fields = "__all__"
 
 
-class ResearchGroupPostSerializer(serializers.ModelSerializer):
+class ProjectPostSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ResearchGroupPost
+        model = ProjectPost
         fields = "__all__"

@@ -34,14 +34,14 @@ const router = new Router({
             component: addGroup,
         },
         {
+            path: "/group/:id",
+            name: "group",
+            component: groupPanel,
+        },
+        {
             path: "/edit-group",
             name: "editGroup",
             component: editGroup,
-        },
-        {
-            path: "/group-panel",
-            name: "groupPanel",
-            component: groupPanel,
         },
         {
             path: "/project-catalog",
