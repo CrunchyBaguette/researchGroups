@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" id="content">
     <div class="columns">
       <div class="column is-3"></div>
       <div class="column is-6">
@@ -558,7 +558,7 @@ export default {
 #centerDiv {
   margin-right: 15px;
   margin-left: 15px;
-  height: 700px;
+  height: 68vh;
   /* border: 5px solid rgb(203, 203, 203); */
 }
 
@@ -630,7 +630,7 @@ export default {
 } 
 
 #editableText {
-  height: 560px;
+  height: 54vh;
   /* width: 800px !important; */
 }
 
@@ -683,7 +683,7 @@ export default {
 
 @media screen and (min-width: 1408px) {
   .container:not(.is-max-desktop):not(.is-max-widescreen) {
-    max-width: 1644px !important;
+    max-width: 6644px !important;
   }
 }
 
