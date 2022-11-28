@@ -79,7 +79,6 @@ export default {
     },
 
     chooseGroup(researchGroup) {
-      console.log(researchGroup.id);
       this.chosenResearchGroup = researchGroup;
     },
   },

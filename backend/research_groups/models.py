@@ -8,8 +8,8 @@ from backend.common.models import Link
 
 
 class ResearchGroup(models.Model):
-    name = models.CharField(max_length=120, null=False, blank=False)
-    about_us = models.TextField(null=False, blank=True)
+    name = models.CharField(max_length=120, null=False, blank=False, unique=True)
+    about_us = models.TextField(null=False, blank=False)
     what_we_do = models.TextField(null=False, blank=True)
     contact = models.TextField(null=False, blank=True)
     members = models.ManyToManyField(User, through="ResearchGroupUser")
@@ -31,14 +31,11 @@ class ResearchGroupUser(models.Model):
     person = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Roles(models.TextChoices):
-        UNSPECIFIED = "un", "Unspecified"
         MEMBER = "mem", "Member"
         MODERATOR = "mod", "Moderator"
         CREATOR = "cr", "Creator"
 
-    role = models.CharField(
-        max_length=20, choices=Roles.choices, default=Roles.UNSPECIFIED
-    )
+    role = models.CharField(max_length=20, choices=Roles.choices, default=Roles.MEMBER)
     created = models.DateField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 
