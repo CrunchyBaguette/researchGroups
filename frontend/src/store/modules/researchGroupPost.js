@@ -1,4 +1,4 @@
-import groupForumPostService from "@/services/groupForumPostService";
+import researchGroupPostService from "@/services/researchGroupPostService";
 
 const state = {
     forumPost: {},
@@ -17,7 +17,7 @@ const getters = {
 const actions = {
     addForumPost({ commit }, post) {
         return new Promise((resolve, reject) => {
-            groupForumPostService.postForumPost(post).then((response) => {
+            researchGroupPostService.postForumPost(post).then((response) => {
                 commit("addForumPost", post);
                 resolve(response);
             }).catch((err) => reject(err));
@@ -25,7 +25,7 @@ const actions = {
     },
     getForumPost({ commit }, params) {
         return new Promise((resolve, reject) => {
-            groupForumPostService.fetchForumPost(params).then((data) => {
+            researchGroupPostService.fetchForumPost(params).then((data) => {
                 commit("setForumPost", data);
                 resolve();
             }).catch((err) => {
@@ -35,7 +35,7 @@ const actions = {
     },
     updateForumPost({ dispatch }, params) {
         return new Promise((resolve, reject) => {
-            groupForumPostService.patchForumPost(params).then(() => {
+            researchGroupPostService.patchForumPost(params).then(() => {
                 dispatch("getForumPosts");
                 resolve();
             }).catch((err) => {
@@ -45,7 +45,7 @@ const actions = {
     },
     getForumPosts({ commit }, group) {
         return new Promise((resolve, reject) => {
-            groupForumPostService.fetchGroupForumPosts(group).then((data) => {
+            researchGroupPostService.fetchGroupForumPosts(group).then((data) => {
                 commit("setForumPosts", data);
                 resolve();
             }).catch((err) => reject(err));

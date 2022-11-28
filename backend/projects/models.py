@@ -13,6 +13,7 @@ class Project(models.Model):
     description = models.TextField(blank=True)
     deadline = models.DateField(null=True)
     funds = models.DecimalField(decimal_places=2, max_digits=20)
+    members = models.ManyToManyField(User, through="ProjectUser")
     guides = models.ManyToManyField(Tutorial, through="GuideProject")
     research_groups = models.ManyToManyField(ResearchGroup)
 
@@ -36,14 +37,11 @@ class ProjectUser(models.Model):
     person = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Roles(models.TextChoices):
-        UNSPECIFIED = "un", "Unspecified"
         MEMBER = "mem", "Member"
         MODERATOR = "mod", "Moderator"
         OWNER = "own", "Owner"
 
-    role = models.CharField(
-        max_length=20, choices=Roles.choices, default=Roles.UNSPECIFIED
-    )
+    role = models.CharField(max_length=20, choices=Roles.choices, default=Roles.MEMBER)
     created = models.DateField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 

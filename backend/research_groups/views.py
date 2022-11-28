@@ -4,8 +4,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from backend.research_groups.serializers import (
+    ResearchGroupUserSerializer,
     ResearchGroupSerializer,
-    ForumPostSerializer,
+    ResearchGroupPostSerializer,
 )
 from backend.research_groups.models import (
     ResearchGroup,
@@ -15,6 +16,12 @@ from backend.research_groups.models import (
 from django.contrib.auth.models import User
 
 from backend.common.views import PermissionPolicyMixin
+
+
+class ResearchGroupUserViewSet(viewsets.ModelViewSet):
+    queryset = ResearchGroupUser.objects.all()
+    serializer_class = ResearchGroupUserSerializer
+
 
 # Create your views here.
 class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
@@ -48,15 +55,15 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
             research_group__name=request.data["name"],
             person__email=request.user.email,
         ).first()
-        ownerMember.role = "mod"
+        ownerMember.role = "cr"
         ownerMember.save()
 
         return response
 
 
-class GroupForumPostViewSet(viewsets.ModelViewSet):
+class ResearchGroupPostViewSet(viewsets.ModelViewSet):
     queryset = ResearchGroupPost.objects.all()
-    serializer_class = ForumPostSerializer
+    serializer_class = ResearchGroupPostSerializer
 
     @action(detail=False, methods=["get"])
     def grouped(self, request):

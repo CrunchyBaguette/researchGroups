@@ -2,15 +2,21 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import researchGroup from "./modules/researchGroup";
-import groupForumPost from "./modules/groupForumPost";
+import researchGroupPost from "./modules/researchGroupPost";
+import project from "./modules/project";
+import projectPost from "./modules/projectPost";
+import announcement from "./modules/announcement";
 import auth from "./modules/auth";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        groupForumPost,
+        researchGroupPost,
         researchGroup,
+        project,
+        projectPost,
+        announcement,
         auth,
     },
 });
