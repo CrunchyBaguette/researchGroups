@@ -1,7 +1,7 @@
 import { api } from "@/services/api";
 
 export default {
-    fetchFroumPost(params) {
+    fetchForumPost(params) {
         return api.get("research-group-post/", { params }).then((response) => response.data);
     },
     postForumPost(data) {
