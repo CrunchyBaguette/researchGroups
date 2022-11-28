@@ -55,7 +55,6 @@
   
   .author {
     padding-left: 5px;
-    font-size: 25px;
   }
   
   .category {
