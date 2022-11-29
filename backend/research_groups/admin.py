@@ -1,5 +1,13 @@
 from django.contrib import admin
-from .models import ResearchGroup, ResearchGroupUser, ResearchGroupGuide, ResearchGroupPost, ResearchGroupPostComment, ResearchGroupDisk, ResearchGroupLink
+from .models import (
+    ResearchGroup,
+    ResearchGroupUser,
+    ResearchGroupGuide,
+    ResearchGroupPost,
+    ResearchGroupPostComment,
+    ResearchGroupDisk,
+    ResearchGroupLink,
+)
 
 admin.site.register(ResearchGroup)
 admin.site.register(ResearchGroupUser)

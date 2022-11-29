@@ -20,9 +20,7 @@ class Project(models.Model):
     class Category(models.TextChoices):
         DEFAULT = "def", "Default"
 
-    category = models.CharField(
-        max_length=20, choices=Category.choices, default=Category.DEFAULT
-    )
+    category = models.CharField(max_length=20, choices=Category.choices, default=Category.DEFAULT)
 
 
 class GuideProject(models.Model):
