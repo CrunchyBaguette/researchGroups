@@ -16,7 +16,6 @@ class Project(models.Model):
     members = models.ManyToManyField(User, through="ProjectUser")
     guides = models.ManyToManyField(Tutorial, through="GuideProject")
     research_groups = models.ManyToManyField(ResearchGroup)
-    members = models.ManyToManyField(User, through="ProjectUser")
 
     class Category(models.TextChoices):
         DEFAULT = "def", "Default"

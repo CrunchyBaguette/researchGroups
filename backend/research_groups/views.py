@@ -35,17 +35,17 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         # Obecnie, w przypadku gdy nie ma użytkownika z podanym mailem, tworzony jest
         # nowy ale później można tu zaimplementować rozsyłanie maili
-        members = request.data["members"]
+        member_emails = request.data["members"]
 
-        if not request.user.email in members:
-            members.append(request.user.email)
+        if not request.user.email in member_emails:
+            member_emails.append(request.user.email)
 
-        for member in members:
-            if not User.objects.filter(email=member).exists():
+        for member_email in member_emails:
+            if not User.objects.filter(email=member_email).exists():
                 User.objects.create_user(
-                    username=member.split("@")[0],
-                    password=member.split("@")[0],
-                    email=member,
+                    username=member_email.split("@")[0],
+                    password=member_email.split("@")[0],
+                    email=member_email,
                 )
 
         response = super().create(request, *args, **kwargs)
