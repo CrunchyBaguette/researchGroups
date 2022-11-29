@@ -6,7 +6,7 @@
           <p class="category">{{ category }}</p>
         </div>
         <div class="date-container">
-            <p class="date">{{ date }}</p>
+            <p class="date">{{ new Date(date) | dateFormat('DD.MM.YYYY HH:mm') }}</p>
         </div>
         <div class="title-container">
             <p class="title">{{ title }}</p>
@@ -25,7 +25,7 @@
     name: "announcement",
     props: {
       author: {type: String},
-      date: {type: String},
+      date: {type: Date},
       title: {type: String},
       category: {type: String},
       content: {type: String},
@@ -34,6 +34,12 @@
   </script>
   
   <style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
   #root-container {
     margin: 20px;
     width: 97%;
@@ -55,13 +61,15 @@
   
   .author {
     padding-left: 5px;
+    font-weight: bold;
+    font-size: 20px;
   }
   
   .category {
     padding-right: 5px;
     color: rgb(139, 139, 139);
     font-weight: bold;
-    font-size: 25px;
+    font-size: 20px;
   }
 
   .date {
@@ -77,4 +85,5 @@
   .content {
     padding: 5px;
   } 
+
   </style>

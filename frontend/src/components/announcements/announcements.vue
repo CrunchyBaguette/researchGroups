@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-if="!loading">
+  <div id="content" v-if="!loading">
     <p class="title" id="tit">Ogłoszenia</p>
     <div id="announcements" class="box">
       <div>
@@ -8,6 +8,7 @@
           :key="announcement.title"
         >
           <announcement
+            
             :author="announcement.author_username"
             :category="announcement.ann_type"
             :date="announcement.date"
@@ -87,10 +88,6 @@ export default {
   padding: 0;
 }
 
-.container {
-  margin: 0 auto;
-}
-
 .title {
   padding: 10px;
   font-size: 40px;
@@ -101,9 +98,11 @@ export default {
 }
 
 #announcements {
+  /* display: flex;
+  justify-content: space-between; */
   padding: 0px;
   width: 100%;
-  height: 85%;
+  height: 74%;
   background-color: white;
   overflow: auto;
 }
