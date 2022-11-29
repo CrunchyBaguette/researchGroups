@@ -22,7 +22,11 @@
       </p>
     </div>
     <div style="width: 100%; text-align: center; margin-top: 40px">
-      <b-button size="is-medium" style="text-align: center"
+      <b-button
+        size="is-medium"
+        style="text-align: center"
+        tag="router-link"
+        :to="{ name: 'group', params: { id: researchGroup.id } }"
         >Przejdź do panelu koła</b-button
       >
     </div>

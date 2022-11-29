@@ -21,9 +21,13 @@ def send_messages_conn(messages: list[EmailMessage], connection: BaseEmailBacken
 
 
 class EmailBuilder:
+<<<<<<< HEAD
     def __init__(
         self, sender: str, subtype: Literal["alternative", "mixed"] = "mixed"
     ) -> None:
+=======
+    def __init__(self, sender: str, subtype: Literal["alternative", "mixed"] = "mixed") -> None:
+>>>>>>> main
         self.sender = sender
         self.message = MIMEMultipart(subtype)
         self.message["From"] = sender
@@ -68,15 +72,19 @@ class EmailBuilder:
             elif p.get_content_type() == "text/html":
                 html = p.get_payload()
 
+<<<<<<< HEAD
         email = EmailMultiAlternatives(
             subject=subject, from_email=sender, to=receivers, body=message
         )
+=======
+        email = EmailMultiAlternatives(subject=subject, from_email=sender, to=receivers, body=message)
+>>>>>>> main
         if html is not None:
             email.attach_alternative(html, "text/html")
 
         return email
 
-    def send(self, connection=None):
+    def send(self, connection=None) -> int:
         email = self.build_django_mail()
         if connection:
             email.connection = connection
@@ -84,8 +92,8 @@ class EmailBuilder:
             sent: int = email.send()
             connection.close()
             return sent
-        else:
-            return email.send()
+
+        return email.send()
 
 
 @dataclass
