@@ -14,6 +14,4 @@ class Announcement(models.Model):
     class Type(models.TextChoices):
         DEFAULT = "def", "Default"
 
-    ann_type = models.CharField(
-        max_length=20, choices=Type.choices, default=Type.DEFAULT
-    )
+    ann_type = models.CharField(max_length=20, choices=Type.choices, default=Type.DEFAULT)
