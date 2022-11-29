@@ -22,7 +22,7 @@ def send_messages_conn(messages: list[EmailMessage], connection: BaseEmailBacken
 
 class EmailBuilder:
     def __init__(
-            self, sender: str, subtype: Literal["alternative", "mixed"] = "mixed"
+        self, sender: str, subtype: Literal["alternative", "mixed"] = "mixed"
     ) -> None:
         self.sender = sender
         self.message = MIMEMultipart(subtype)
@@ -69,10 +69,7 @@ class EmailBuilder:
                 html = p.get_payload()
 
         email = EmailMultiAlternatives(
-            subject=subject,
-            from_email=sender,
-            to=receivers,
-            body=message
+            subject=subject, from_email=sender, to=receivers, body=message
         )
         if html is not None:
             email.attach_alternative(html, "text/html")
@@ -108,6 +105,7 @@ class Email(Mapping):
 
     .. note:: Preffer to use Django EmailMultiAlternatives
     """
+
     from_addr: str
     to_addr: str | Sequence[str]
     msg: bytes | str
