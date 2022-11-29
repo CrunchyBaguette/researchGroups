@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('announcements', '0001_initial'),
+        ("announcements", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='announcement',
-            name='ann_type',
-            field=models.CharField(choices=[('def', 'Default')], default='def', max_length=20),
+            model_name="announcement",
+            name="ann_type",
+            field=models.CharField(
+                choices=[("def", "Default")], default="def", max_length=20
+            ),
         ),
     ]
