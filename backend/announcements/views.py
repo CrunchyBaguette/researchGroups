@@ -5,7 +5,15 @@ from rest_framework.response import Response
 from backend.announcements.models import Announcement
 from backend.announcements.serializers import AnnouncementSerializer
 
+from rest_framework.permissions import IsAuthenticated
+from backend.common.views import PermissionPolicyMixin
 
-class AnnouncementViewSet(viewsets.ModelViewSet):
+
+class AnnouncementViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     queryset = Announcement.objects.all()
     serializer_class = AnnouncementSerializer
+    permission_classes_per_method = {
+        "create": [
+            IsAuthenticated,
+        ]
+    }
