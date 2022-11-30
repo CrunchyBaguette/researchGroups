@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import announcements from "@/components/announcements/announcements"
+import addAnnouncement from "@/components/announcements/addAnnouncement"
 import groupCatalog from "@/components/groupCatalog/groupCatalog"
 import addGroup from "@/components/groupCatalog/addGroup"
 import projectCatalog from "@/components/projectCatalog/projectCatalog"
@@ -22,6 +23,11 @@ const router = new Router({
             path: "/",
             name: "announcements",
             component: announcements,
+        },
+        {
+            path: "/add-announcement",
+            name: "addAnnouncement",
+            component: addAnnouncement,
         },
         {
             path: "/group-catalog",

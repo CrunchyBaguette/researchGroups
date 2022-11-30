@@ -1,8 +1,19 @@
 <template>
   <div id="content" v-if="!loading">
-    <p class="title" id="tit">Ogłoszenia</p>
+    <div id="titleDiv">
+      <p class="title" id="tit">Ogłoszenia</p>
+      <b-button
+          id="btnTitle"
+          tag="router-link"
+          :to="isAuthenticated ? { name: 'addAnnouncement' } : { name: 'login' }"
+          rounded
+          size="is-medium"
+          type="is-success"
+          >Dodaj nowe ogłoszenie</b-button
+        >
+    </div>
+    
     <div id="announcements" class="box">
-      <div>
         <div
           v-for="announcement in paginatedAnnouncements"
           :key="announcement.title"
@@ -17,7 +28,6 @@
             :content="announcement.text"
           />
         </div>
-      </div>
     </div>
 
     <br>
@@ -37,7 +47,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import announcement from "./announcement.vue";
 
 export default {
@@ -65,6 +75,7 @@ export default {
     ...mapState({
       announcements: (state) => state.announcement.announcements,
     }),
+    ...mapGetters("auth", ["isAuthenticated"]),
     paginatedAnnouncements() {
       let page_number = this.current - 1;
 
@@ -106,6 +117,20 @@ export default {
   background-color: white;
   overflow: auto;
 }
+
+#titleDiv {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#btnTitle {
+  margin-top: 10px;
+  margin-right: 20px
+}
+
+
 
 </style>
 

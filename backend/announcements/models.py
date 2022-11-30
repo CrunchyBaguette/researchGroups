@@ -14,6 +14,11 @@ class Announcement(models.Model):
     )
 
     class Type(models.TextChoices):
+        SPONSOR = "sponsor", "Poszukiwanie sponsora"
+        RECRUITMENT = "rekrutacja", "Poszukiwanie nowych członków"
+        PROJECT = "projekt", "Poszukiwanie osób do projektu"
         DEFAULT = "def", "Default"
 
-    ann_type = models.CharField(max_length=20, choices=Type.choices, default=Type.DEFAULT)
+    ann_type = models.CharField(
+        max_length=30, choices=Type.choices, default=Type.DEFAULT
+    )
