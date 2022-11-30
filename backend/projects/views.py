@@ -1,8 +1,8 @@
-from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.contrib.auth.models import User
 from backend.projects.serializers import (
     ProjectSerializer,
     ProjectUserSerializer,
@@ -13,7 +13,6 @@ from backend.projects.models import (
     ProjectPost,
     ProjectUser,
 )
-from django.contrib.auth.models import User
 
 from backend.common.views import PermissionPolicyMixin
 
@@ -91,8 +90,6 @@ class ProjectPostViewSet(viewsets.ModelViewSet):
                 {"project": ["'project' parameter is required."]},
                 status=400,
             )
-        postsQueryset = (
-            ProjectPost.objects.filter(project=project).order_by("added").all()
-        )
+        postsQueryset = ProjectPost.objects.filter(project=project).order_by("added").all()
         serializer = self.get_serializer(postsQueryset, many=True)
         return Response({"project": project, "posts": serializer.data})

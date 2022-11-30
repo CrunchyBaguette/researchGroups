@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from backend.announcements.models import Announcement
-from django.contrib.auth.models import User
 
 
 class AnnouncementSerializer(serializers.ModelSerializer):
@@ -12,9 +11,6 @@ class AnnouncementSerializer(serializers.ModelSerializer):
 
     def get_author_username(self, obj):
         return obj.author.username
-
-    def create(self, validated_data):
-        obj = super().create(validated_data)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

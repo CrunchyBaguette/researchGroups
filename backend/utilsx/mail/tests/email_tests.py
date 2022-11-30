@@ -6,11 +6,13 @@ from ..EmailBuilder import EmailBuilder
 
 @pytest.mark.order(1)
 def test_send_simple_mail(mailoutbox):
-    email = EmailBuilder("sender@example.com") \
-        .add_receiver("receiver@example.com") \
-        .add_text("This is a simple text") \
-        .add_subject("Test subject") \
+    email = (
+        EmailBuilder("sender@example.com")
+        .add_receiver("receiver@example.com")
+        .add_text("This is a simple text")
+        .add_subject("Test subject")
         .build_django_mail()
+    )
 
     email.send()
     received = mailoutbox[0]
@@ -24,38 +26,45 @@ def test_send_simple_mail(mailoutbox):
 
 @pytest.mark.order(2)
 def test_send_html(mailoutbox):
-    html = "<p style=\"color:blue;font-size:46px;\">I'm a big, blue, <strong>strong</strong> paragraph</p>"
-    email = EmailBuilder("sender@example.com") \
-        .add_receiver("receiver@example.com") \
-        .add_text("This is a simple text") \
-        .add_subject("Test subject") \
-        .add_html(html) \
+    html = '<p style="color:blue;font-size:46px;">I\'m a big, blue, <strong>strong</strong> paragraph</p>'
+    email = (
+        EmailBuilder("sender@example.com")
+        .add_receiver("receiver@example.com")
+        .add_text("This is a simple text")
+        .add_subject("Test subject")
+        .add_html(html)
         .build_django_mail()
+    )
 
     email.send()
     received = mailoutbox[0]
 
     assert len(mailoutbox) == 1, "Inbox is not empty"
     assert received.alternatives[0][1] == "text/html"
-    assert received.alternatives[0][
-               0] == "<p style=\"color:blue;font-size:46px;\">I'm a big, blue, <strong>strong</strong> paragraph</p>"
+    assert (
+        received.alternatives[0][0]
+        == '<p style="color:blue;font-size:46px;">I\'m a big, blue, <strong>strong</strong> paragraph</p>'
+    )
     assert received.body == "This is a simple text"
 
 
 def test_multiple_emails_send(mailoutbox):
-    html = "<p style=\"color:blue;font-size:46px;\">I'm a big, blue, <strong>strong</strong> paragraph</p>"
-    email1 = EmailBuilder("sender@example.com") \
-        .add_receiver("receiver@example.com") \
-        .add_text("This is a simple text") \
-        .add_subject("Test subject") \
-        .add_html(html) \
-        .build_django_mail() \
-
-    email2 = EmailBuilder("sender@example.com") \
-        .add_receiver("receiver@example.com") \
-        .add_text("This is a simple text") \
-        .add_subject("Test subject") \
+    html = '<p style="color:blue;font-size:46px;">I\'m a big, blue, <strong>strong</strong> paragraph</p>'
+    email1 = (
+        EmailBuilder("sender@example.com")
+        .add_receiver("receiver@example.com")
+        .add_text("This is a simple text")
+        .add_subject("Test subject")
+        .add_html(html)
         .build_django_mail()
+    )
+    email2 = (
+        EmailBuilder("sender@example.com")
+        .add_receiver("receiver@example.com")
+        .add_text("This is a simple text")
+        .add_subject("Test subject")
+        .build_django_mail()
+    )
 
     emails = [email1, email2]
 
