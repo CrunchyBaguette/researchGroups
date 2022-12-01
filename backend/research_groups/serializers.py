@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from backend.users.serializers import UserSerializer
 from backend.utilsx.serializers import QuerySerializerMixin
 from backend.research_groups.models import (
     ResearchGroup,
@@ -15,6 +14,7 @@ class ResearchGroupSerializer(QuerySerializerMixin, serializers.ModelSerializer)
 
     RELATED_FIELDS = ["group_owner"]
     PREFETCH_FIELDS = ["members"]
+
     class Meta:
         model = ResearchGroup
         fields = "__all__"
