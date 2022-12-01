@@ -17,6 +17,4 @@ class Announcement(models.Model):
         PROJECT = "projekt", "Poszukiwanie osób do projektu"
         DEFAULT = "def", "Default"
 
-    ann_type = models.CharField(
-        max_length=30, choices=Type.choices, default=Type.DEFAULT
-    )
+    ann_type = models.CharField(max_length=30, choices=Type.choices, default=Type.DEFAULT)

@@ -44,11 +44,6 @@ const router = new Router({
             component: groupPanel,
         },
         {
-            path: "/edit-group",
-            name: "editGroup",
-            component: editGroup,
-        },
-        {
             path: "/project-catalog",
             name: "projectCatalog",
             component: projectCatalog,
