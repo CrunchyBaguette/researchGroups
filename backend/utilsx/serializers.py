@@ -1,6 +1,6 @@
 class QuerySerializerMixin:
-    PREFETCH_FIELDS = []
-    RELATED_FIELDS = []
+    PREFETCH_FIELDS: list[str] = []
+    RELATED_FIELDS: list[str] = []
 
     @classmethod
     def get_related_queries(cls, queryset):
