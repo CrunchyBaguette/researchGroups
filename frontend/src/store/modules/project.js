@@ -68,13 +68,13 @@ const actions = {
 
 const mutations = {
     setProjects(state, data) {
-        state.Projects = data;
+        state.projects = data;
     },
     addProject(state, group) {
-        state.Projects.push(group)
+        state.projects.push(group)
     },
     setProject(state, data) {
-        state.Project = data;
+        state.project = data;
     },
     setGroupProjects(state, data) {
         state.groupProjects = data
