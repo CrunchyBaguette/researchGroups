@@ -25,7 +25,7 @@
     name: "announcement",
     props: {
       author: {type: String},
-      date: {type: Date},
+      date: {type: String},
       title: {type: String},
       category: {type: String},
       content: {type: String},
