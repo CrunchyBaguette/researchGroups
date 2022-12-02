@@ -37,9 +37,6 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         # nowy ale później można tu zaimplementować rozsyłanie maili
         member_emails = request.data["members"]
 
-        if not request.user.email in member_emails:
-            member_emails.append(request.user.email)
-
         for member_email in member_emails:
             if not User.objects.filter(email=member_email).exists():
                 User.objects.create_user(
@@ -48,16 +45,7 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
                     email=member_email,
                 )
 
-        response = super().create(request, *args, **kwargs)
-
-        ownerMember = ResearchGroupUser.objects.filter(
-            research_group__name=request.data["name"],
-            person__email=request.user.email,
-        ).first()
-        ownerMember.role = "cr"
-        ownerMember.save()
-
-        return response
+        return super().create(request, *args, **kwargs)
 
 
 class ResearchGroupPostViewSet(viewsets.ModelViewSet):
