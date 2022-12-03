@@ -1,8 +1,8 @@
 import { api } from "@/services/api";
 
 export default {
-    fetchGroup(params) {
-        return api.get("research-group/", { params }).then((response) => response.data);
+    fetchGroup(researchGroupId) {
+        return api.get(`research-group/${researchGroupId}/`).then((response) => response.data);
     },
     postGroup(data) {
         return api.post("research-group/", data).then((response) => response.data);

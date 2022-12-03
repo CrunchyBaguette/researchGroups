@@ -69,6 +69,8 @@ export default {
 }
 
 .groupTileDesc {
+  height: 80%;
+  overflow: hidden;
   text-align: left;
   padding: 5px;
 }
