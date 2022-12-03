@@ -97,7 +97,7 @@
             ann_type: this.announcementCategory,
             
             author: 2,
-            research_group_id: 1,
+            research_group_id: 5,
           })
             .then(() => {
               this.$buefy.toast.open({
