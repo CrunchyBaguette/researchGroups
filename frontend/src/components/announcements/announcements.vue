@@ -20,7 +20,7 @@
           >
             <announcement
               id="ann"
-              :author="announcement.author_username"
+              :author="announcement.author_full_name"
               :category="announcement.ann_type"
               :date="announcement.date"
               sortable

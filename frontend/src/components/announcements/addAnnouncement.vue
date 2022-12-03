@@ -65,7 +65,7 @@
   </template>
   
   <script>
-  import { mapActions } from "vuex";
+  import { mapActions, mapGetters } from "vuex";
   
   export default {
     name: "addAnnouncement",
@@ -96,8 +96,8 @@
             text: this.announcementContent,
             ann_type: this.announcementCategory,
             
-            author: 2,
-            research_group_id: 5,
+            author: this.authUser.id,
+            research_group_id: 1,
           })
             .then(() => {
               this.$buefy.toast.open({
@@ -125,5 +125,8 @@
         }
       },
     },
+    computed: {
+    ...mapGetters("auth", ["authUser"]),
+  },
   }
 </script>
