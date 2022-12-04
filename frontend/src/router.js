@@ -12,6 +12,7 @@ import passwordReminder from "@/components/user/passwordReminder"
 import groupPanel from "@/components/groupPanel/groupPanel"
 import groupTutorials from "@/components/tutorialCatalog/groupTutorials"
 import forum from "@/components/forum/forum"
+import postDetails from "@/components/forum/PostDetails";
 
 Vue.use(Router);
 
@@ -56,6 +57,11 @@ const router = new Router({
             path: "/forum",
             name: "forum",
             component: forum,
+        },
+        {
+            path: "/post/",
+            name: "post",
+            component: postDetails,
         },
         {
             path: "/register",

@@ -12,5 +12,8 @@ export default {
     },
     fetchGroupForumPosts(params) {
         return api.get("research-group-post/grouped/", { params }).then((response) => response.data);
+    },
+    deleteGroupForumPosts(params) {
+        return api.delete(`research-group-post/${params.id}`, ).then((response) => response.data);
     }
 };

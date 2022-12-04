@@ -43,6 +43,16 @@ const actions = {
             });
         });
     },
+    deleteForumPost({ dispatch }, params) {
+        return new Promise((resolve, reject) => {
+            researchGroupPostService.deleteGroupForumPosts(params).then(() => {
+                dispatch("getForumPosts");
+                resolve();
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    },
     getForumPosts({ commit }, group) {
         return new Promise((resolve, reject) => {
             researchGroupPostService.fetchGroupForumPosts(group).then((data) => {

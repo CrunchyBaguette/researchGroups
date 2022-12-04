@@ -1,16 +1,21 @@
 <template>
   <div>
-    <div class="columns">
-      <div>
-        <h2>Forum</h2>
+    <div class="columns mr-3">
+      <div class="column is-2 pr-6">
+        <p class="title">Forum</p>
       </div>
-      <div>
-        <button>add new</button>
+      <div class="column is-2 is-offset-8 pl-6">
+        <b-button class="is-primary" v-on:click="addPost">Utwórz nowy wpis</b-button>
       </div>
+    </div>
+    <div v-if="adding">
+      <add-post></add-post>
     </div>
     <div v-if="loading">
       <div v-for="post in forumPosts" :key="post.id">
-        <Post></Post>
+        <router-link :to="{ name: 'post' }">
+          <Post :post="post"></Post>
+        </router-link>
       </div>
     </div>
   </div>
@@ -19,20 +24,34 @@
 <script>
 import {mapActions, mapGetters, mapState} from "vuex";
 import Post from "@/components/forum/Post";
+import AddPost from "@/components/forum/addPost";
 
 export default {
   name: "forum",
+  props: {
+    title: {type: String},
+    content: {type: String}
+  },
   components: {
+    AddPost,
     Post,
   },
   data() {
     return {
       loading: false,
+      adding: false,
     };
   },
 
   methods: {
     ...mapActions("researchGroupPost", ["getForumPosts"]),
+
+    addPost(){
+      this.adding = true;
+      // this.loading = false;
+
+    }
+
   },
 
   computed: {
@@ -43,7 +62,7 @@ export default {
   },
 
   mounted() {
-    this.getForumPosts({researchGroup: 1000}).then(
+    this.getForumPosts({post: 1000}).then(
         () => (this.loading = true)
     );
   },
