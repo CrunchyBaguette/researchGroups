@@ -1,9 +1,8 @@
 <template>
   <div id="content">
-    <div id="titleDiv">
-      <p class="title" id="tit" v-if="!isBeingEdited">Panel Ogłoszenia</p>
+    <div id="titleDiv" v-if="!isBeingEdited">
+      <p class="title" id="tit">Panel Ogłoszenia</p>
       <b-button
-          v-if="!isBeingEdited"
           id="btnTitle"
           rounded
           size="is-medium"
@@ -11,17 +10,20 @@
           @click="changeToEditMode"
           >Edytuj ogłoszenie</b-button
         >
-      <p class="title" id="tit"  v-if="isBeingEdited">Edycja Ogłoszenia</p>
+    </div>
+    <div id="titleDiv" v-else>
+      <p class="title" id="tit">Edycja Ogłoszenia</p>
       <b-button
-        v-if="isBeingEdited"
         id="btnTitle"
         rounded
         size="is-medium"
         type="is-success"
         @click="changeToPanelMode"
+        :disabled="isButtonDisabled"
         ><b-icon icon="arrow-left" />&nbsp;&nbsp;Wróć do panelu ogłoszenia</b-button
       >
     </div>
+    
     
     <announcement v-if="!isBeingEdited" 
       id="ann"
@@ -36,7 +38,7 @@
       <div id="root-container" class="box">
         <div class="container">
           <div class="author-category-container">
-            <p class="author">{{ announcementAuthor }}</p>
+            <p class="author-in-edit-mode">{{ announcementAuthor }}</p>
             <div class="category-edit-container">
               <p class="category" v-if="!editAnnouncementCategory || !isBeingEdited">
                 {{ announcementCategory }}
@@ -72,7 +74,7 @@
             </div>
           </div>
           <div class="date-container">
-              <p class="date">{{ announcementDate }}</p> 
+              <p class="date-in-edit-mode">{{ announcementDate }}</p> 
           </div>
           <div class="title-container">
             <div class="title-edit-container">
@@ -305,10 +307,11 @@ export default {
   height: 30%;
 }
 
-.author {
+.author-in-edit-mode {
   padding-left: 5px;
   font-weight: bold;
   font-size: 20px;
+  color: rgb(139, 139, 139);
 }
 
 .category {
@@ -318,8 +321,9 @@ export default {
   font-size: 20px;
 }
 
-.date {
+.date-in-edit-mode {
   padding-left: 5px;
+  color: rgb(139, 139, 139);
 }
 
 .content-container {
