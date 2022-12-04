@@ -106,7 +106,7 @@
               });
   
               this.$router.replace(
-                this.$route.query.redirect || "/"
+                this.$route.query.redirect || "/announcement-panel"
               );
             })
             .catch((err) => {

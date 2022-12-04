@@ -409,7 +409,7 @@ export default {
     };
   },
   mounted() {
-    document.title = "Edycja koła";
+    document.title = "Panel koła";
   },
   methods: {
     showAboutUs() {
