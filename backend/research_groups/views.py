@@ -52,8 +52,8 @@ class ResearchGroupUserViewSet(viewsets.ModelViewSet):
                 status=400,
             )
         members = self.get_queryset()
-        newMembers = request.data["members"]  
-        
+        newMembers = request.data["members"]
+
         newMembersRoles = [newMember["role"] for newMember in newMembers]
         if Counter(newMembersRoles)["Creator"] != 1:
             raise APIException("Koło naukowe musi posiadać dokładnie jedengo twórcę")
@@ -111,11 +111,13 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
 
         response = super().create(request, *args, **kwargs)
 
-        ownerMember = ResearchGroupUser.objects.filter(research_group__id=response.data["id"], person__email=self.request.user.email).first()
+        ownerMember = ResearchGroupUser.objects.filter(
+            research_group__id=response.data["id"], person__email=self.request.user.email
+        ).first()
         ownerMember.role = "cr"
         ownerMember.save()
 
-        return response        
+        return response
 
 
 class ResearchGroupPostViewSet(viewsets.ModelViewSet):

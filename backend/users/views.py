@@ -31,7 +31,7 @@ class UserViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     }
 
     @action(detail=True, methods=["get"])
-    def researchGroups(self, request, pk=None):
+    def researchGroups(self, request):
         user = self.get_object()
         researchGroups = ResearchGroup.objects.all()
         researchGroupData = ResearchGroupSerializer(researchGroups, many=True)
@@ -44,7 +44,7 @@ class UserViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         return Response(userResarchGroups)
 
     @action(detail=True, methods=["get"])
-    def adminResearchGroups(self, request, pk=None):
+    def adminResearchGroups(self, request):
         user = self.get_object()
         researchGroupUsers = ResearchGroupUser.objects.filter(person=user, role="mod").all()
         userResearchGroups = [researchGroupUser.research_group for researchGroupUser in researchGroupUsers]
@@ -52,7 +52,7 @@ class UserViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         return Response(researchGroupSerializer.data)
 
     @action(detail=True, methods=["get"])
-    def projects(self, request, pk=None):
+    def projects(self, request):
         user = self.get_object()
         projects = Project.objects.all()
         projectData = ProjectSerializer(projects, many=True)
