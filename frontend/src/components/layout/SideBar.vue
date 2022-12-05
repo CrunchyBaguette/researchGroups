@@ -7,7 +7,11 @@
           :key="researchGroup.name"
           :label="researchGroup.name"
           tag="router-link"
-          :to="{ name: 'group', params: { id: researchGroup.id } }"
+          :to="
+            isAuthenticated
+              ? { name: 'group', params: { id: researchGroup.id } }
+              : { name: 'login' }
+          "
         ></b-menu-item>
       </b-menu-item>
       <b-menu-item label="Projekty">
