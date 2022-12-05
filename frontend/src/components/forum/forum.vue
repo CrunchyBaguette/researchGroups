@@ -1,8 +1,8 @@
 <template>
-  <div v-if="loading">
+  <div>
     <div class="columns mr-3">
       <div class="column is-2 pr-6">
-        <p class="title">Forum</p>
+        <p class="subtitle">Forum</p>
       </div>
       <div class="column is-2 is-offset-8 pl-6">
         <b-button v-if="!adding" class="is-primary" v-on:click="addPost">Utwórz nowy wpis</b-button>
@@ -12,7 +12,7 @@
       <add-post></add-post>
       <b-button v-on:click="cancelPost">Anuluj</b-button>
     </div>
-    <div>
+    <div v-if="loading">
       <div v-for="post in forumPosts" :key="post.id">
         <router-link :to="{ name: 'post' }">
           <Post :post="post"></Post>
