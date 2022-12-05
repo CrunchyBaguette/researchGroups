@@ -134,7 +134,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "addGroup",
@@ -166,6 +166,7 @@ export default {
           about_us: this.groupAboutUs,
           category: this.groupCategory,
           members: this.groupMembers,
+          group_owner: this.authUser.username,
         })
           .then(() => {
             this.$buefy.toast.open({
@@ -210,6 +211,10 @@ export default {
       let index = this.groupMembers.indexOf(email);
       this.groupMembers.splice(index, 1);
     },
+  },
+
+  computed: {
+    ...mapGetters("auth", ["authUser"]),
   },
 };
 </script>

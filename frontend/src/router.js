@@ -33,8 +33,8 @@ const router = new Router({
             component: addGroup,
         },
         {
-            path: "/group-panel",
-            name: "groupPanel",
+            path: "/group/:id",
+            name: "group",
             component: groupPanel,
         },
         {
