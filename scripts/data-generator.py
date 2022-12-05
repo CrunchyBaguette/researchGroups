@@ -1,11 +1,12 @@
 from faker import Faker
 import pandas as pd
+from django.contrib.auth.hashers import make_password
 from sqlalchemy import create_engine
 from collections import defaultdict
 
 # Aby wywołać generator trzeba w folderze researchGroup wpisać "python manage.py runscript data-generator"
 # falga do printowania danych do konsoli
-is_printing = True
+is_printing = False
 
 number_of_announcements = 10
 number_of_projects = 10
@@ -32,15 +33,14 @@ engine = create_engine(
 
 def run():
     users = generate_user()
-    guides = generate_guide(users)
     research_groups = generate_research_group()
     projects = generate_project()
     tutorials = generate_tutorial(users)
     tutorial_users = generate_tutorial_user(tutorials, users)
-    ratings = generate_Rating(users, guides)
+    ratings = generate_Rating(users, tutorials)
     project_research_group = generate_project_research_group(projects, research_groups)
     projectUsers = generate_project_user(users, projects)
-    guideProjects = generate_guide_project(guides, projects)
+    guideProjects = generate_guide_project(tutorials, projects)
     announcements = generate_announcement(users, research_groups)
     research_group_users = generate_research_group_users(users, research_groups)
     research_group_posts = generate_research_group_post(users, research_groups)
@@ -49,7 +49,7 @@ def run():
     )
     research_group_disks = generate_research_group_disk(projects)
     research_group_links = generate_research_group_link(projects)
-    research_group_guides = generate_research_group_guides(research_groups, guides)
+    research_group_guides = generate_research_group_guides(research_groups, tutorials)
     project_posts = generate_project_post(users, projects)
     project_post_comments = generate_project_post_comment(users, project_posts)
     project_disks = generate_project_disk(projects)
@@ -60,7 +60,7 @@ def generate_user():
     users = defaultdict(list)
     users["id"].append(10000)
     users["username"].append("admin")
-    users["password"].append("pbkdf2_sha256$390000$t4vBM3S5FW5evj2qICfZZs$w28n77q4iQv7oxDbez9iadVk3mLOxJmog051cO2+SLE=")# "admin" po szyfrowaniu
+    users["password"].append(make_password("admin"))# "admin" po szyfrowaniu
     users["last_login"].append(fake.date())
     users["is_superuser"].append(True)
     users["first_name"].append("admin")
@@ -71,15 +71,16 @@ def generate_user():
     users["date_joined"].append(fake.past_date())
     for i in range(number_of_users):
         users["id"].append(1000 + i)
-        users["username"].append(fake.unique.word() + fake.unique.word())
-        users["password"].append(fake.password())
+        username = fake.unique.word() + fake.unique.word()
+        users["username"].append(username)
+        users["password"].append(make_password(username))
         users["last_login"].append(fake.date())
-        users["is_superuser"].append(fake.boolean())
+        users["is_superuser"].append(False)
         users["first_name"].append(fake.first_name())
         users["last_name"].append(fake.last_name())
         users["email"].append(fake.email())
-        users["is_staff"].append(fake.boolean())
-        users["is_active"].append(fake.boolean())
+        users["is_staff"].append(False)
+        users["is_active"].append(True)
         users["date_joined"].append(fake.past_date())
     df_users = pd.DataFrame(users)
     if is_printing:
@@ -96,7 +97,7 @@ def generate_research_group():
         research_groups["about_us"].append(fake.text())
         research_groups["what_we_do"].append(fake.text())
         research_groups["contact"].append(fake.text())
-        categories = ["MATH", "MEDICAL", "CHEMISTRY", "DEFAULT"]
+        categories = ["math", "med", "chem", "def"]
         research_groups["category"].append(
             categories[fake.pyint(0, len(categories) - 1)]
         )
@@ -126,26 +127,6 @@ def generate_project():
         print(df_projects)
     df_projects.to_sql("projects_project", con=engine, index=False, if_exists="append")
     return df_projects
-
-
-def generate_guide(users):
-    guides = defaultdict(list)
-    for i in range(number_of_guides):
-        guides["id"].append(1000 + i)
-        guides["name"].append(fake.unique.name())
-        guides["text"].append(fake.text())
-        guides["isDraft"].append(fake.boolean())
-        guides["isPublic"].append(fake.boolean())
-        guides["createDate"].append(fake.past_date())
-        guides["author"].append(users["id"].values[(i % len(users["id"]))])
-        guides["editor"].append(users["id"].values[(i % len(users["id"]))])
-        types = ["Default", "Default"]
-        guides["type"].append(types[fake.pyint(0, len(types) - 1)])
-    df_guides = pd.DataFrame(guides)
-    if is_printing:
-        print(df_guides)
-    df_guides.to_sql("Guides", con=engine, index=False, if_exists="append")
-    return df_guides
 
 
 def generate_tutorial(users):
