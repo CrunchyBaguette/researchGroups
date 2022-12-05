@@ -178,10 +178,7 @@ export default {
           })
           .catch((err) => {
             this.$buefy.toast.open({
-              message:
-                "Błąd przy dodawaniu koła naukowego (" +
-                (err.response ? err.response.status : 500) +
-                ")",
+              message: err.response.data[Object.keys(err.response.data)[0]],
               type: "is-danger",
             });
           });
@@ -200,6 +197,8 @@ export default {
         this.invalidEmailMessage = "Podaj poprawny E-mail";
       } else if (this.projectMembers.includes(memberEmail)) {
         this.invalidEmailMessage = "Już podano dany E-mail";
+      } else if (memberEmail == this.authUser.email) {
+        this.invalidEmailMessage = "Nie można dodać własnego adresu E-mail";
       } else {
         this.projectMembers.push(memberEmail);
       }

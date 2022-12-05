@@ -26,7 +26,7 @@
         size="is-medium"
         style="text-align: center"
         tag="router-link"
-        :to="{ name: 'group', params: { id: project.id } }"
+        :to="{ name: 'project', params: { id: project.id } }"
         >Przejdź do panelu projektu</b-button
       >
     </div>

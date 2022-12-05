@@ -36,9 +36,7 @@ class ProjectViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         # Obecnie, w przypadku gdy nie ma użytkownika z podanym mailem, tworzony jest
         # nowy ale później można tu zaimplementować rozsyłanie maili
         members = request.data["members"]
-
-        if not request.user.email in members:
-            members.append(request.user.email)
+        members.append(self.request.user.email)
 
         for member in members:
             if not User.objects.filter(email=member).exists():

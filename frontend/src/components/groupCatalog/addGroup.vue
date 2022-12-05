@@ -155,6 +155,7 @@ export default {
 
   methods: {
     ...mapActions("researchGroup", ["addResearchGroup"]),
+    ...mapActions("user", ["getUserResearchGroups"]),
     clicked() {
       if (this.groupName == "") this.nameGiven = false;
       if (this.groupCategory == "") this.categoryGiven = false;
@@ -180,10 +181,7 @@ export default {
           })
           .catch((err) => {
             this.$buefy.toast.open({
-              message:
-                "Błąd przy dodawaniu koła naukowego (" +
-                (err.response ? err.response.status : 500) +
-                ")",
+              message: err.response.data[Object.keys(err.response.data)[0]],
               type: "is-danger",
             });
           });
@@ -202,6 +200,8 @@ export default {
         this.invalidEmailMessage = "Podaj poprawny E-mail";
       } else if (this.groupMembers.includes(memberEmail)) {
         this.invalidEmailMessage = "Już podano dany E-mail";
+      } else if (memberEmail == this.authUser.email) {
+        this.invalidEmailMessage = "Nie można dodać własnego adresu E-mail";
       } else {
         this.groupMembers.push(memberEmail);
       }

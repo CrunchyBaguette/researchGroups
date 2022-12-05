@@ -8,7 +8,7 @@ export default {
         return api.post("research-group/", data).then((response) => response.data);
     },
     patchGroup(update) {
-        return api.patch(`research-group/${update.id}`, update.payload).then((response) => response.data);
+        return api.patch(`research-group/${update.id}/`, update.payload).then((response) => response.data);
     },
     fetchGroups() {
         return api.get("research-group/").then((response) => response.data);
