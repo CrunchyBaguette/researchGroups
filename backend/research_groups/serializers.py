@@ -1,18 +1,19 @@
 from rest_framework import serializers
-
+from django.contrib.auth.models import User
+from backend.utilsx.serializers import QuerySerializerMixin
 from backend.research_groups.models import (
     ResearchGroup,
     ResearchGroupPost,
     ResearchGroupUser,
 )
 
-from django.contrib.auth.models import User
 
+class ResearchGroupSerializer(QuerySerializerMixin, serializers.ModelSerializer):
+    members = serializers.SlugRelatedField(many=True, slug_field="email", queryset=User.objects.all())
+    group_owner = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
 
-class ResearchGroupSerializer(serializers.ModelSerializer):
-    members = serializers.SlugRelatedField(
-        many=True, slug_field="email", queryset=User.objects.all()
-    )
+    RELATED_FIELDS = ["group_owner"]
+    PREFETCH_FIELDS = ["members"]
 
     class Meta:
         model = ResearchGroup
