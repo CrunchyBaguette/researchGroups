@@ -7,11 +7,15 @@ from backend.projects.serializers import (
     ProjectSerializer,
     ProjectUserSerializer,
     ProjectPostSerializer,
+    ProjectLinkSerializer,
+    ProjectDiskSerializer,
 )
 from backend.projects.models import (
     Project,
     ProjectPost,
     ProjectUser,
+    ProjectLink,
+    ProjectDisk,
 )
 
 from backend.common.views import PermissionPolicyMixin
@@ -91,3 +95,13 @@ class ProjectPostViewSet(viewsets.ModelViewSet):
         postsQueryset = ProjectPost.objects.filter(project=project).order_by("added").all()
         serializer = self.get_serializer(postsQueryset, many=True)
         return Response({"project": project, "posts": serializer.data})
+
+
+class ProjectLinkViewSet(viewsets.ModelViewSet):
+    queryset = ProjectLink.objects.all()
+    serializer_class = ProjectLinkSerializer
+
+
+class ProjectDiskViewSet(viewsets.ModelViewSet):
+    queryset = ProjectDisk.objects.all()
+    serializer_class = ProjectDiskSerializer

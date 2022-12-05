@@ -5,6 +5,8 @@ from backend.research_groups.models import (
     ResearchGroup,
     ResearchGroupPost,
     ResearchGroupUser,
+    ResearchGroupLink,
+    ResearchGroupDisk,
 )
 
 
@@ -44,4 +46,16 @@ class ResearchGroupUserSerializer(QuerySerializerMixin, serializers.ModelSeriali
 class ResearchGroupPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResearchGroupPost
+        fields = "__all__"
+
+
+class ResearchGroupLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResearchGroupLink
+        fields = "__all__"
+
+
+class ResearchGroupDiskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResearchGroupDisk
         fields = "__all__"

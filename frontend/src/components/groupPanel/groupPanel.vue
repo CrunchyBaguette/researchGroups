@@ -410,9 +410,15 @@
           <b-menu-list>
             <b-menu-item label="Linki">
               <b-menu-item
+                v-if="!isBeingEdited"
                 label="Github"
                 target="_blank"
                 href="https://github.com"
+              ></b-menu-item>
+              <b-menu-item
+                v-else
+                label="Github"
+                @click="openEditLinkModal('GitHub', 'https://github.com')"
               ></b-menu-item>
               <b-menu-item
                 label="Facebook"
@@ -441,23 +447,31 @@
         </b-menu>
       </div>
     </div>
+    <b-modal has-modal-card :active.sync="this.editLink" trap-focus>
+      <editLinkModal :linkTitle="this.linkTitle" :linkUrl="this.linkUrl" />
+    </b-modal>
   </div>
 </template>
 
 <script>
 import popupEmail from "@/components/popup/PopupEmail.vue";
+import editLinkModal from "@/components/groupPanel/editLink.vue";
 import { mapActions, mapState, mapGetters } from "vuex";
 
 export default {
   name: "groupPanel",
   components: {
     popupEmail,
+    editLinkModal,
   },
   data() {
     return {
       loading: true,
       addEmail: "",
       addRole: "Member",
+      linkTitle: "",
+      linkUrl: "",
+      editLink: false,
 
       selectedTabTitle: "O Nas",
 
@@ -514,6 +528,12 @@ export default {
       "getResearchGroupMembers",
       "updateResearchGroupMembers",
     ]),
+
+    openEditLinkModal(linkTitle, linkUrl) {
+      this.linkTitle = linkTitle;
+      this.linkUrl = linkUrl;
+      this.editLink = true;
+    },
 
     isAdminOrOwner() {
       for (var i = 0; i < this.researchGroupMembers.length; i++) {

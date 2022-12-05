@@ -9,11 +9,14 @@ from backend.research_groups.serializers import (
     ResearchGroupUserSerializer,
     ResearchGroupSerializer,
     ResearchGroupPostSerializer,
+    ResearchGroupLinkSerializer,
 )
 from backend.research_groups.models import (
     ResearchGroup,
     ResearchGroupPost,
     ResearchGroupUser,
+    ResearchGroupLink,
+    ResearchGroupDisk,
 )
 
 from backend.common.views import PermissionPolicyMixin
@@ -135,3 +138,26 @@ class ResearchGroupPostViewSet(viewsets.ModelViewSet):
         postsQueryset = ResearchGroupPost.objects.filter(research_group=researchGroup).order_by("added").all()
         serializer = self.get_serializer(postsQueryset, many=True)
         return Response({"researchGroup": researchGroup, "posts": serializer.data})
+
+
+class ResearchGroupLinkViewSet(viewsets.ModelViewSet):
+    queryset = ResearchGroupLink.objects.all()
+    serializer_class = ResearchGroupLinkSerializer
+
+    @action(detail=False, methods=["post"])
+    def groupLinks(self, request):
+        researchGroupId = request.data["researchGroupId"]
+        if not researchGroupId:
+            return Response(
+                {"researchGroupId": ["'researchGroupId' parameter is required."]},
+                status=400,
+            )
+        links = self.get_queryset()
+        researchGroupLinks = links.filter(research_group__id=researchGroupId).all()
+        serializer = self.get_serializer(researchGroupLinks, many=True)
+        return Response({"researchGroup": researchGroupId, "links": serializer.data})
+
+
+class ResearchGroupDiskViewSet(viewsets.ModelViewSet):
+    queryset = ResearchGroupDisk.objects.all()
+    serializer_class = ResearchGroupLinkSerializer

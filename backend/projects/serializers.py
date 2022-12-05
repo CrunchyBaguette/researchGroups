@@ -5,6 +5,8 @@ from backend.projects.models import (
     Project,
     ProjectPost,
     ProjectUser,
+    ProjectLink,
+    ProjectDisk,
 )
 
 
@@ -34,4 +36,16 @@ class ProjectUserSerializer(serializers.ModelSerializer):
 class ProjectPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectPost
+        fields = "__all__"
+
+
+class ProjectLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectLink
+        fields = "__all__"
+
+
+class ProjectDiskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectDisk
         fields = "__all__"
