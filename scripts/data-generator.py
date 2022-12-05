@@ -1,8 +1,10 @@
 from faker import Faker
 import pandas as pd
 from django.contrib.auth.hashers import make_password
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, MetaData, text
 from collections import defaultdict
+
+from sqlalchemy.ext.declarative import declarative_base
 
 # Aby wywołać generator trzeba w folderze researchGroup wpisać "python manage.py runscript data-generator"
 # falga do printowania danych do konsoli
@@ -26,12 +28,39 @@ number_of_ratings = 10
 
 fake = Faker()
 engine = create_engine(
-    "postgresql://admin:pleasechangeme@postgres:5432/backend", echo=False
-    # "postgresql://admin:pleasechangeme@localhost:5432/backend", echo=False
+    # "postgresql://admin:pleasechangeme@postgres:5432/backend", echo=False
+    "postgresql://admin:pleasechangeme@localhost:5432/backend", echo=False
 )
 
 
 def run():
+    dropTables()
+    genrateTables()
+
+def dropTables():
+    dropTable("projects_projectlink")
+    dropTable("projects_projectdisk")
+    dropTable("projects_projectpostcomment")
+    dropTable("projects_projectpost")
+    dropTable("research_groups_researchgroupguide")
+    dropTable("research_groups_researchgrouplink")
+    dropTable("research_groups_researchgroupdisk")
+    dropTable("research_groups_researchgrouppostcomment")
+    dropTable("research_groups_researchgrouppost")
+    dropTable("research_groups_researchgroupuser")
+    dropTable("announcements_announcement")
+    dropTable("projects_guideproject")
+    dropTable("project_projectuser")
+    dropTable("projects_project_research_groups")
+    dropTable("tutorials_rating")
+    dropTable("tutorials_tutorial_editors")
+    dropTable("tutorials_tutorial")
+    dropTable("projects_project")
+    dropTable("research_groups_researchgroup")
+    dropTable("auth_user")
+
+
+def genrateTables():
     users = generate_user()
     research_groups = generate_research_group()
     projects = generate_project()
@@ -55,6 +84,12 @@ def run():
     project_disks = generate_project_disk(projects)
     project_links = generate_project_link(projects)
 
+
+def dropTable(name):
+    sql = text('DROP TABLE IF EXISTS '+name+';')
+    engine.execute(sql)
+    if is_printing:
+        print("deleting table " + name)
 
 def generate_user():
     users = defaultdict(list)
