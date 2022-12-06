@@ -26,6 +26,7 @@
               sortable
               :title="announcement.title"
               :content="announcement.text"
+              @click.native="moveToAnnouncement(announcement.id)"
             />
           </div>
       </div>
@@ -49,7 +50,7 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from "vuex";
-import announcement from "./announcement.vue";
+import announcement from "./announcement.vue"
 
 export default {
   name: "announcementCatalog",
@@ -70,6 +71,9 @@ export default {
       // update page of items
       this.pageOfItems = pageOfItems;
     },
+    moveToAnnouncement(announcementId) {
+      this.$router.push(`/announcement/${announcementId}`)
+    }
   },
 
   computed: {

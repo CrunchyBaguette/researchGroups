@@ -25,14 +25,14 @@ const router = new Router({
             component: announcementCatalog,
         },
         {
+            path: "/announcement/:id",
+            name: "announcement",
+            component: announcementPanel,
+        },
+        {
             path: "/add-announcement",
             name: "addAnnouncement",
             component: addAnnouncement,
-        },
-        {
-            path: "/announcement-panel",
-            name: "announcementPanel",
-            component: announcementPanel,
         },
         {
             path: "/group-catalog",

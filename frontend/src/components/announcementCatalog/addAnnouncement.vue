@@ -97,16 +97,16 @@
             ann_type: this.announcementCategory,
             
             author: this.authUser.id,
-            research_group_id: 1,
+            research_group_id: 1, //todo
           })
-            .then(() => {
+            .then((newAnnouncement) => {
               this.$buefy.toast.open({
                 message: "Pomyślnie dodano ogłoszenie",
                 type: "is-success",
               });
   
               this.$router.replace(
-                this.$route.query.redirect || "/announcement-panel"
+                this.$route.query.redirect || `/announcement/${newAnnouncement.id}`
               );
             })
             .catch((err) => {
