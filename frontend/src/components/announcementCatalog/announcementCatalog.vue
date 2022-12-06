@@ -53,7 +53,7 @@ import { mapActions, mapState, mapGetters } from "vuex";
 import announcement from "./announcement.vue"
 
 export default {
-  name: "announcementCatalog",
+  name: "announcements",
   components: {
     announcement,
   },

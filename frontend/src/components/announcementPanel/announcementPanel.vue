@@ -304,8 +304,8 @@ export default {
             (this.announcementTitle = this.announcement.title),
             (this.announcementCategory = this.announcement.ann_type),
             (this.announcementContent = this.announcement.text),
-            (this.announcementAuthor = this.researchGroup.author),
-            (this.announcementDate = this.researchGroup.date)
+            (this.announcementAuthor = this.announcement.author),
+            (this.announcementDate = this.announcement.date)
           )
         )
         .then(() => {

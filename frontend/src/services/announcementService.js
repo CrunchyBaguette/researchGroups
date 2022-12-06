@@ -1,8 +1,8 @@
 import { api } from "@/services/api";
 
 export default {
-    fetchAnnouncement(params) {
-        return api.get("announcement/", { params }).then((response) => response.data);
+    fetchAnnouncement(announcementId) {
+        return api.get(`announcement/${announcementId}`).then((response) => response.data);
     },
     postAnnouncement(data) {
         return api.post("announcement/", data).then((response) => response.data);
