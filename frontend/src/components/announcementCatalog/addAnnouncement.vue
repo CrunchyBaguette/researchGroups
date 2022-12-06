@@ -65,7 +65,7 @@
   </template>
   
   <script>
-  import { mapActions } from "vuex";
+  import { mapActions, mapGetters } from "vuex";
   
   export default {
     name: "addAnnouncement",
@@ -96,17 +96,17 @@
             text: this.announcementContent,
             ann_type: this.announcementCategory,
             
-            author: 2,
-            research_group_id: 1,
+            author: this.authUser.id,
+            research_group_id: 1, //todo
           })
-            .then(() => {
+            .then((newAnnouncement) => {
               this.$buefy.toast.open({
                 message: "Pomyślnie dodano ogłoszenie",
                 type: "is-success",
               });
   
               this.$router.replace(
-                this.$route.query.redirect || "/"
+                this.$route.query.redirect || `/announcement/${newAnnouncement.id}`
               );
             })
             .catch((err) => {
@@ -125,5 +125,8 @@
         }
       },
     },
+    computed: {
+    ...mapGetters("auth", ["authUser"]),
+  },
   }
 </script>

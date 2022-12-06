@@ -1,4 +1,4 @@
-<template>
+  <template>
     <div id="root-container" class="box">
       <div class="container">
         <div class="author-category-container">

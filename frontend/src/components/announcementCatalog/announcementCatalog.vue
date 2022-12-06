@@ -1,5 +1,5 @@
 <template>
-  <div id="content" v-if="!loading">
+  <div id="content">
     <div id="titleDiv">
       <p class="title" id="tit">Ogłoszenia</p>
       <b-button
@@ -12,35 +12,37 @@
           >Dodaj nowe ogłoszenie</b-button
         >
     </div>
-    
-    <div id="announcements" class="box">
-        <div
-          v-for="announcement in paginatedAnnouncements"
-          :key="announcement.title"
-        >
-          <announcement
-            
-            :author="announcement.author_username"
-            :category="announcement.ann_type"
-            :date="announcement.date"
-            sortable
-            :title="announcement.title"
-            :content="announcement.text"
-          />
+    <div id="announcementsContainer" v-if="!loading">
+      <div class="box" id="box">
+          <div
+            v-for="announcement in paginatedAnnouncements"
+            :key="announcement.title"
+          >
+            <announcement
+              id="ann"
+              :author="announcement.author_full_name"
+              :category="announcement.ann_type"
+              :date="announcement.date"
+              sortable
+              :title="announcement.title"
+              :content="announcement.text"
+              @click.native="moveToAnnouncement(announcement.id)"
+            />
+          </div>
+      </div>
+
+      <br>
+
+      <div class="columns" style="width: 100%">
+        <div class="column is-two-thirds"></div>
+        <div class="box column is-one-third">
+          <b-pagination
+            order="is-centered"
+            :total="announcements.length"
+            :per-page="perPage"
+            :current.sync="current"
+          ></b-pagination>
         </div>
-    </div>
-
-    <br>
-
-    <div class="columns" style="width: 100%">
-      <div class="column is-two-thirds"></div>
-      <div class="box column is-one-third">
-        <b-pagination
-          order="is-centered"
-          :total="announcements.length"
-          :per-page="perPage"
-          :current.sync="current"
-        ></b-pagination>
       </div>
     </div>
   </div>
@@ -48,10 +50,10 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from "vuex";
-import announcement from "./announcement.vue";
+import announcement from "./announcement.vue"
 
 export default {
-  name: "announcements",
+  name: "announcementCatalog",
   components: {
     announcement,
   },
@@ -69,6 +71,9 @@ export default {
       // update page of items
       this.pageOfItems = pageOfItems;
     },
+    moveToAnnouncement(announcementId) {
+      this.$router.push(`/announcement/${announcementId}`)
+    }
   },
 
   computed: {
@@ -108,14 +113,15 @@ export default {
   text-align: left;
 }
 
-#announcements {
-  /* display: flex;
-  justify-content: space-between; */
+#announcementsContainer {
   padding: 0px;
   width: 100%;
-  height: 74%;
-  background-color: white;
+  height: 85%;
   overflow: auto;
+}
+
+#box {
+  min-height: 80%;
 }
 
 #titleDiv {
@@ -130,7 +136,12 @@ export default {
   margin-right: 20px
 }
 
-
+#ann {
+  margin-bottom: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: rgb(196, 196, 196);
+}
 
 </style>
 
