@@ -50,19 +50,22 @@ def dropTables():
     dropTable("research_groups_researchgroupuser")
     dropTable("announcements_announcement")
     dropTable("projects_guideproject")
-    dropTable("project_projectuser")
+    dropTable("projects_projectuser")
     dropTable("projects_project_research_groups")
     dropTable("tutorials_rating")
     dropTable("tutorials_tutorial_editors")
     dropTable("tutorials_tutorial")
     dropTable("projects_project")
     dropTable("research_groups_researchgroup")
-    dropTable("auth_user")
+    sql = text('DELETE FROM auth_user;')
+    engine.execute(sql)
+    if is_printing:
+        print("deleting table auth_user")
 
 
 def genrateTables():
     users = generate_user()
-    research_groups = generate_research_group()
+    research_groups = generate_research_group(users)
     projects = generate_project()
     tutorials = generate_tutorial(users)
     tutorial_users = generate_tutorial_user(tutorials, users)
@@ -124,7 +127,7 @@ def generate_user():
     return df_users
 
 
-def generate_research_group():
+def generate_research_group(users):
     research_groups = defaultdict(list)
     for i in range(number_of_research_groups):
         research_groups["id"].append(1000 + i)
@@ -136,6 +139,7 @@ def generate_research_group():
         research_groups["category"].append(
             categories[fake.pyint(0, len(categories) - 1)]
         )
+        research_groups["group_owner"].append(users["id"].values[i % len(users["id"])])
     df_research_groups = pd.DataFrame(research_groups)
     if is_printing:
         print(df_research_groups)
