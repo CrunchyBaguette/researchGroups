@@ -33,6 +33,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include(api_urlpatterns)),
     path("api-auth/", include("rest_framework.urls")),
+    path("api-auth/", include("backend.common.urls")),
     path("api/logout/", logout_view, name="logout_view"),
     path("api/token/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
