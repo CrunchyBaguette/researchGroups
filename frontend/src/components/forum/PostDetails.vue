@@ -1,8 +1,8 @@
 <template>
-  <div v-if="loading">
+  <div v-if="loading">{{ authUser }}
     <div class="columns">
       <div class="column is-4">
-        <p class="author-decor">{{ forumPost.author.surname }} {{ forumPost.author.lastname }}</p>
+        <p class="author-decor">{{ authorName }} {{ forumPost.author }}</p>
       </div>
       <div class="column is-2 is-offset-6">
         <b-button class="button" v-on:click="showEdit">Edytuj</b-button>
@@ -17,7 +17,7 @@
         <label for="title">Tytuł:</label>
         <b-input id="title" v-model="title"></b-input>
         <label for="text">Treść:</label>
-        <b-input id="text" v-model="text" maxlength="1000"></b-input>
+        <b-input type="textarea" id="text" v-model="text" maxlength="1000"></b-input>
         <b-button v-on:click="updatePost">Akceptuj zmiany</b-button>
       </div>
     </div>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import {mapActions, mapState} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 
 export default {
   name: "postDetails",
@@ -39,6 +39,8 @@ export default {
     return {
       title: "",
       text: "",
+      postId: 1000,
+      authorName: "autor name",//todo author name
       loading: false,
       isUpdate: false,
     };
@@ -57,7 +59,7 @@ export default {
     updatePost() {
       if (this.title && this.text) {
         this.updateForumPost({
-          id: 1,//todo
+          id: this.postId,
           title: this.title,
           text: this.text,
         })
@@ -87,7 +89,7 @@ export default {
     deletePost() {
       // if (true) {//prompt
       this.deleteForumPost({
-        id: 1,//todo
+        id: this.postId,
       })
           .then(() => {
             this.$buefy.toast.open({
@@ -111,14 +113,16 @@ export default {
   },
 
   computed: {
+    ...mapGetters("auth", ["authUser"]),
     ...mapState({
       forumPost: (state) => state.researchGroupPost.forumPost,
+      // authorName: (state) => state.auth.authUser,
       // comments: state => state.researchGroupPost.postComment
     }),
   },
 
   mounted() {
-    this.getForumPost({researchGroup: 1}).then(
+    this.getForumPost({id: this.postId}).then(
         () => (this.loading = true)
     );
   },

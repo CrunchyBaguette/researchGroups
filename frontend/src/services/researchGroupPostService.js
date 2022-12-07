@@ -2,7 +2,7 @@ import { api } from "@/services/api";
 
 export default {
     fetchForumPost(params) {
-        return api.get("research-group-post/", { params }).then((response) => response.data);
+        return api.get("research-group-post/" + (params.id !== undefined ? params.id.toString() : ""), { params }).then((response) => response.data);
     },
     postForumPost(data) {
         return api.post("research-group-post/", data).then((response) => response.data);

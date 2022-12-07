@@ -13,7 +13,7 @@
       <b-button v-on:click="cancelPost">Anuluj</b-button>
     </div>
     <div v-if="loading">
-      <div v-for="post in forumPosts" :key="post.id">
+      <div v-for="post in forumPosts.posts" :key="post.id">
         <router-link :to="{ name: 'post' }">
           <Post :post="post"></Post>
         </router-link>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 import Post from "@/components/forum/Post";
 import AddPost from "@/components/forum/addPost";
 
@@ -56,14 +56,13 @@ export default {
   },
 
   computed: {
-    ...mapGetters("researchGroupPost", ["forumPosts"]),
     ...mapState({
       forumPosts: (state) => state.researchGroupPost.forumPosts,
     }),
   },
 
   mounted() {
-    this.getForumPosts({post: 1000}).then(
+    this.getForumPosts({researchGroup: 1000}).then(
         () => (this.loading = true)
     );
   },
