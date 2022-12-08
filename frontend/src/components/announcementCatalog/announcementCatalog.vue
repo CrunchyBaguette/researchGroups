@@ -111,6 +111,7 @@ export default {
 
 #tit {
   text-align: left;
+  margin-bottom: 20px;
 }
 
 #announcementsContainer {
@@ -141,6 +142,14 @@ export default {
   margin-left: 10px;
   margin-right: 10px;
   background-color: rgb(196, 196, 196);
+  border-color: transparent;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+#ann:hover {
+  background-color: #7a7a7a;
+  box-shadow: 0 0 10px #7a7a7a;
 }
 
 </style>

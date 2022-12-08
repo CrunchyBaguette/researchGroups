@@ -27,7 +27,7 @@
     
     
     <announcement v-if="!isBeingEdited" 
-      id="ann"
+      id="annx"
       :author="announcementAuthor"
       :category="announcementCategory"
       :date="announcementDate"
@@ -48,7 +48,7 @@
                 <b-field label="Typ ogłoszenia">
                   <b-select v-model="announcementCategory" placeholder="Wybierz kategorię">
                     <option value="Poszukiwanie sponsora">Poszukiwanie sponsora</option>
-                    <option value="Rekrutacja">Poszukiwanie nowych członków</option>
+                    <option value="Poszukiwanie nowych członków">Poszukiwanie nowych członków</option>
                     <option value="Poszukiwanie osób do projektu">Poszukiwanie osób do projektu</option>
                   </b-select>
                 </b-field>
@@ -75,7 +75,7 @@
             </div>
           </div>
           <div class="date-container">
-              <p class="date-in-edit-mode">{{ new Date(announcementDate) | dateFormat('DD.MM.YYYY HH:mm') }}</p> 
+              <p class="date-in-edit-mode">{{ new Date() | dateFormat('DD.MM.YYYY HH:mm') }}</p> 
           </div>
           <div class="title-container">
             <div class="title-edit-container">
@@ -220,7 +220,6 @@ export default {
     ...mapActions("announcement", ["getAnnouncement", "updateAnnouncement"]),
 
     updateAnnouncementInfo() {
-      console.log('cokolwiek');
       this.updateAnnouncement({
         id: this.$route.params.id,
         payload: {
@@ -229,22 +228,19 @@ export default {
           text: this.announcementContent,
           //author_full_name: this.announcementAuthor,
           //author: this.authUser.id,
-          //date: this.announcementDate,
+          date: this.announcementDate,
           //research_group_id: 1,
         },
       }).catch((err) => {
-        console.log(err);
-        console.log('cokolwiek')
         this.announcementTitle = this.announcement.title;
         this.announcementCategory = this.announcement.ann_type;
         this.announcementContent = this.announcement.text;
-        this.announcementAuthor = this.announcement.author_full_name; //
         this.announcementDate = this.announcement.date;
-        //
-        // this.$buefy.toast.open({
-        //   message: err.response.data[Object.keys(err.response.data)[0]],
-        //   type: "is-danger",
-        // });
+       
+        this.$buefy.toast.open({
+          message: err.response.data[Object.keys(err.response.data)[0]],
+          type: "is-danger",
+        });
       });
     },
 
@@ -259,6 +255,8 @@ export default {
       this.isButtonDisabled = !this.isButtonDisabled;
     },
     saveAnnouncementCategory() {
+      const p = document.getElementsByClassName('date-in-edit-mode');
+      this.announcementDate = p.content;
       this.updateAnnouncementInfo();
       this.changeAnnouncementCategory();
     },
@@ -275,6 +273,8 @@ export default {
         this.announcementTitleGiven = "Podaj tytuł ogłoszenia";
       }
       else {
+        const p = document.getElementsByClassName('date-in-edit-mode');
+        this.announcementDate = p.content;
         this.updateAnnouncementInfo();
         this.changeAnnouncementTitle();
       }
@@ -290,7 +290,10 @@ export default {
     saveAnnouncementContent() {
       if (this.announcementContent === "") {
         this.announcementContentGiven = "Podaj treść";
-      } else {
+      } 
+      else {
+        const p = document.getElementsByClassName('date-in-edit-mode');
+        this.announcementDate = p.content;
         this.updateAnnouncementInfo();
         this.changeAnnouncementContent();
       }
@@ -346,6 +349,7 @@ export default {
 
 #tit {
   text-align: left;
+  margin-bottom: 20px;
 }
 
 #titleDiv {
@@ -360,7 +364,7 @@ export default {
   margin-right: 20px
 }
 
-#ann {
+#annx {
   margin-bottom: 20px;
   margin-left: 10px;
   margin-right: 10px;

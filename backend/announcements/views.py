@@ -16,3 +16,14 @@ class AnnouncementViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
             IsAuthenticated,
         ],
     }
+
+    def update(self, request, *args, **kwargs):
+        print(request.data["ann_type"])
+        match request.data["ann_type"]:
+            case "Poszukiwanie sponsora":
+                request.data["ann_type"] = "sponsor"
+            case "Poszukiwanie nowych członków":
+                request.data["ann_type"] = "rekrutacja"
+            case "Poszukiwanie osób do projektu":
+                request.data["ann_type"] = "projekt"
+        return super().update(request, *args, **kwargs)
