@@ -51,6 +51,7 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
 class ResearchGroupPostViewSet(viewsets.ModelViewSet):
     queryset = ResearchGroupPost.objects.all()
     serializer_class = ResearchGroupPostSerializer
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=["get"])
     def grouped(self, request):

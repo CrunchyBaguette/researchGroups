@@ -54,12 +54,12 @@ const router = new Router({
             component: groupTutorials,
         },
         {
-            path: "/forum",
+            path: "/group/:groupId/forum",
             name: "forum",
             component: forum,
         },
         {
-            path: "/post/",
+            path: "/group/:groupId/post/:postId",
             name: "post",
             component: postDetails,
         },
@@ -78,6 +78,12 @@ const router = new Router({
             name: "passwordReminder",
             component: passwordReminder,
         },
+
+        // { strona dla error 404 - router do dowolnego url
+        //     path: '/:pathMatch(.*)*',
+        //     name: 'NotFound',
+        //     component: NotFound
+        // },
 
     ],
 });

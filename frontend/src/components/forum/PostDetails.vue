@@ -2,6 +2,8 @@
   <div v-if="loading">{{ authUser }}
     <div class="columns">
       <div class="column is-4">
+        <b-button class="button"
+        v-on:click="$router.back()">Powrót</b-button>
         <p class="author-decor">{{ authorName }} {{ forumPost.author }}</p>
       </div>
       <div class="column is-2 is-offset-6">
@@ -39,7 +41,7 @@ export default {
     return {
       title: "",
       text: "",
-      postId: 1000,
+      postId: this.$route.params.postId,
       authorName: "autor name",//todo author name
       loading: false,
       isUpdate: false,
@@ -114,6 +116,7 @@ export default {
 
   computed: {
     ...mapGetters("auth", ["authUser"]),
+    ...mapGetters("auth", ["accessToken"]),
     ...mapState({
       forumPost: (state) => state.researchGroupPost.forumPost,
       // authorName: (state) => state.auth.authUser,
@@ -123,7 +126,7 @@ export default {
 
   mounted() {
     this.getForumPost({id: this.postId}).then(
-        () => (this.loading = true)
+      this.loading = true
     );
   },
 };

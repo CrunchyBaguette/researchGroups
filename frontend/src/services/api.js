@@ -1,14 +1,15 @@
 import axios from "axios";
+import auth from "@/store/modules/auth";
 
 const api = axios.create({
     baseURL: "http://localhost:8000/api", //tu najlepiej żeby to dało się zmienić w jednym miejscu najlepiej żeby można to było ustawić w czasie buildu
     timeout: 5000,
     headers: {
         "Content-Type": "application/json",
+        "Authorization": auth.state.accessToken === undefined ? "" : "Bearer " + auth.state.accessToken,
     },
 });
-
-var pendingRequests = 0;
+let pendingRequests = 0;
 
 api.interceptors.request.use(
     function (config) {

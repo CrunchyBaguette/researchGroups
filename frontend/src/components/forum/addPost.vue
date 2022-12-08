@@ -1,32 +1,50 @@
 <template>
-  <div>
-    <form>
-      <label for="title">Tytuł:</label>
-      <b-input id="title" v-model="title"></b-input>
-      <label for="text">Treść:</label>
-      <b-input id="text" v-model="text"></b-input>
-      <b-button v-on:click="savePost">Dodaj wpis</b-button>
-    </form>
-  </div>
+
+  <transition name="modal">
+    <div class="modal__wrapper" @click="$emit('close')">
+      <div class="modal-content" @click.stop="">
+        <div class="modal-header">
+          <span class="modal-title"> Dodaj Wpis </span>
+          <span class="button-close" @click="$emit('close')">×</span>
+        </div>
+        <div>
+          <form class="form">
+            <b-field label="Tytuł:"></b-field>
+            <b-input v-model="title"></b-input>
+            <b-field label="Treść:"></b-field>
+            <b-input v-model="text" type="textarea"></b-input>
+            <b-button class="mt-4" type="is-primary" expanded v-on:click="savePost">Dodaj wpis</b-button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "addPost",
+  mounted() {
+    document.body.addEventListener('keyup', e => {
+      if (e.key === 'Escape') this.$emit('close')
+    })
+  },
+  computed: {
+    ...mapGetters("auth", ["authUser"]),
+  },
   methods:
       {
-    ...mapActions("researchGroupPost", ["addForumPost"]),
+        ...mapActions("researchGroupPost", ["addForumPost"]),
         savePost() {
-          // if (this.title == "") this.nameGiven = false;
-          // if (this.text == "") this.categoryGiven = false;
 
-          if (this.title && this.text) {
-            this.addForumPost({
+          if (this.title !== "" && this.text !== "" && this.authUser.id) {
+            this.addForumPost( {
               title: this.title,
               text: this.text,
-              author: 1,//todo
+              author: this.authUser.id,
+              research_group: this.$route.params.groupId,
             })
                 .then((data) => {
                   this.$buefy.toast.open({
@@ -34,7 +52,7 @@ export default {
                     type: "is-success",
                   });
 
-                  this.$router.push("/post/"+data.id);
+                  this.$router.push("/post/" + data.id);
                 })
                 .catch((err) => {
                   this.$buefy.toast.open({
