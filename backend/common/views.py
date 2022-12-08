@@ -3,8 +3,6 @@ from logging import getLogger
 from datetime import timedelta
 import jwt
 from django.contrib.auth.models import User
-from django.contrib.sites.shortcuts import get_current_site
-from django.urls import reverse
 from django.conf import settings
 from rest_framework.request import Request
 from rest_framework.views import APIView
@@ -12,10 +10,9 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
-from backend.utilsx.mail.EmailBuilder import EmailBuilder
 from backend.users.serializers import UserSerializer
-from .serializers import RegisterSerializer
-
+from .serializers import RegisterSerializer, ResetPasswordSerializer
+from .utils import generate_registration_link, get_registration_email
 
 logger = getLogger(__name__)
 
@@ -46,23 +43,16 @@ class RegisterView(generics.GenericAPIView):
 
     def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         user = request.data
-        serializer = self.serializer_class(data=user)
+        serializer: RegisterSerializer = self.serializer_class(data=user)
+
         serializer.is_valid(raise_exception=True)
         created_user: User = serializer.save()
 
         token = RefreshToken.for_user(created_user).access_token
         token.lifetime = timedelta(days=1)
 
-        current_site = get_current_site(request).domain
-        relative_link = reverse("register")
-        absurl = f"http://{current_site}{relative_link}?token={token}"
-
-        email = (
-            EmailBuilder(settings.EMAIL_HOST_USER)
-            .add_text(get_email_body_for_user(created_user, absurl))
-            .add_receiver(created_user.email)
-            .build_django_mail()
-        )
+        link = generate_registration_link(token, request)
+        email = get_registration_email(created_user, link)
         if email.send() == 1:
             logger.info("Email to user %s with register link sent", created_user.username)
         else:
@@ -74,7 +64,7 @@ class RegisterView(generics.GenericAPIView):
     def get(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         token = request.GET.get("token")
         try:
-            payload = jwt.decode(token, settings.SECRET_KEY)
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
             user: User = User.objects.get(id=payload["user_id"])
             if not user.is_active:
                 user.is_active = True
@@ -88,10 +78,10 @@ class RegisterView(generics.GenericAPIView):
                 {"error": "Account already activated", "user": user_data}, status=status.HTTP_400_BAD_REQUEST
             )
         except jwt.ExpiredSignatureError:
+            logger.warning("Token expired")
             return Response({"error": "Token expired"}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.DecodeError:
+            logger.warning("Invalid token")
             return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-def get_email_body_for_user(user: User, link: str) -> str:
-    return f"Hi {user.first_name} \nUse this link to activate your account: {link}"
