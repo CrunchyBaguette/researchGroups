@@ -12,4 +12,7 @@ class AnnouncementViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         "create": [
             IsAuthenticated,
         ],
+        "partial_update": [
+            IsAuthenticated,
+        ],
     }
