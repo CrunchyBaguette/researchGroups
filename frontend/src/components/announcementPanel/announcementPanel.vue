@@ -3,6 +3,7 @@
     <div id="titleDiv" v-if="!isBeingEdited">
       <p class="title" id="tit">Panel Ogłoszenia</p>
       <b-button
+          v-if="isAuthenticated"
           id="btnTitle"
           rounded
           size="is-medium"
@@ -74,7 +75,7 @@
             </div>
           </div>
           <div class="date-container">
-              <p class="date-in-edit-mode">{{ announcementDate }}</p> 
+              <p class="date-in-edit-mode">{{ new Date(announcementDate) | dateFormat('DD.MM.YYYY HH:mm') }}</p> 
           </div>
           <div class="title-container">
             <div class="title-edit-container">
@@ -207,7 +208,7 @@ export default {
           (this.announcementTitle = this.announcement.title),
           (this.announcementCategory = this.announcement.ann_type),
           (this.announcementContent = this.announcement.text),
-          (this.announcementAuthor = this.announcement.author),
+          (this.announcementAuthor = this.announcement.author_full_name),
           (this.announcementDate = this.announcement.date)
         )
       )
@@ -219,25 +220,31 @@ export default {
     ...mapActions("announcement", ["getAnnouncement", "updateAnnouncement"]),
 
     updateAnnouncementInfo() {
+      console.log('cokolwiek');
       this.updateAnnouncement({
         id: this.$route.params.id,
         payload: {
           title: this.announcementTitle,
           ann_type: this.announcementCategory,
           text: this.announcementContent,
-          author: this.announcementAuthor,
-          date: this.announcementDate,
+          //author_full_name: this.announcementAuthor,
+          //author: this.authUser.id,
+          //date: this.announcementDate,
+          //research_group_id: 1,
         },
       }).catch((err) => {
+        console.log(err);
+        console.log('cokolwiek')
         this.announcementTitle = this.announcement.title;
         this.announcementCategory = this.announcement.ann_type;
         this.announcementContent = this.announcement.text;
-        this.announcementAuthor = this.announcement.author;
+        this.announcementAuthor = this.announcement.author_full_name; //
         this.announcementDate = this.announcement.date;
-        this.$buefy.toast.open({
-          message: err.response.data[Object.keys(err.response.data)[0]],
-          type: "is-danger",
-        });
+        //
+        // this.$buefy.toast.open({
+        //   message: err.response.data[Object.keys(err.response.data)[0]],
+        //   type: "is-danger",
+        // });
       });
     },
 
@@ -304,8 +311,8 @@ export default {
             (this.announcementTitle = this.announcement.title),
             (this.announcementCategory = this.announcement.ann_type),
             (this.announcementContent = this.announcement.text),
-            (this.announcementAuthor = this.researchGroup.author),
-            (this.announcementDate = this.researchGroup.date)
+            (this.announcementAuthor = this.announcement.author_full_name), //
+            (this.announcementDate = this.announcement.date)
           )
         )
         .then(() => {
@@ -318,6 +325,7 @@ export default {
     ...mapState({
       announcement: (state) => state.announcement.announcement,
     }),
+    //...mapGetters("auth", ["isAuthenticated"]),
     ...mapGetters("auth", ["isAuthenticated", "authUser"]),
   },
 

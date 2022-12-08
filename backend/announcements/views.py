@@ -8,9 +8,11 @@ from backend.common.views import PermissionPolicyMixin
 class AnnouncementViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     queryset = Announcement.objects.all()
     serializer_class = AnnouncementSerializer
-    permission_classes = [IsAuthenticated]
     permission_classes_per_method = {
         "create": [
             IsAuthenticated,
-        ]
+        ],
+        "partial_update": [
+            IsAuthenticated,
+        ],
     }
