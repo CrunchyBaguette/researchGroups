@@ -95,6 +95,12 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         ],
     }
 
+    categoryCodes = {
+        "Matematyka": "math",
+        "Medycyna": "med",
+        "Chemia": "chem",
+    }
+
     def create(self, request, *args, **kwargs):
         # Obecnie, w przypadku gdy nie ma użytkownika z podanym mailem, tworzony jest
         # nowy ale później można tu zaimplementować rozsyłanie maili
@@ -118,6 +124,10 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         ownerMember.save()
 
         return response
+
+    def update(self, request, *args, **kwargs):
+        request.data["category"] = self.categoryCodes.get(request.data["category"])
+        return super().update(request, *args, **kwargs)
 
 
 class ResearchGroupPostViewSet(viewsets.ModelViewSet):
