@@ -65,7 +65,7 @@ def dropTables():
 def genrateTables():
     users = generate_user()
     research_groups = generate_research_group(users)
-    projects = generate_project()
+    projects = generate_project(users)
     tutorials = generate_tutorial(users)
     tutorial_users = generate_tutorial_user(tutorials, users)
     ratings = generate_Rating(users, tutorials)
@@ -148,7 +148,7 @@ def generate_research_group(users):
     return df_research_groups
 
 
-def generate_project():
+def generate_project(users):
     projects = defaultdict(list)
     for i in range(number_of_projects):
         projects["id"].append(1000 + i)
@@ -160,6 +160,7 @@ def generate_project():
         projects["category"].append(
             categories[fake.pyint(0, len(categories) - 1)]
         )
+        projects["group_owner_id"].append(users["id"].values[i % len(users["id"])])
     df_projects = pd.DataFrame(projects)
     if is_printing:
         print(df_projects)
