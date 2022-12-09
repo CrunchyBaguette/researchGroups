@@ -33,7 +33,7 @@ class UserViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=["get"])
     def researchGroups(self, request, pk=None):  # pylint: disable=unused-argument
         user = self.get_object()
-        researchGroups = ResearchGroup.objects.all()
+        researchGroups = ResearchGroup.objects.all().order_by("name")
         researchGroupData = ResearchGroupSerializer(researchGroups, many=True)
         userResarchGroups = []
 
@@ -46,7 +46,7 @@ class UserViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=["get"])
     def adminResearchGroups(self, request, pk=None):  # pylint: disable=unused-argument
         user = self.get_object()
-        researchGroupUsers = ResearchGroupUser.objects.filter(person=user, role="mod").all()
+        researchGroupUsers = ResearchGroupUser.objects.filter(person=user, role="mod").all().order_by("name")
         userResearchGroups = [researchGroupUser.research_group for researchGroupUser in researchGroupUsers]
         researchGroupSerializer = ResearchGroupSerializer(userResearchGroups, many=True)
         return Response(researchGroupSerializer.data)
@@ -54,7 +54,7 @@ class UserViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=["get"])
     def projects(self, request, pk=None):  # pylint: disable=unused-argument
         user = self.get_object()
-        projects = Project.objects.all()
+        projects = Project.objects.all().order_by("name")
         projectData = ProjectSerializer(projects, many=True)
         userProjects = []
 

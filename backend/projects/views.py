@@ -20,7 +20,7 @@ from backend.common.views import PermissionPolicyMixin
 
 
 class ProjectUserViewSet(viewsets.ModelViewSet):
-    queryset = ProjectUser.objects.all()
+    queryset = ProjectUser.objects.all().order_by("created")
     serializer_class = ProjectUserSerializer
     permission_classes = [AllowAny]
 
@@ -84,7 +84,7 @@ class ProjectUserViewSet(viewsets.ModelViewSet):
 
 # Create your views here.
 class ProjectViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
-    queryset = Project.objects.all()
+    queryset = Project.objects.all().order_by("name")
     serializer_class = ProjectSerializer
     permission_classes_per_method = {
         "create": [
