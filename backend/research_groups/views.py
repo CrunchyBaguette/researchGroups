@@ -1,5 +1,6 @@
 from collections import Counter
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -8,7 +9,7 @@ from rest_framework.response import Response
 from backend.research_groups.serializers import (
     ResearchGroupUserSerializer,
     ResearchGroupSerializer,
-    ResearchGroupPostSerializer,
+    ResearchGroupPostSerializer, ResearchGroupPostSerializerWithUser,
 )
 from backend.research_groups.models import (
     ResearchGroup,
@@ -131,17 +132,36 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
 
 
 class ResearchGroupPostViewSet(viewsets.ModelViewSet):
+
     queryset = ResearchGroupPost.objects.all()
     serializer_class = ResearchGroupPostSerializer
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=["get"])
     def grouped(self, request):
+        serializer_class = ResearchGroupPostSerializerWithUser
         researchGroup = request.query_params.get("researchGroup", None)
+        userId = request.query_params.get("userId", None)
         if not researchGroup:
             return Response(
                 {"researchGroup": ["'researchGroup' parameter is required."]},
                 status=400,
             )
+        if not userId:
+            return Response(
+                {"userId": ["'userId' parameter is required."]},
+                status=400,
+            )
         postsQueryset = ResearchGroupPost.objects.filter(research_group=researchGroup).order_by("added").all()
-        serializer = self.get_serializer(postsQueryset, many=True)
-        return Response({"researchGroup": researchGroup, "posts": serializer.data})
+        serializer = serializer_class(postsQueryset, many=True)
+        participation = ResearchGroupUser.objects.filter(person_id=userId).filter(research_group_id=researchGroup)
+        isParticipant = False
+        if(participation):
+            isParticipant = True
+        return Response({"researchGroup": researchGroup, "isParticipant": isParticipant, "posts": serializer.data})
+
+    def retrieve(self, request, pk=None, *args, **kwargs):
+        serializer_class = ResearchGroupPostSerializerWithUser
+        post = get_object_or_404(self.queryset, pk=pk)
+        serializer = serializer_class(post)
+        return Response(serializer.data)

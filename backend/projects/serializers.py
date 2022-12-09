@@ -6,6 +6,7 @@ from backend.projects.models import (
     ProjectPost,
     ProjectUser,
 )
+from backend.users.serializers import UserSerializerName
 
 
 class ProjectSerializer(QuerySerializerMixin, serializers.ModelSerializer):
@@ -42,6 +43,14 @@ class ProjectUserSerializer(QuerySerializerMixin, serializers.ModelSerializer):
 
 
 class ProjectPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectPost
+        fields = "__all__"
+
+
+class ProjectPostSerializerWithUser(serializers.ModelSerializer):
+    author = UserSerializerName(many=False, read_only=True)
+
     class Meta:
         model = ProjectPost
         fields = "__all__"
