@@ -27,7 +27,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             researchGroupPostService.fetchForumPost(params).then((data) => {
                 commit("setForumPost", data);
-                resolve();
+                resolve(data);
             }).catch((err) => {
                 reject(err);
             });

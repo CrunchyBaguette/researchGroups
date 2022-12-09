@@ -10,11 +10,11 @@
         </div>
       </div>
       <div v-if="adding">
-        <add-post @close="adding = false"></add-post>
+        <AddGroupPost @close="adding = false"></AddGroupPost>
       </div>
       <div v-if="loading">
         <div v-for="post in forumPosts" :key="post.id" class="mb-5">
-          <router-link :to="{ name: 'post', params: {groupId: groupId, postId: post.id} }">
+          <router-link :to="{ name: 'groupPost', params: {groupId: groupId, postId: post.id} }">
             <Post :post="post"></Post>
           </router-link>
         </div>
@@ -42,16 +42,16 @@
 <script>
 import {mapActions, mapGetters, mapState} from "vuex";
 import Post from "@/components/forum/Post";
-import AddPost from "@/components/forum/addPost";
+import AddGroupPost from "@/components/forum/addGroupPost";
 
 export default {
-  name: "forum",
+  name: "groupForum",
   props: {
     title: {type: String},
     content: {type: String},
   },
   components: {
-    AddPost,
+    AddGroupPost,
     Post,
   },
   data() {

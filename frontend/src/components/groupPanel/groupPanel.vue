@@ -106,7 +106,7 @@
           id="btn"
           size="is-medium"
           tag="router-link"
-          :to="{ name: 'forum', params: { groupId: this.$route.params.id} }"
+          :to="{ name: 'groupForum', params: { groupId: this.$route.params.id} }"
           :disabled="isButtonDisabled"
           >Forum</b-button
         >

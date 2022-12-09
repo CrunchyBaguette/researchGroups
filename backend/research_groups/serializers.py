@@ -34,6 +34,13 @@ class ResearchGroupUserSerializer(serializers.ModelSerializer):
 
 
 class ResearchGroupPostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ResearchGroupPost
+        fields = "__all__"
+
+
+class ResearchGroupPostSerializerWithUser(serializers.ModelSerializer):
     author = UserSerializerName(many=False, read_only=True)
 
     class Meta:

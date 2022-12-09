@@ -11,8 +11,10 @@ import registerPage from "@/components/user/registerPage"
 import passwordReminder from "@/components/user/passwordReminder"
 import groupPanel from "@/components/groupPanel/groupPanel"
 import groupTutorials from "@/components/tutorialCatalog/groupTutorials"
-import forum from "@/components/forum/forum"
-import postDetails from "@/components/forum/PostDetails";
+import projectForum from "@/components/forum/projectForum";
+import groupForum from "@/components/forum/groupForum";
+import groupPost from "@/components/forum/groupPost";
+import projectPost from "@/components/forum/projectPost";
 
 Vue.use(Router);
 
@@ -55,13 +57,23 @@ const router = new Router({
         },
         {
             path: "/group/:groupId/forum",
-            name: "forum",
-            component: forum,
+            name: "groupForum",
+            component: groupForum,
         },
         {
             path: "/group/:groupId/post/:postId",
-            name: "post",
-            component: postDetails,
+            name: "groupPost",
+            component: groupPost,
+        },
+        {
+            path: "/project/:projectId/forum",
+            name: "projectForum",
+            component: projectForum,
+        },
+        {
+            path: "/project/:projectId/post/:postId",
+            name: "projectPost",
+            component: projectPost,
         },
         {
             path: "/register",

@@ -24,12 +24,6 @@
         <b-button v-on:click="updatePost">Akceptuj zmiany</b-button>
       </div>
     </div>
-    <!--    <div>-->
-    <!--      <h2>Komentarze: </h2>-->
-    <!--      <div v-for="comment in comments">-->
-    <!--        <Comment></Comment>-->
-    <!--      </div>-->
-    <!--    </div>-->
   </div>
 </template>
 
@@ -37,22 +31,22 @@
 import {mapActions, mapGetters, mapState} from "vuex";
 
 export default {
-  name: "postDetails",
+  name: "projectPost",
   data() {
     return {
       title: "",
       text: "",
       postId: this.$route.params.postId,
-      groupId: this.$route.params.groupId,
+      projectId: this.$route.params.projectId,
       loading: false,
       isUpdate: false,
     };
   },
 
   methods: {
-    ...mapActions("researchGroupPost", ["getForumPost"]),
-    ...mapActions("researchGroupPost", ["updateForumPost"]),
-    ...mapActions("researchGroupPost", ["deleteForumPost"]),
+    ...mapActions("projectPost", ["getForumPost"]),
+    ...mapActions("projectPost", ["updateForumPost"]),
+    ...mapActions("projectPost", ["deleteForumPost"]),
 
     showEdit() {
       this.isUpdate = !this.isUpdate;
@@ -106,7 +100,7 @@ export default {
                 type: "is-success",
               });
               this.$router.push(
-                  {name: 'forum', params: {groupId: this.groupId}});
+                  {name: 'projectForum', params: {groupId: this.groupId}});
             })
             .catch((err) => {
               this.$buefy.toast.open({
@@ -124,13 +118,12 @@ export default {
   computed: {
     ...mapGetters("auth", ["authUser"]),
     ...mapState({
-      forumPost: (state) => state.researchGroupPost.forumPost,
-      // comments: state => state.researchGroupPost.postComment
+      forumPost: (state) => state.projectPost.forumPost,
     }),
   },
 
   mounted() {
-    this.getForumPost({id: this.postId}).then(
+    this.getForumPost({id: this.postId}).then(() =>
         this.loading = true
     );
   },
