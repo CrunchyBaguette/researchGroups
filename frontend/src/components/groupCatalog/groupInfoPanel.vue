@@ -2,7 +2,7 @@
   <div id="group-info-panel" v-if="researchGroup">
     <p class="group-info-panel-title">{{ researchGroup.name }}</p>
     <div
-      class="group-info-panel-desc-container"
+      class="box group-info-panel-desc-container"
       style="background-color: white"
     >
       <p
@@ -15,14 +15,18 @@
           padding-left: 5px;
         "
       >
-        Opis:
+        O nas:
       </p>
       <p style="font-size: 20px">
-        {{ researchGroup.description }}
+        {{ researchGroup.about_us }}
       </p>
     </div>
     <div style="width: 100%; text-align: center; margin-top: 40px">
-      <b-button size="is-medium" style="text-align: center"
+      <b-button
+        size="is-medium"
+        style="text-align: center"
+        tag="router-link"
+        :to="{ name: 'group', params: { id: researchGroup.id } }"
         >Przejdź do panelu koła</b-button
       >
     </div>
@@ -58,7 +62,7 @@ export default {
   height: 70%;
   padding: 10px;
   border-radius: 25px;
-  border: 5px solid black;
+  /* border: 5px solid black; */
   overflow: auto;
 }
 

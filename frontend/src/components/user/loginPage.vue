@@ -1,72 +1,85 @@
 <template>
-  <div class="login-container">
-    <h1 class="title">Logowanie</h1>
+  <div
+    style="
+      height: 100%;
+      width: 100%;
+      justify-content: center;
+      display: flex;
+      align-items: center;
+    "
+  >
+    <div class="box login-container">
+      <h1 class="title">Logowanie</h1>
 
-    <br>
+      <br />
 
-    <form @submit.prevent="submitLoginForm">
-      <b-field label="Login">
-          <b-input v-model="login"
-              maxlength="30"
-              required>
+      <form @submit.prevent="submitLoginForm">
+        <b-field label="Login">
+          <b-input v-model="login" maxlength="30" required> </b-input>
+        </b-field>
+
+        <b-field label="Hasło">
+          <b-input
+            type="password"
+            v-model="password"
+            password-reveal
+            minlength="8"
+            maxlength="30"
+            required
+          >
           </b-input>
-      </b-field>
+        </b-field>
 
-      <b-field label="Hasło">
-          <b-input type="password" v-model="password"
-              password-reveal
-              minlength="8"
-              maxlength="30"
-              required>
-          </b-input>
-      </b-field>
+        <div class="notification is-danger" v-if="loginBtnErrors.length">
+          <p v-for="error in loginBtnErrors" v-bind:key="error">{{ error }}</p>
+        </div>
 
-      <div class="notification is-danger" v-if="loginBtnErrors.length">
-        <p v-for="error in loginBtnErrors" v-bind:key="error">{{ error }}</p>
+        <br />
+
+        <button id="btnLogin" class="button">ZALOGUJ SIĘ</button>
+      </form>
+
+      <br />
+
+      <div class="notification is-danger" v-if="remindPasswordError !== ''">
+        <p>{{ remindPasswordError }}</p>
       </div>
 
-      <br>
+      <button id="btnOther" class="button" v-on:click="moveToRemindPassword">
+        Nie pamiętam hasła.
+      </button>
 
-      <button id="btnLogin" class="button">ZALOGUJ SIĘ</button>
+      <br />
 
-    </form>
-
-    <br>
-
-    <div class="notification is-danger" v-if="remindPasswordError !== ''">
-      <p>{{ remindPasswordError }}</p>
+      <router-link :to="{ name: 'register' }" id="btnOther">
+        Nie masz konta? &nbsp;
+        <p class="p-register">Zarejestruj się.</p>
+      </router-link>
     </div>
-
-    <button id="btnOther" class="button" v-on:click="moveToRemindPassword">Nie pamiętam hasła.</button>
-
-    <br>
-
-    <router-link :to="{ name: 'register' }" id="btnOther">
-        Nie masz konta? &nbsp;<p class="p-register"> Zarejestruj się. </p>
-    </router-link>
-  
   </div>
 </template>
 
 <script>
 //import axios from 'axios'
+import { mapActions } from "vuex";
 
 export default {
   name: "loginPage",
   data() {
     return {
-      login: '',
-      password: '',
+      login: "",
+      password: "",
       loginBtnErrors: [],
-      remindPasswordError: ''
-    }
+      remindPasswordError: "",
+    };
   },
   mounted() {
-      document.title = 'Zaloguj się'
+    document.title = "Zaloguj się";
   },
   methods: {
+    ...mapActions("auth", ["getTokenPairs"]),
     async submitLoginForm() {
-      this.loginBtnErrors = []
+      this.loginBtnErrors = [];
       // if (this.login === '') {
       //   this.errors.push('Nie podałeś loginu!')
       // }
@@ -76,6 +89,27 @@ export default {
       // axios.defaults.headers.common["Authorization"] = ""
       // localStorage.removeItem("token")
       if (!this.loginBtnErrors.length) {
+        this.getTokenPairs({
+          username: this.login,
+          password: this.password,
+        })
+          .then(() => {
+            this.$buefy.toast.open({
+              message: "Zalogowano pomyślnie",
+              type: "is-success",
+            });
+
+            this.$router.replace(this.$route.query.redirect || "/");
+          })
+          .catch((err) => {
+            this.$buefy.toast.open({
+              message:
+                "Błąd przy logowaniu (" +
+                (err.response ? err.response.status : 500) +
+                ")",
+              type: "is-danger",
+            });
+          });
         /*
         const formData = {
           login: this.username,
@@ -108,15 +142,13 @@ export default {
       }
     },
     moveToRemindPassword() {
-      this.remindPasswordError = ''
-      if (this.login === '') {
-          this.remindPasswordError = 'Wprowadź login!'
+      this.remindPasswordError = "";
+      if (this.login === "") {
+        this.remindPasswordError = "Wprowadź login!";
       }
-
-      
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>
@@ -128,7 +160,7 @@ export default {
 
 .login-container {
   margin: 0 auto;
-  max-width: 320px;
+  width: 400px;
 }
 
 .title {
@@ -146,7 +178,7 @@ export default {
   border-color: transparent;
   font-weight: bold;
   color: white;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 #btnLogin:hover {
@@ -161,7 +193,7 @@ export default {
   line-height: 1.5;
   color: #4a4a4a;
   border: none;
-  transition: .3s;
+  transition: 0.3s;
   cursor: pointer;
 }
 
@@ -169,5 +201,4 @@ export default {
   color: #7957d5;
   background-color: #fafafa;
 }
-
 </style>

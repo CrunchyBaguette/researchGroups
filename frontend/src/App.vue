@@ -3,7 +3,6 @@
     <div class="columns" style="height: 100%">
       <div class="column">
         <div>
-          
           <NavBar :loginOrRegister="this.isLoginOrRegister()" />
         </div>
         <div class="columns" style="height: 100%">
@@ -14,7 +13,7 @@
           >
             <SideBar />
           </div>
-          <div class="column">
+          <div class="column" style="background-color: #fad6a5">
             <div id="content">
               <router-view />
             </div>
@@ -37,7 +36,11 @@ export default {
   },
   methods: {
     isLoginOrRegister() {
-      return this.$route.name == "login" || this.$route.name == "register" || this.$route.name == "passwordReminder";
+      return (
+        this.$route.name == "login" ||
+        this.$route.name == "register" ||
+        this.$route.name == "passwordReminder"
+      );
     },
   },
 };
@@ -93,6 +96,7 @@ body {
 .modal__btn-list .btn {
     margin: 0 20px;
 } */
+<<<<<<< HEAD
 
 <!-- </style> -->
 
@@ -168,3 +172,6 @@ code {
 }
 */
 </style>  
+=======
+</style> 
+>>>>>>> main
