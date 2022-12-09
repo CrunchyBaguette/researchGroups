@@ -49,6 +49,7 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
 
 
 class ResearchGroupPostViewSet(viewsets.ModelViewSet):
+
     queryset = ResearchGroupPost.objects.all()
     serializer_class = ResearchGroupPostSerializer
     permission_classes = [IsAuthenticated]
@@ -56,11 +57,23 @@ class ResearchGroupPostViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["get"])
     def grouped(self, request):
         researchGroup = request.query_params.get("researchGroup", None)
+        userId = request.query_params.get("userId", None)
         if not researchGroup:
             return Response(
                 {"researchGroup": ["'researchGroup' parameter is required."]},
                 status=400,
             )
+        if not userId:
+            return Response(
+                {"userId": ["'userId' parameter is required."]},
+                status=400,
+            )
+        participantion = ResearchGroupUser.objects.filter(person_id=userId).filter(research_group_id=researchGroup)
         postsQueryset = ResearchGroupPost.objects.filter(research_group=researchGroup).order_by("added").all()
         serializer = self.get_serializer(postsQueryset, many=True)
-        return Response({"researchGroup": researchGroup, "posts": serializer.data})
+        isParticipant = False
+        if(participantion):
+            isParticipant = True
+        return Response({"researchGroup": researchGroup, "isParticipant": isParticipant, "posts": serializer.data})
+
+    # def retrieve(self, request, pk):
