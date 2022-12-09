@@ -10,9 +10,15 @@
         <div>
           <form class="form">
             <b-field label="Tytuł:"></b-field>
-            <b-input v-model="title"></b-input>
+            <b-input v-on:focus="isTitleValid = true" v-model="title"></b-input>
+            <b-field
+              :message="!isTitleValid ? 'Proszę podać tytuł' : '\b'"
+              :type="!isTitleValid ? 'is-danger' : ''"/>
             <b-field label="Treść:"></b-field>
-            <b-input v-model="text" type="textarea"></b-input>
+            <b-input v-on:focus="isTextValid = true" v-model="text" type="textarea"></b-input>
+            <b-field
+              :message="!isTextValid ? 'Proszę podać treść' : '\b'"
+              :type="!isTextValid ? 'is-danger' : ''"/>
             <b-button class="mt-4" type="is-primary" expanded v-on:click="savePost">Dodaj wpis</b-button>
           </form>
         </div>
@@ -26,6 +32,14 @@ import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "addPost",
+  data() {
+    return {
+      title: "",
+      text: "",
+      isTitleValid: true,
+      isTextValid: true,
+    };
+  },
   mounted() {
     document.body.addEventListener('keyup', e => {
       if (e.key === 'Escape') this.$emit('close')
@@ -38,12 +52,14 @@ export default {
       {
         ...mapActions("researchGroupPost", ["addForumPost"]),
         savePost() {
+          if (this.title === "") this.isTitleValid = false;
+          if (this.text === "") this.isTextValid = false;
 
-          if (this.title !== "" && this.text !== "" && this.authUser.id) {
+          if (this.isTitleValid && this.isTextValid && this.authUser.id) {
             this.addForumPost( {
               title: this.title,
               text: this.text,
-              author: this.authUser.id,
+              author: this.authUser.id.toString(),
               research_group: this.$route.params.groupId,
             })
                 .then((data) => {
@@ -52,9 +68,13 @@ export default {
                     type: "is-success",
                   });
 
-                  this.$router.push("/post/" + data.id);
+                  this.$router.push({ name: 'post', params: {groupId: data.research_group, postId: data.id} });
                 })
                 .catch((err) => {
+                  // if(err.response.status === 403){
+                  //   refreshToken()
+                  //   this.savePost()
+                  // }
                   this.$buefy.toast.open({
                     message:
                         "Błąd przy dodawaniu posta (" +
@@ -66,12 +86,6 @@ export default {
           }
         },
       },
-  data() {
-    return {
-      title: "",
-      text: "",
-    };
-  },
 }
 </script>
 

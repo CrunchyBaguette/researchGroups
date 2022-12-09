@@ -1,19 +1,20 @@
 <template>
-  <div v-if="loading">{{ authUser }}
+  <div v-if="loading">
     <div class="columns">
       <div class="column is-4">
         <b-button class="button"
-        v-on:click="$router.back()">Powrót</b-button>
-        <p class="author-decor">{{ authorName }} {{ forumPost.author }}</p>
+                  v-on:click="$router.back()">Powrót
+        </b-button>
+        <p class="author-decor">{{ forumPost.author.first_name }} {{forumPost.author.last_name}}</p>
       </div>
-      <div class="column is-2 is-offset-6">
+      <div class="column is-2 is-offset-6" v-if="forumPost.author.id === authUser.id">
         <b-button class="button" v-on:click="showEdit">Edytuj</b-button>
-        <b-button class="button" v-on:click="deletePost">delete</b-button>
+        <b-button class="button" v-on:click="confirmDeleting">Usuń</b-button>
       </div>
     </div>
     <div>
-      <h2 v-if="!isUpdate" class="title">{{ forumPost.title }}</h2>
-      <p v-if="!isUpdate">{{ forumPost.text }}</p>
+      <p v-if="!isUpdate" class="title">{{ forumPost.title }}</p>
+      <p v-if="!isUpdate" class="postText"> {{ forumPost.text}}</p>
 
       <div v-if="isUpdate">
         <label for="title">Tytuł:</label>
@@ -42,7 +43,7 @@ export default {
       title: "",
       text: "",
       postId: this.$route.params.postId,
-      authorName: "autor name",//todo author name
+      groupId: this.$route.params.groupId,
       loading: false,
       isUpdate: false,
     };
@@ -59,9 +60,9 @@ export default {
       this.text = this.forumPost.text;
     },
     updatePost() {
-      if (this.title && this.text) {
+      if (this.title && this.text && this.forumPost.author.id === this.authUser.id) {
         this.updateForumPost({
-          id: this.postId,
+          id: this.$route.params.postId,
           title: this.title,
           text: this.text,
         })
@@ -70,9 +71,8 @@ export default {
                 message: "Pomyślnie zedytowano posta",
                 type: "is-success",
               });
-              this.$router.push(
-                  this.$route.query.redirect || "/post/" + data.id
-              );
+              this.forumPost.text = data.text;
+              this.forumPost.title = data.title;
             })
             .catch((err) => {
               this.$buefy.toast.open({
@@ -88,46 +88,57 @@ export default {
 
       }
     },
-    deletePost() {
-      // if (true) {//prompt
-      this.deleteForumPost({
-        id: this.postId,
+    confirmDeleting() {
+      this.$buefy.dialog.confirm({
+        message: 'Czy na pewno chcesz usunąc post?',
+        onConfirm: () => this.deletePost()
       })
-          .then(() => {
-            this.$buefy.toast.open({
-              message: "Pomyślnie usunięto post",
-              type: "is-success",
+    },
+    deletePost() {
+      if (this.forumPost.author.id === this.authUser.id) {
+        this.deleteForumPost({
+          id: this.postId,
+          groupId: this.groupId,
+        })
+            .then(() => {
+              this.$buefy.toast.open({
+                message: "Pomyślnie usunięto post",
+                type: "is-success",
+              });
+              this.$router.push(
+                  {name: 'forum', params: {groupId: this.groupId}});
+            })
+            .catch((err) => {
+              this.$buefy.toast.open({
+                message:
+                    "Błąd przy usuwaniu posta (" +
+                    (err.response ? err.response.status : 500) +
+                    ")",
+                type: "is-danger",
+              });
             });
-            this.$router.push("forum");
-          })
-          .catch((err) => {
-            this.$buefy.toast.open({
-              message:
-                  "Błąd przy usuwaniu posta (" +
-                  (err.response ? err.response.status : 500) +
-                  ")",
-              type: "is-danger",
-            });
-          });
+      }
     }
-
-
   },
 
   computed: {
     ...mapGetters("auth", ["authUser"]),
-    ...mapGetters("auth", ["accessToken"]),
     ...mapState({
       forumPost: (state) => state.researchGroupPost.forumPost,
-      // authorName: (state) => state.auth.authUser,
       // comments: state => state.researchGroupPost.postComment
     }),
   },
 
   mounted() {
     this.getForumPost({id: this.postId}).then(
-      this.loading = true
+        this.loading = true
     );
   },
 };
 </script>
+
+<style scoped>
+.postText{
+  white-space: pre-line;
+}
+</style>
