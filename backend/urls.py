@@ -23,12 +23,13 @@ from backend.users.views import UserViewSet, logout_view, CustomTokenObtainPairV
 from .research_groups.urls import urlpatterns as research_groups_urls
 from .announcements.urls import urlpatterns as announcements_urls
 from .projects.urls import urlpatterns as projects_urls
+from .users.urls import urlpatterns as users_urls
 from .users.views import SendEmailView
 
 router = DefaultRouter()
 router.register("user", UserViewSet)
 
-api_urlpatterns = list(chain.from_iterable([research_groups_urls, announcements_urls, projects_urls]))
+api_urlpatterns = list(chain.from_iterable([research_groups_urls, announcements_urls, projects_urls, users_urls]))
 
 urlpatterns = [
     path("admin/", admin.site.urls),
