@@ -5,11 +5,6 @@
         <p class="groupTileTitle">{{ project.name }}</p>
         <p class="groupTileCategory">{{ project.category }}</p>
       </div>
-      <div class="groupTileDescContainer">
-        <p class="groupTileDesc">
-          {{ project.description }}
-        </p>
-      </div>
     </div>
   </div>
 </template>

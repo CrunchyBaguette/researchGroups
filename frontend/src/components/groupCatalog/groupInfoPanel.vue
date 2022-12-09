@@ -18,7 +18,11 @@
         O nas:
       </p>
       <p style="font-size: 20px">
-        {{ researchGroup.about_us }}
+        <markdown-it-vue
+          class="md-body"
+          :content="researchGroup.about_us"
+          :options="markdownOptions"
+        />
       </p>
     </div>
     <div style="width: 100%; text-align: center; margin-top: 40px">
