@@ -165,7 +165,11 @@
             </div>
           </div>
           <div class="inner" v-if="!editWhatWeDo">
-            {{ whatWeDo }}
+            <markdown-it-vue
+              class="md-body"
+              :content="whatWeDo"
+              :options="markdownOptions"
+            />
           </div>
           <div v-else>
             <b-field>
@@ -332,7 +336,11 @@
             </div>
           </div>
           <div class="inner" v-if="!editAboutUs">
-            {{ aboutUs }}
+            <markdown-it-vue
+              class="md-body"
+              :content="aboutUs"
+              :options="markdownOptions"
+            />
           </div>
           <div v-else>
             <b-field
@@ -373,7 +381,11 @@
             </div>
           </div>
           <div class="inner" v-if="!editContact">
-            {{ contact }}
+            <markdown-it-vue
+              class="md-body"
+              :content="contact"
+              :options="markdownOptions"
+            />
             <div class="container-send-email">
               <button
                 class="button"
@@ -473,6 +485,7 @@ export default {
       editGroupCategory: false,
 
       whatWeDo: "",
+      testMarkdown: "::: success\nTest success.\n:::",
       editWhatWeDo: false,
 
       members: [],
@@ -488,6 +501,18 @@ export default {
 
       isBeingEdited: false,
       isButtonDisabled: false,
+
+      markdownOptions: {
+        markdownIt: {
+          linkify: true,
+        },
+        linkAttributes: {
+          attrs: {
+            target: "_self",
+            rel: "noopener",
+          },
+        },
+      },
     };
   },
   mounted() {
