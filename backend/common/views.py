@@ -15,7 +15,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from backend.users.serializers import UserSerializer
 from .serializers import RegisterSerializer, ResetPasswordSerializer, SetNewPasswordSerializer
-from .utils import generate_registration_link, get_registration_email, generate_reset_pass_link
+from .utils import generate_registration_link, get_registration_email, generate_reset_pass_link, get_reset_pass_email
 
 logger = getLogger(__name__)
 
@@ -97,14 +97,14 @@ class ResetPasswordRequestView(generics.GenericAPIView):
         serializer: ResetPasswordSerializer = self.get_serializer_class()(data=request.data)  # type: ignore
         serializer.is_valid(raise_exception=True)
 
-        email = serializer.email
+        email = serializer.validated_data["email"]
         try:
             user = User.objects.get(email=email)
             token = RefreshToken.for_user(user).access_token
             token.lifetime = timedelta(minutes=30)
 
             link = generate_reset_pass_link(token, request)
-            mail: EmailMultiAlternatives = get_registration_email(user, link)
+            mail: EmailMultiAlternatives = get_reset_pass_email(user, link)
             if mail.send() == 1:
                 logger.info("Email to user %s with register link sent", user.username)
                 return Response({"message": "Successfully send email with reset link"})
@@ -120,16 +120,16 @@ class ResetPasswordRequestView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user = request.user
         if request.user.is_authenticated:
-            user.set_password(str(serializer.password))
+            user.set_password(str(serializer.validated_data["password"]))
             user.save()
             user_data = UserSerializer(user).data
             return Response({"message": "Successfully changed password", "user": user_data}, status=status.HTTP_200_OK)
 
         try:
-            token = serializer.token
+            token = serializer.validated_data["token"]
             payload = jwt.decode(str(token), settings.SECRET_KEY, algorithms=["HS256"])
             found_user: User = User.objects.get(id=payload["user_id"])
-            found_user.set_password(str(serializer.password))
+            found_user.set_password(str(serializer.validated_data["password"]))
             found_user.save()
             user_data = UserSerializer(found_user).data
 
