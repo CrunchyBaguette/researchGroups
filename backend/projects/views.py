@@ -92,9 +92,7 @@ class ProjectViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         ]
     }
 
-    categoryCodes = {
-        "Default": "def"
-    }
+    categoryCodes = {"Default": "def"}
 
     def create(self, request, *args, **kwargs):
         # Obecnie, w przypadku gdy nie ma użytkownika z podanym mailem, tworzony jest
