@@ -10,6 +10,7 @@ import "markdown-it-vue/dist/markdown-it-vue.css";
 
 
 export default {
+  name: "markdown",
   components: {
     MarkdownItVue,
   },

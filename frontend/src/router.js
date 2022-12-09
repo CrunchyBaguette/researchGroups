@@ -14,11 +14,17 @@ import passwordReminder from "@/components/user/passwordReminder"
 import groupPanel from "@/components/groupPanel/groupPanel"
 import groupTutorials from "@/components/tutorialCatalog/groupTutorials"
 import forum from "@/components/forum/forum"
+import markdown from "@/components/tutorialCatalog/markdown"
 
 Vue.use(Router);
 
 const router = new Router({
     routes: [
+        {
+            path: "/markdown",
+            name: "markdown",
+            component: markdown,
+        },
         {
             path: "/",
             name: "announcements",
