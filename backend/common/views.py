@@ -14,8 +14,13 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from backend.users.serializers import UserSerializer
-from .serializers import RegisterSerializer, ResetPasswordSerializer, SetNewPasswordSerializer
-from .utils import generate_registration_link, get_registration_email, generate_reset_pass_link, get_reset_pass_email
+from backend.common.serializers import RegisterSerializer, ResetPasswordSerializer, SetNewPasswordSerializer
+from backend.common.utils import (
+    generate_registration_link,
+    get_registration_email,
+    generate_reset_pass_link,
+    get_reset_pass_email,
+)
 
 logger = getLogger(__name__)
 
