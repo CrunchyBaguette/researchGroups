@@ -1,17 +1,22 @@
+from typing import Any
 from rest_framework import viewsets
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework import generics, status
+from rest_framework.request import Request
 from django.contrib.auth import get_user_model, logout
-from backend.users.serializers import UserSerializer, CustomTokenObtainPairSerializer
+from django.contrib.auth.models import User
+from backend.users.serializers import UserSerializer, CustomTokenObtainPairSerializer, SendMailSerializer
 from backend.research_groups.models import ResearchGroup, ResearchGroupUser
 from backend.projects.models import Project
 from backend.research_groups.serializers import ResearchGroupSerializer
 from backend.projects.serializers import ProjectSerializer
 from backend.common.views import PermissionPolicyMixin
+from backend.utilsx.mail.EmailBuilder import EmailBuilder
 
 
 class UserViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
@@ -86,3 +91,23 @@ def logout_view(request):
     logout(request)
 
     return Response("Successful logout", status=200)
+
+
+class SendEmailView(generics.GenericAPIView):
+    serializer_class = SendMailSerializer
+    queryset = User.objects.all()
+    permission_classes = [AllowAny]
+
+    def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        emails_sent = 0
+
+        for r in data["receivers"]:
+            email = EmailBuilder(data["sender"]).add_subject(data["subject"]).add_text(data["body"])
+            email.add_receiver(r)
+            emails_sent += email.build_django_mail().send()
+
+        return Response({"message": f"Sent {emails_sent} emails successfully"}, status=status.HTTP_200_OK)

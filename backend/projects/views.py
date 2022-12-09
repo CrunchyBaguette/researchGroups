@@ -79,7 +79,7 @@ class ProjectUserViewSet(viewsets.ModelViewSet):
                 newMemberObject = User.objects.filter(email=newMember["person"]).first()
                 project.project_owner = newMemberObject
                 project.save()
-        return Response({"researchGroup": projectId, "members": newMembersResponseList})
+        return Response({"project": projectId, "members": newMembersResponseList})
 
 
 # Create your views here.
@@ -125,18 +125,18 @@ class ProjectViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
 
     @action(detail=False, methods=["get"])
     def grouped(self, request):
-        researchGroup = request.query_params.get("researchGroup", None)
-        if not researchGroup:
+        project = request.query_params.get("project", None)
+        if not project:
             return Response(
-                {"researchGroup": ["'researchGroup' parameter is required."]},
+                {"project": ["'project' parameter is required."]},
                 status=400,
             )
         projectsQueryset = self.get_queryset()
-        projectsData = projectsQueryset.filter(research_group=researchGroup).all()
+        projectsData = projectsQueryset.filter(project=project).all()
         projectsSerializer = self.get_serializer(projectsData, many=True)
         return Response(
             {
-                "researchGroup": researchGroup,
+                "project": project,
                 "projects": projectsSerializer.data,
             }
         )
