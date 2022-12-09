@@ -1,13 +1,12 @@
 from collections import OrderedDict
 
-from django.utils.http import urlsafe_base64_decode
+from django.conf import settings
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.password_validation import validate_password
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from rest_framework.exceptions import AuthenticationFailed
-from django.utils.encoding import force_str
+import jwt
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -37,8 +36,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 class ResetPasswordSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
-    redirect_url = serializers.CharField(max_length=500, required=False)
-
     class Meta:
         fields = ["email"]
 
@@ -46,23 +43,20 @@ class ResetPasswordSerializer(serializers.Serializer):
 class SetNewPasswordSerializer(serializers.Serializer):
     password = serializers.CharField(min_length=6, max_length=68, write_only=True)
     token = serializers.CharField(min_length=1, write_only=True)
-    uidb64 = serializers.CharField(min_length=1, write_only=True)
 
     class Meta:
-        fields = ["password", "token", "uidb64"]
+        fields = ["password", "token"]
 
     def validate(self, attrs: OrderedDict):
         try:
-            token = attrs.get("token")
-            uidb64 = attrs.get("uidb64")
-
-            user_id = force_str(urlsafe_base64_decode(uidb64))
-            user: User = User.objects.get(id=user_id)
-            if not PasswordResetTokenGenerator().check_token(user, token):
-                raise AuthenticationFailed("The reset link is invalid")
-
+            token_str = attrs.get("token")
+            token = jwt.decode(token_str, settings.SECRET_KEY, algorithms=["HS256"])
+            User.objects.get(id=token["user_id"])
             return attrs
 
-        except ObjectDoesNotExist:
-            raise AuthenticationFailed("User does not exist")
-
+        except ObjectDoesNotExist as exc:
+            raise AuthenticationFailed("User does not exist") from exc
+        except jwt.ExpiredSignatureError as exc:
+            raise AuthenticationFailed("Token expired") from exc
+        except jwt.DecodeError as exc:
+            raise AuthenticationFailed("Invalid token") from exc

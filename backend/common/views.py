@@ -1,9 +1,12 @@
-from typing import Any
+from typing import Any, Type
 from logging import getLogger
 from datetime import timedelta
 import jwt
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import EmailMultiAlternatives
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.request import Request
 from rest_framework.views import APIView
 from rest_framework import generics, status
@@ -11,8 +14,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from backend.users.serializers import UserSerializer
-from .serializers import RegisterSerializer, ResetPasswordSerializer
-from .utils import generate_registration_link, get_registration_email
+from .serializers import RegisterSerializer, ResetPasswordSerializer, SetNewPasswordSerializer
+from .utils import generate_registration_link, get_registration_email, generate_reset_pass_link
 
 logger = getLogger(__name__)
 
@@ -85,3 +88,67 @@ class RegisterView(generics.GenericAPIView):
             return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class ResetPasswordRequestView(generics.GenericAPIView):
+    serializer_class: ResetPasswordSerializer = ResetPasswordSerializer  # type: ignore
+    queryset = User.objects.all()
+    permission_classes = [AllowAny]
+
+    def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        serializer: ResetPasswordSerializer = self.get_serializer_class()(data=request.data)  # type: ignore
+        serializer.is_valid(raise_exception=True)
+
+        email = serializer.email
+        try:
+            user = User.objects.get(email=email)
+            token = RefreshToken.for_user(user).access_token
+            token.lifetime = timedelta(minutes=30)
+
+            link = generate_reset_pass_link(token, request)
+            mail: EmailMultiAlternatives = get_registration_email(user, link)
+            if mail.send() == 1:
+                logger.info("Email to user %s with register link sent", user.username)
+                return Response({"message": "Successfully send email with reset link"})
+
+            logger.warning("Could not send email with register link for user %s", user.username)
+            return Response({"error": "Email with reset link has not been sent"})
+
+        except ObjectDoesNotExist:
+            return Response({"error": "User does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        serializer: SetNewPasswordSerializer = self.get_serializer_class()(data=request.data)  # type: ignore
+        serializer.is_valid(raise_exception=True)
+        user = request.user
+        if request.user.is_authenticated:
+            user.set_password(str(serializer.password))
+            user.save()
+            user_data = UserSerializer(user).data
+            return Response({"message": "Successfully changed password", "user": user_data}, status=status.HTTP_200_OK)
+
+        try:
+            token = serializer.token
+            payload = jwt.decode(str(token), settings.SECRET_KEY, algorithms=["HS256"])
+            found_user: User = User.objects.get(id=payload["user_id"])
+            found_user.set_password(str(serializer.password))
+            found_user.save()
+            user_data = UserSerializer(found_user).data
+
+            return Response({"message": "Successfully changed password", "user": user_data}, status=status.HTTP_200_OK)
+
+        except jwt.ExpiredSignatureError:
+            logger.warning("Token expired")
+            return Response({"error": "Token expired"}, status=status.HTTP_400_BAD_REQUEST)
+
+        except jwt.DecodeError:
+            logger.warning("Invalid token")
+            return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+
+        except ObjectDoesNotExist as exc:
+            raise AuthenticationFailed("User does not exist") from exc
+
+    def get_serializer_class(self) -> Type[ResetPasswordSerializer | SetNewPasswordSerializer]:
+        if self.request.method == "POST":
+            return ResetPasswordSerializer
+        if self.request.method == "PUT":
+            return SetNewPasswordSerializer
+        return ResetPasswordSerializer
