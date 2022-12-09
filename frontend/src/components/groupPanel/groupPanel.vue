@@ -554,7 +554,10 @@ export default {
 
     isAdminOrOwner() {
       for (var i = 0; i < this.researchGroupMembers.length; i++) {
-        if (this.isMember()) {
+        if (
+          this.isMember() &&
+          this.researchGroupMembers[i]["person"] == this.authUser.email
+        ) {
           if (
             this.researchGroupMembers[i]["role"] == "Creator" ||
             this.researchGroupMembers[i]["role"] == "Moderator"
