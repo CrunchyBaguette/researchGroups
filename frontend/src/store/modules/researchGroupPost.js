@@ -46,7 +46,7 @@ const actions = {
     getForumPosts({ commit }, group) {
         return new Promise((resolve, reject) => {
             researchGroupPostService.fetchGroupForumPosts(group).then((data) => {
-                commit("setForumPosts", data);
+                commit("setForumPosts", data.posts);
                 resolve();
             }).catch((err) => reject(err));
         });
