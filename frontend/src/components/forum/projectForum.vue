@@ -28,7 +28,7 @@
         </b-button>
       </div>
     </div>
-    <div v-if="isAuthenticated && !isParticipant">
+    <div v-if="isAuthenticated && !isParticipant && loading">
       <p class="title pr-6">Nie członkiem tego preojektu.</p>
       <div class="columns is-flex is-vcentered is-centered">
         <b-button class="is-medium column is-2" type="is-success" v-on:click="$router.back()" label="Powrót">

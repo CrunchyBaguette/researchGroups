@@ -23,16 +23,15 @@
     <div v-if="!isAuthenticated">
       <p class="title pr-6">Nie jesteś zalogowny.</p>
       <div class="columns is-flex is-vcentered is-centered">
-        <b-button class="is-medium column is-2" type="is-success" :to="{ name: 'login' }"
+        <b-button class="is-medium is-rounded column is-2" type="is-success" :to="{ name: 'login' }"
                   tag="router-link" label="Zaloguj się">
         </b-button>
       </div>
     </div>
-    <div v-if="isAuthenticated && !isParticipant">
+    <div v-if="isAuthenticated && !isParticipant && loading">
       <p class="title pr-6">Nie członkiem tego koła.</p>
-      <p class="title pr-6">Wypier...</p>
       <div class="columns is-flex is-vcentered is-centered">
-        <b-button class="is-medium column is-2" type="is-success" v-on:click="$router.back()" label="Powrót">
+        <b-button class="is-medium is-rounded column is-2" type="is-success" v-on:click="$router.back()" label="Powrót">
         </b-button>
       </div>
     </div>
