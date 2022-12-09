@@ -2,14 +2,14 @@
   <div v-if="loading">
     <div class="columns">
       <div class="column is-4">
-        <b-button class="button"
+        <b-button class="button is-rounded"
                   v-on:click="$router.back()">Powrót
         </b-button>
         <p class="author-decor">{{ forumPost.author.first_name }} {{forumPost.author.last_name}}</p>
       </div>
       <div class="column is-2 is-offset-6" v-if="forumPost.author.id === authUser.id">
-        <b-button class="button" v-on:click="showEdit">Edytuj</b-button>
-        <b-button class="button" v-on:click="confirmDeleting">Usuń</b-button>
+        <b-button class="button is-success is-rounded mr-2" v-on:click="showEdit">Edytuj</b-button>
+        <b-button class="button is-success is-rounded" v-on:click="confirmDeleting">Usuń</b-button>
       </div>
     </div>
     <div>
