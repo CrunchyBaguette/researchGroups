@@ -28,39 +28,38 @@ number_of_ratings = 10
 
 fake = Faker()
 engine = create_engine(
-    "postgresql://admin:pleasechangeme@postgres:5432/backend", echo=False
-    # "postgresql://admin:pleasechangeme@localhost:5432/backend", echo=False
+    # "postgresql://admin:pleasechangeme@postgres:5432/backend", echo=False
+    "postgresql://admin:pleasechangeme@localhost:5432/backend", echo=False
 )
 
 
 def run():
+    print("Script is running...")
     dropTables()
     genrateTables()
+    print("Script end successfully")
 
 def dropTables():
-    dropTable("projects_projectlink")
-    dropTable("projects_projectdisk")
-    dropTable("projects_projectpostcomment")
-    dropTable("projects_projectpost")
-    dropTable("research_groups_researchgroupguide")
-    dropTable("research_groups_researchgrouplink")
-    dropTable("research_groups_researchgroupdisk")
-    dropTable("research_groups_researchgrouppostcomment")
-    dropTable("research_groups_researchgrouppost")
-    dropTable("research_groups_researchgroupuser")
-    dropTable("announcements_announcement")
-    dropTable("projects_guideproject")
-    dropTable("projects_projectuser")
-    dropTable("projects_project_research_groups")
-    dropTable("tutorials_rating")
-    dropTable("tutorials_tutorial_editors")
-    dropTable("tutorials_tutorial")
-    dropTable("projects_project")
-    dropTable("research_groups_researchgroup")
-    sql = text('DELETE FROM auth_user;')
-    engine.execute(sql)
-    if is_printing:
-        print("deleting table auth_user")
+    DeleteTableData("projects_projectlink")
+    DeleteTableData("projects_projectdisk")
+    DeleteTableData("projects_projectpostcomment")
+    DeleteTableData("projects_projectpost")
+    DeleteTableData("research_groups_researchgroupguide")
+    DeleteTableData("research_groups_researchgrouplink")
+    DeleteTableData("research_groups_researchgroupdisk")
+    DeleteTableData("research_groups_researchgrouppostcomment")
+    DeleteTableData("research_groups_researchgrouppost")
+    DeleteTableData("research_groups_researchgroupuser")
+    DeleteTableData("announcements_announcement")
+    DeleteTableData("projects_guideproject")
+    DeleteTableData("projects_projectuser")
+    DeleteTableData("projects_project_research_groups")
+    DeleteTableData("tutorials_rating")
+    DeleteTableData("tutorials_tutorial_editors")
+    DeleteTableData("tutorials_tutorial")
+    DeleteTableData("projects_project")
+    DeleteTableData("research_groups_researchgroup")
+    DeleteTableData("auth_user")
 
 
 def genrateTables():
@@ -88,11 +87,11 @@ def genrateTables():
     project_links = generate_project_link(projects)
 
 
-def dropTable(name):
-    sql = text('DROP TABLE IF EXISTS '+name+';')
+def DeleteTableData(name):
+    sql = text('DELETE FROM '+name+';')
     engine.execute(sql)
     if is_printing:
-        print("deleting table " + name)
+        print("data deleted from table: " + name)
 
 def generate_user():
     users = defaultdict(list)
@@ -139,7 +138,7 @@ def generate_research_group(users):
         research_groups["category"].append(
             categories[fake.pyint(0, len(categories) - 1)]
         )
-        research_groups["group_owner"].append(users["id"].values[i % len(users["id"])])
+        research_groups["group_owner_id"].append(users["id"].values[i % len(users["id"])])
     df_research_groups = pd.DataFrame(research_groups)
     if is_printing:
         print(df_research_groups)
@@ -367,9 +366,9 @@ def generate_research_group_post(df_users, df_research_group):
             df_users["id"].values[i % len(df_users["id"])]
         )
         research_group_post["text"].append(fake.text())
-        added = fake.past_date()
+        added = fake.past_datetime()
         research_group_post["added"].append(added)
-        research_group_post["edited"].append(fake.date_between(added))
+        research_group_post["edited"].append(added)
         research_group_post["research_group_id"].append(
             df_research_group["id"].values[i % len(df_research_group["id"])]
         )
