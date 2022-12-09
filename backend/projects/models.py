@@ -11,11 +11,12 @@ from backend.common.models import Link
 class Project(models.Model):
     name = models.CharField(max_length=120, null=False, blank=False)
     description = models.TextField(blank=True)
-    deadline = models.DateField(null=True)
-    funds = models.DecimalField(decimal_places=2, max_digits=20)
+    deadline = models.DateField(null=True, blank=True)
+    funds = models.DecimalField(decimal_places=2, max_digits=20, null=True)
     members = models.ManyToManyField(User, through="ProjectUser")
+    project_owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name="project_owner", default=None)
     guides = models.ManyToManyField(Tutorial, through="GuideProject")
-    research_groups = models.ManyToManyField(ResearchGroup)
+    research_groups = models.ManyToManyField(ResearchGroup, blank=True)
 
     class Category(models.TextChoices):
         DEFAULT = "def", "Default"

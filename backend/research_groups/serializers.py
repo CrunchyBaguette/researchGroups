@@ -27,10 +27,20 @@ class ResearchGroupSerializer(QuerySerializerMixin, serializers.ModelSerializer)
         return representation
 
 
-class ResearchGroupUserSerializer(serializers.ModelSerializer):
+class ResearchGroupUserSerializer(QuerySerializerMixin, serializers.ModelSerializer):
+    person = serializers.SlugRelatedField(slug_field="email", queryset=User.objects.all())
+    research_group = serializers.SlugRelatedField(slug_field="id", queryset=ResearchGroup.objects.all())
+
+    RELATED_FIELDS = ["research_group", "person"]
+
     class Meta:
         model = ResearchGroupUser
         fields = "__all__"
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["role"] = instance.get_role_display()
+        return representation
 
 
 class ResearchGroupPostSerializer(serializers.ModelSerializer):

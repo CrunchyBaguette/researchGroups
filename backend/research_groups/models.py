@@ -17,9 +17,9 @@ class ResearchGroup(models.Model):
     group_owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name="group_owner", default=None)
 
     class Category(models.TextChoices):
-        MATH = "math", "Math"
-        MEDICAL = "med", "Medical"
-        CHEMISTRY = "chem", "Chemistry"
+        MATH = "math", "Matematyka"
+        MEDICAL = "med", "Medycyna"
+        CHEMISTRY = "chem", "Chemia"
         DEFAULT = "def", "Default"
 
     category = models.CharField(max_length=20, choices=Category.choices, default=Category.DEFAULT)
