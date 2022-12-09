@@ -22,8 +22,8 @@
               id="ann"
               :author="announcement.author_full_name"
               :category="announcement.ann_type"
-              :date="announcement.date"
-              sortable
+              :added="announcement.added"
+              :edited="announcement.edited"
               :title="announcement.title"
               :content="announcement.text"
               @click.native="moveToAnnouncement(announcement.id)"

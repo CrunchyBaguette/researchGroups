@@ -6,7 +6,8 @@
           <p class="category">{{ category }}</p>
         </div>
         <div class="date-container">
-            <p class="date">{{ new Date(date) | dateFormat('DD.MM.YYYY HH:mm') }}</p>
+            <p class="added" id="da">Utworzone: {{ new Date(added) | dateFormat('DD.MM.YYYY HH:mm') }}</p>
+            <p class="edited" id="da">Edytowane: {{ new Date(edited) | dateFormat('DD.MM.YYYY HH:mm') }}</p>
         </div>
         <div class="title-container">
             <p class="title">{{ title }}</p>
@@ -25,7 +26,8 @@
     name: "announcement",
     props: {
       author: {type: String},
-      date: {type: String},
+      added: {type: String},
+      edited: {type: String},
       title: {type: String},
       category: {type: String},
       content: {type: String},
@@ -72,7 +74,7 @@
     font-size: 20px;
   }
 
-  .date {
+  .added .edited {
     padding-left: 5px;
   }
   
@@ -84,6 +86,10 @@
   
   .content {
     padding: 5px;
-  } 
+  }
+  
+  #da {
+    color: grey;
+  }
 
   </style>

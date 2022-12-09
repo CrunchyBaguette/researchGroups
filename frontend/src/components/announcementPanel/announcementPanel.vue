@@ -30,8 +30,8 @@
       id="annx"
       :author="announcementAuthor"
       :category="announcementCategory"
-      :date="announcementDate"
-      sortable
+      :added="announcementAdded"
+      :edited="announcementEdited"
       :title="announcementTitle"
       :content="announcementContent"
     />
@@ -75,7 +75,8 @@
             </div>
           </div>
           <div class="date-container">
-              <p class="date-in-edit-mode">{{ new Date() | dateFormat('DD.MM.YYYY HH:mm') }}</p> 
+              <p class="date-in-edit-mode">Utworzone: {{ new Date(announcementAdded) | dateFormat('DD.MM.YYYY HH:mm') }}</p>
+              <p class="date-in-edit-mode">Edytowane: {{ new Date() | dateFormat('DD.MM.YYYY HH:mm') }}</p> 
           </div>
           <div class="title-container">
             <div class="title-edit-container">
@@ -140,7 +141,7 @@
                 <b-input
                   @focus="announcementContentGiven = ''"
                   v-model="announcementContent"
-                  id="editableText"
+                  id="editableAnnContent"
                   type="textarea"
                   size="is-medium"
                 ></b-input>
@@ -194,7 +195,8 @@ export default {
       announcementAuthor: "",
 
       //beforeEditAnnouncementDate: "12.08.2022 21:21",
-      announcementDate: "",
+      announcementAdded: "",
+      announcementEdited: "",
 
       isBeingEdited: false,
       isButtonDisabled: false,
@@ -209,7 +211,8 @@ export default {
           (this.announcementCategory = this.announcement.ann_type),
           (this.announcementContent = this.announcement.text),
           (this.announcementAuthor = this.announcement.author_full_name),
-          (this.announcementDate = this.announcement.date)
+          (this.announcementAdded = this.announcement.added),
+          (this.announcementEdited = this.announcement.edited)
         )
       )
       .then(() => {
@@ -228,14 +231,14 @@ export default {
           text: this.announcementContent,
           //author_full_name: this.announcementAuthor,
           //author: this.authUser.id,
-          date: this.announcementDate,
+          //edited: this.announcementEdited,
           //research_group_id: 1,
         },
       }).catch((err) => {
         this.announcementTitle = this.announcement.title;
         this.announcementCategory = this.announcement.ann_type;
         this.announcementContent = this.announcement.text;
-        this.announcementDate = this.announcement.date;
+        //this.announcementEdited = this.announcement.edited;
        
         this.$buefy.toast.open({
           message: err.response.data[Object.keys(err.response.data)[0]],
@@ -245,6 +248,7 @@ export default {
     },
 
     changeToPanelMode() {
+      //this.announcementEdited = this.announcementAdded;
       this.isBeingEdited = false;
     },
     changeToEditMode() {
@@ -255,8 +259,8 @@ export default {
       this.isButtonDisabled = !this.isButtonDisabled;
     },
     saveAnnouncementCategory() {
-      const p = document.getElementsByClassName('date-in-edit-mode');
-      this.announcementDate = p.content;
+      // const p = document.getElementsByClassName('date-in-edit-mode');
+      // this.announcementDate = p.content;
       this.updateAnnouncementInfo();
       this.changeAnnouncementCategory();
     },
@@ -273,8 +277,8 @@ export default {
         this.announcementTitleGiven = "Podaj tytuł ogłoszenia";
       }
       else {
-        const p = document.getElementsByClassName('date-in-edit-mode');
-        this.announcementDate = p.content;
+        // const p = document.getElementsByClassName('date-in-edit-mode');
+        // this.announcementDate = p.content;
         this.updateAnnouncementInfo();
         this.changeAnnouncementTitle();
       }
@@ -292,8 +296,8 @@ export default {
         this.announcementContentGiven = "Podaj treść";
       } 
       else {
-        const p = document.getElementsByClassName('date-in-edit-mode');
-        this.announcementDate = p.content;
+        // const p = document.getElementsByClassName('date-in-edit-mode');
+        // this.announcementDate = p.content;
         this.updateAnnouncementInfo();
         this.changeAnnouncementContent();
       }
@@ -315,7 +319,8 @@ export default {
             (this.announcementCategory = this.announcement.ann_type),
             (this.announcementContent = this.announcement.text),
             (this.announcementAuthor = this.announcement.author_full_name), //
-            (this.announcementDate = this.announcement.date)
+            (this.announcementAdded = this.announcement.added),
+            (this.announcementEdited = this.announcement.edited)
           )
         )
         .then(() => {
@@ -447,6 +452,11 @@ export default {
 
 .btnEditContent {
   text-align: left;
+}
+
+#editableAnnContent {
+  height: 36vh;
+  /* width: 800px !important; */
 }
 
 </style>
