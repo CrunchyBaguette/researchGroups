@@ -20,7 +20,6 @@ from backend.utilsx.mail.EmailBuilder import EmailBuilder
 
 
 class UserViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
-    permission_classes = (IsAdminUser,)
     serializer_class = UserSerializer
     queryset = get_user_model().objects.all()
     permission_classes_per_method = {
