@@ -424,7 +424,7 @@ export default {
       for (var i = 0; i < this.projectMembers.length; i++) {
         if (
           this.isMember() &&
-          this.researchGroupMembers[i]["person"] == this.authUser.email
+          this.projectMembers[i]["person"] == this.authUser.email
         ) {
           if (
             this.projectMembers[i]["role"] == "Owner" ||
