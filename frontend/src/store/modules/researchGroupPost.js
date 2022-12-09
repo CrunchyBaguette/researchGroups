@@ -35,9 +35,9 @@ const actions = {
     },
     updateForumPost({ dispatch }, params) {
         return new Promise((resolve, reject) => {
-            researchGroupPostService.patchForumPost(params).then(() => {
-                dispatch("getForumPosts");
-                resolve();
+            researchGroupPostService.patchForumPost(params).then((data) => {
+                dispatch("getForumPosts", {researchGroup: data.research_group});
+                resolve(data);
             }).catch((err) => {
                 reject(err);
             });
@@ -46,7 +46,7 @@ const actions = {
     deleteForumPost({ dispatch }, params) {
         return new Promise((resolve, reject) => {
             researchGroupPostService.deleteGroupForumPosts(params).then(() => {
-                dispatch("getForumPosts");
+                dispatch("getForumPosts", {researchGroup: params.groupId});
                 resolve();
             }).catch((err) => {
                 reject(err);
@@ -57,7 +57,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             researchGroupPostService.fetchGroupForumPosts(group).then((data) => {
                 commit("setForumPosts", data);
-                resolve();
+                resolve(data);
             }).catch((err) => reject(err));
         });
     },
@@ -65,7 +65,7 @@ const actions = {
 
 const mutations = {
     setForumPosts(state, data) {
-        state.forumPosts = data;
+        state.forumPosts = data.posts;
     },
     addForumPost(state, post) {
         state.forumPosts.push(post)

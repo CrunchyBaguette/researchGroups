@@ -8,7 +8,7 @@ export default {
         return api.post("research-group-post/", data).then((response) => response.data);
     },
     patchForumPost(update) {
-        return api.patch(`research-group-post/${update.id}/`, update.payload).then((response) => response.data);
+        return api.patch(`research-group-post/${update.id}/`, update).then((response) => response.data);
     },
     fetchGroupForumPosts(params) {
         return api.get("research-group-post/grouped/", {params}).then((response) => response.data);
