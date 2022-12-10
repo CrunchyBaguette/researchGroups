@@ -6,9 +6,24 @@ import 'buefy/dist/buefy.css'
 import App from './App.vue'
 import mdiVue from 'mdi-vue/v2'
 import * as mdijs from '@mdi/js'
+import MarkdownItVue from "markdown-it-vue";
+import "markdown-it-vue/dist/markdown-it-vue.css";
 
 Vue.config.productionTip = false
 
+if (store.getters["auth/isAuthenticated"]) {
+  store.dispatch("auth/setAxiosHeaders");
+  if (store.getters["auth/isAccessTokenExpired"]) {
+    store.dispatch("auth/logOut");
+    router.push("/login");
+  } else {
+    store.dispatch("auth/refreshAccessToken").then(() => {
+      store.dispatch("auth/beginTokenRefreshCountdown");
+    })
+  }
+}
+
+Vue.use(MarkdownItVue)
 Vue.use(Buefy)
 Vue.use(mdiVue, {
   icons: mdijs

@@ -71,7 +71,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
       PGADMIN_DEFAULT_PASSWORD: admin
     depends_on:
-     - postgres
+      - postgres
     volumes:
       - pgadmin-data:/var/lib/pgadmin'
     profiles:

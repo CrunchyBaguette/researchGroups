@@ -3,7 +3,7 @@
     <div id="titleDiv" v-if="!isBeingEdited">
       <p class="title" id="tit">Panel Ogłoszenia</p>
       <b-button
-          v-if="isAuthenticated"
+          v-if="isOwner()"
           id="btnTitle"
           rounded
           size="is-medium"
@@ -27,11 +27,11 @@
     
     
     <announcement v-if="!isBeingEdited" 
-      id="ann"
+      id="annx"
       :author="announcementAuthor"
       :category="announcementCategory"
-      :date="announcementDate"
-      sortable
+      :added="announcementAdded"
+      :edited="announcementEdited"
       :title="announcementTitle"
       :content="announcementContent"
     />
@@ -48,7 +48,7 @@
                 <b-field label="Typ ogłoszenia">
                   <b-select v-model="announcementCategory" placeholder="Wybierz kategorię">
                     <option value="Poszukiwanie sponsora">Poszukiwanie sponsora</option>
-                    <option value="Rekrutacja">Poszukiwanie nowych członków</option>
+                    <option value="Poszukiwanie nowych członków">Poszukiwanie nowych członków</option>
                     <option value="Poszukiwanie osób do projektu">Poszukiwanie osób do projektu</option>
                   </b-select>
                 </b-field>
@@ -75,7 +75,8 @@
             </div>
           </div>
           <div class="date-container">
-              <p class="date-in-edit-mode">{{ new Date(announcementDate) | dateFormat('DD.MM.YYYY HH:mm') }}</p> 
+              <p class="date-in-edit-mode">Utworzone: {{ new Date(announcementAdded) | dateFormat('DD.MM.YYYY HH:mm') }}</p>
+              <p class="date-in-edit-mode">Edytowane: {{ new Date() | dateFormat('DD.MM.YYYY HH:mm') }}</p> 
           </div>
           <div class="title-container">
             <div class="title-edit-container">
@@ -140,7 +141,7 @@
                 <b-input
                   @focus="announcementContentGiven = ''"
                   v-model="announcementContent"
-                  id="editableText"
+                  id="editableAnnContent"
                   type="textarea"
                   size="is-medium"
                 ></b-input>
@@ -192,9 +193,11 @@ export default {
       announcementContentGiven: "",
 
       announcementAuthor: "",
+      announcementAuthorId: 0,
 
       //beforeEditAnnouncementDate: "12.08.2022 21:21",
-      announcementDate: "",
+      announcementAdded: "",
+      announcementEdited: "",
 
       isBeingEdited: false,
       isButtonDisabled: false,
@@ -209,7 +212,9 @@ export default {
           (this.announcementCategory = this.announcement.ann_type),
           (this.announcementContent = this.announcement.text),
           (this.announcementAuthor = this.announcement.author_full_name),
-          (this.announcementDate = this.announcement.date)
+          (this.announcementAuthorId = this.announcement.author),
+          (this.announcementAdded = this.announcement.added),
+          (this.announcementEdited = this.announcement.edited)
         )
       )
       .then(() => {
@@ -219,8 +224,15 @@ export default {
   methods: {
     ...mapActions("announcement", ["getAnnouncement", "updateAnnouncement"]),
 
+    isOwner() {
+      if (this.announcementAuthorId === this.authUser.id) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
     updateAnnouncementInfo() {
-      console.log('cokolwiek');
       this.updateAnnouncement({
         id: this.$route.params.id,
         payload: {
@@ -229,26 +241,24 @@ export default {
           text: this.announcementContent,
           //author_full_name: this.announcementAuthor,
           //author: this.authUser.id,
-          //date: this.announcementDate,
+          //edited: this.announcementEdited,
           //research_group_id: 1,
         },
       }).catch((err) => {
-        console.log(err);
-        console.log('cokolwiek')
         this.announcementTitle = this.announcement.title;
         this.announcementCategory = this.announcement.ann_type;
         this.announcementContent = this.announcement.text;
-        this.announcementAuthor = this.announcement.author_full_name; //
-        this.announcementDate = this.announcement.date;
-        //
-        // this.$buefy.toast.open({
-        //   message: err.response.data[Object.keys(err.response.data)[0]],
-        //   type: "is-danger",
-        // });
+        //this.announcementEdited = this.announcement.edited;
+       
+        this.$buefy.toast.open({
+          message: err.response.data[Object.keys(err.response.data)[0]],
+          type: "is-danger",
+        });
       });
     },
 
     changeToPanelMode() {
+      //this.announcementEdited = this.announcementAdded;
       this.isBeingEdited = false;
     },
     changeToEditMode() {
@@ -259,6 +269,8 @@ export default {
       this.isButtonDisabled = !this.isButtonDisabled;
     },
     saveAnnouncementCategory() {
+      // const p = document.getElementsByClassName('date-in-edit-mode');
+      // this.announcementDate = p.content;
       this.updateAnnouncementInfo();
       this.changeAnnouncementCategory();
     },
@@ -275,6 +287,8 @@ export default {
         this.announcementTitleGiven = "Podaj tytuł ogłoszenia";
       }
       else {
+        // const p = document.getElementsByClassName('date-in-edit-mode');
+        // this.announcementDate = p.content;
         this.updateAnnouncementInfo();
         this.changeAnnouncementTitle();
       }
@@ -290,7 +304,10 @@ export default {
     saveAnnouncementContent() {
       if (this.announcementContent === "") {
         this.announcementContentGiven = "Podaj treść";
-      } else {
+      } 
+      else {
+        // const p = document.getElementsByClassName('date-in-edit-mode');
+        // this.announcementDate = p.content;
         this.updateAnnouncementInfo();
         this.changeAnnouncementContent();
       }
@@ -312,7 +329,9 @@ export default {
             (this.announcementCategory = this.announcement.ann_type),
             (this.announcementContent = this.announcement.text),
             (this.announcementAuthor = this.announcement.author_full_name), //
-            (this.announcementDate = this.announcement.date)
+            (this.announcementAuthorId = this.announcement.author),
+            (this.announcementAdded = this.announcement.added),
+            (this.announcementEdited = this.announcement.edited)
           )
         )
         .then(() => {
@@ -326,7 +345,7 @@ export default {
       announcement: (state) => state.announcement.announcement,
     }),
     //...mapGetters("auth", ["isAuthenticated"]),
-    ...mapGetters("auth", ["isAuthenticated", "authUser"]),
+    ...mapGetters("auth", ["authUser"]),
   },
 
 };
@@ -346,6 +365,7 @@ export default {
 
 #tit {
   text-align: left;
+  margin-bottom: 20px;
 }
 
 #titleDiv {
@@ -360,7 +380,7 @@ export default {
   margin-right: 20px
 }
 
-#ann {
+#annx {
   margin-bottom: 20px;
   margin-left: 10px;
   margin-right: 10px;
@@ -443,6 +463,11 @@ export default {
 
 .btnEditContent {
   text-align: left;
+}
+
+#editableAnnContent {
+  height: 36vh;
+  /* width: 800px !important; */
 }
 
 </style>
