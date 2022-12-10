@@ -1,6 +1,6 @@
 <template>
-  <div id="group-info-panel" v-if="researchGroup">
-    <p class="group-info-panel-title">{{ researchGroup.name }}</p>
+  <div id="group-info-panel" v-if="project">
+    <p class="group-info-panel-title">{{ project.name }}</p>
     <div
       class="box group-info-panel-desc-container"
       style="background-color: white"
@@ -15,12 +15,12 @@
           padding-left: 5px;
         "
       >
-        O nas:
+        Opis projektu:
       </p>
       <p style="font-size: 20px">
         <markdown-it-vue
           class="md-body"
-          :content="researchGroup.about_us"
+          :content="project.description"
           :options="markdownOptions"
         />
       </p>
@@ -30,23 +30,23 @@
         size="is-medium"
         style="text-align: center"
         tag="router-link"
-        :to="{ name: 'group', params: { id: researchGroup.id } }"
-        >Przejdź do panelu koła</b-button
+        :to="{ name: 'project', params: { id: project.id } }"
+        >Przejdź do panelu projektu</b-button
       >
     </div>
   </div>
   <div v-else class="no-research-group">
-    <p>Wybierz koło naukowe z listy</p>
+    <p>Wybierz projekt z listy</p>
     <img src="@/assets/arrow-down-left.png" width="100" />
   </div>
 </template>
 
 <script>
 export default {
-  name: "groupInfoPanel",
+  name: "projectInfoPanel",
 
   props: {
-    researchGroup: { type: Object },
+    project: { type: Object },
   },
 };
 </script>

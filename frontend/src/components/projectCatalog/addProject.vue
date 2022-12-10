@@ -1,7 +1,7 @@
 <template>
   <div id="content" style="display: flex; flex-flow: column; margin 0">
     <div style="flex: 0 1 auto">
-      <p class="title" style="width: fit-content">Tworzenie koła naukowego</p>
+      <p class="title" style="width: fit-content">Tworzenie projektu</p>
     </div>
     <div style="flex: 1 1 auto; overflow: auto; padding: 10px">
       <div class="columns" style="width: 80%; margin: 50px auto">
@@ -12,16 +12,16 @@
               :type="!nameGiven ? 'is-danger' : ''"
             >
               <template #label
-                ><p style="font-size: 20px">Nazwa koła naukowego</p></template
+                ><p style="font-size: 20px">Nazwa projektu</p></template
               >
               <b-input
                 @focus="nameGiven = true"
-                v-model="groupName"
+                v-model="projectName"
                 style="width: 100%"
               />
             </b-field>
             <b-field
-              :message="!categoryGiven ? 'Proszę podać kategorię koła' : ''"
+              :message="!categoryGiven ? 'Proszę podać kategorię projektu' : ''"
               :type="!categoryGiven ? 'is-danger' : ''"
             >
               <template #label
@@ -29,26 +29,24 @@
               >
               <b-select
                 @focus="categoryGiven = true"
-                v-model="groupCategory"
+                v-model="projectCategory"
                 expanded
                 style="width: 100%"
                 placeholder="Wybierz kategorię"
               >
-                <option value="math">Math</option>
-                <option value="med">Medical</option>
-                <option value="chem">Chemistry</option>
+                <option value="def">Default</option>
               </b-select>
             </b-field>
             <b-field
-              :message="!aboutUsGiven ? 'Proszę podać opis koła' : ''"
-              :type="!aboutUsGiven ? 'is-danger' : ''"
+              :message="!descriptionGiven ? 'Proszę podać opis projektu' : ''"
+              :type="!descriptionGiven ? 'is-danger' : ''"
             >
               <template #label
-                ><p style="font-size: 20px">Opis koła naukowego</p></template
+                ><p style="font-size: 20px">Opis projektu</p></template
               >
               <b-input
-                @focus="aboutUsGiven = true"
-                v-model="groupAboutUs"
+                @focus="descriptionGiven = true"
+                v-model="projectDescription"
                 style="width: 100%"
                 type="textarea"
               />
@@ -61,7 +59,7 @@
               type="is-success"
               @click="clicked()"
             >
-              Stwórz Koło naukowe
+              Stwórz projekt
             </b-button>
           </div>
         </div>
@@ -92,7 +90,7 @@
                   padding: 5px 10px;
                   display: flex;
                 "
-                v-for="email in groupMembers"
+                v-for="email in projectMembers"
                 :key="email"
               >
                 <p style="flex: 0 1 auto">
@@ -102,7 +100,7 @@
                   style="flex: 1 0 auto; text-align: right"
                   @click="removeMemberFromList(email)"
                 >
-                  <b-icon icon="close" />
+                  <mdicon name="close" />
                 </div>
               </div>
             </div>
@@ -110,18 +108,18 @@
             <b-field
               :message="invalidEmailMessage"
               :type="invalidEmailMessage ? 'is-danger' : ''"
-              label="Dodaj e-maile członków do koła"
+              label="Dodaj e-maile członków do projektu"
             >
               <b-input
                 @focus="invalidEmailMessage = ''"
-                v-model="groupMemberInput"
+                v-model="projectMemberInput"
                 placeholder="Email członka..."
                 expanded
               ></b-input>
               <p class="control">
                 <b-button
                   class="button is-primary is-success"
-                  @click="addToMemberList(groupMemberInput)"
+                  @click="addToMemberList(projectMemberInput)"
                   >Dodaj członka</b-button
                 >
               </p>
@@ -137,46 +135,45 @@
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-  name: "addGroup",
+  name: "addProject",
 
   data() {
     return {
-      groupName: "",
-      groupCategory: "",
-      groupAboutUs: "",
-      groupMemberInput: "",
-      groupMembers: [],
+      projectName: "",
+      projectCategory: "",
+      projectDescription: "",
+      projectMemberInput: "",
+      projectMembers: [],
       nameGiven: true,
       categoryGiven: true,
-      aboutUsGiven: true,
+      descriptionGiven: true,
       invalidEmailMessage: "",
     };
   },
 
   methods: {
-    ...mapActions("researchGroup", ["addResearchGroup"]),
-    ...mapActions("user", ["getUserResearchGroups"]),
+    ...mapActions("project", ["addProject"]),
     clicked() {
-      if (this.groupName == "") this.nameGiven = false;
-      if (this.groupCategory == "") this.categoryGiven = false;
-      if (this.groupAboutUs == "") this.aboutUsGiven = false;
+      if (this.projectName == "") this.nameGiven = false;
+      if (this.projectCategory == "") this.categoryGiven = false;
+      if (this.projectDescription == "") this.descriptionGiven = false;
 
-      if (this.nameGiven && this.categoryGiven && this.aboutUsGiven) {
-        this.addResearchGroup({
-          name: this.groupName,
-          about_us: this.groupAboutUs,
-          category: this.groupCategory,
-          members: this.groupMembers,
-          group_owner: this.authUser.username,
+      if (this.nameGiven && this.categoryGiven && this.descriptionGiven) {
+        this.addProject({
+          name: this.projectName,
+          description: this.projectDescription,
+          category: this.projectCategory,
+          members: this.projectMembers,
+          project_owner: this.authUser.username,
         })
-          .then((response) => {
+          .then(() => {
             this.$buefy.toast.open({
               message: "Pomyślnie dodano koło naukowe",
               type: "is-success",
             });
 
             this.$router.replace(
-              this.$route.query.redirect || `/group/${response.id}`
+              this.$route.query.redirect || "/project-catalog"
             );
           })
           .catch((err) => {
@@ -186,9 +183,9 @@ export default {
             });
           });
 
-        this.groupName = "";
-        this.groupAboutUs = "";
-        this.groupCategory = "";
+        this.projectName = "";
+        this.projectDescription = "";
+        this.projectCategory = "";
       }
     },
     addToMemberList(memberEmail) {
@@ -198,18 +195,18 @@ export default {
         )
       ) {
         this.invalidEmailMessage = "Podaj poprawny E-mail";
-      } else if (this.groupMembers.includes(memberEmail)) {
+      } else if (this.projectMembers.includes(memberEmail)) {
         this.invalidEmailMessage = "Już podano dany E-mail";
       } else if (memberEmail == this.authUser.email) {
         this.invalidEmailMessage = "Nie można dodać własnego adresu E-mail";
       } else {
-        this.groupMembers.push(memberEmail);
+        this.projectMembers.push(memberEmail);
       }
-      this.groupMemberInput = "";
+      this.projectMemberInput = "";
     },
     removeMemberFromList(email) {
-      let index = this.groupMembers.indexOf(email);
-      this.groupMembers.splice(index, 1);
+      let index = this.projectMembers.indexOf(email);
+      this.projectMembers.splice(index, 1);
     },
   },
 

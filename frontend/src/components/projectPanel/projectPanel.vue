@@ -4,18 +4,22 @@
       <div class="column is-3"></div>
       <div class="column is-6">
         <div class="div-title">
-          <h1 class="title" id="title" v-if="!editGroupName || !isBeingEdited">
-            {{ groupName }}
+          <h1
+            class="title"
+            id="title"
+            v-if="!editProjectName || !isBeingEdited"
+          >
+            {{ projectName }}
           </h1>
           <div class="div-edit" v-else>
             <b-field
-              :message="invalidGroupName"
-              :type="invalidGroupName ? 'is-danger' : ''"
+              :message="invalidProjectName"
+              :type="invalidProjectName ? 'is-danger' : ''"
               label="Nazwa koła"
             >
               <b-input
-                @focus="invalidGroupName = ''"
-                v-model="groupName"
+                @focus="invalidProjectName = ''"
+                v-model="projectName"
                 placeholder="Podaj nazwę koła"
                 maxlength="120"
               ></b-input>
@@ -24,54 +28,55 @@
               <b-button
                 id="btnSave"
                 class="button is-primary is-success"
-                @click="saveGroupName"
+                @click="saveProjectName"
                 >Zapisz</b-button
               >
-              <b-button @click="cancelGroupName">Anuluj</b-button>
+              <b-button @click="cancelProjectName">Anuluj</b-button>
             </div>
           </div>
           <div id="btnsDiv">
             <b-button
               :disabled="isButtonDisabled"
               id="btnPencil"
-              @click="changeGroupName"
-              v-if="!editGroupName && isBeingEdited"
+              @click="changeProjectName"
+              v-if="!editProjectName && isBeingEdited"
             >
-              <b-icon icon="lead-pencil" />
+              <mdicon name="lead-pencil" />
             </b-button>
           </div>
         </div>
 
         <div class="div-title">
-          <p class="p-category" v-if="!editGroupCategory || !isBeingEdited">
-            {{ groupCategory }}
+          <p class="p-category" v-if="!editProjectCategory || !isBeingEdited">
+            {{ projectCategory }}
           </p>
           <div class="div-edit" v-else>
             <b-field label="Kategoria koła">
-              <b-select v-model="groupCategory" placeholder="Wybierz kategorię">
-                <option value="Matematyka">Matematyka</option>
-                <option value="Medycyna">Medycyna</option>
-                <option value="Chemia">Chemia</option>
+              <b-select
+                v-model="projectCategory"
+                placeholder="Wybierz kategorię"
+              >
+                <option value="Default">Default</option>
               </b-select>
             </b-field>
             <div id="btnsDiv">
               <b-button
                 id="btnSave"
                 class="button is-primary is-success"
-                @click="saveGroupCategory"
+                @click="saveProjectCategory"
                 >Zapisz</b-button
               >
-              <b-button @click="cancelGroupCategory">Anuluj</b-button>
+              <b-button @click="cancelProjectCategory">Anuluj</b-button>
             </div>
           </div>
           <div id="btnsDiv">
             <b-button
               :disabled="isButtonDisabled"
               id="btnPencil"
-              @click="changeGroupCategory"
-              v-if="!editGroupCategory && isBeingEdited"
+              @click="changeProjectCategory"
+              v-if="!editProjectCategory && isBeingEdited"
             >
-              <b-icon icon="lead-pencil" />
+              <mdicon name="lead-pencil" />
             </b-button>
           </div>
         </div>
@@ -85,7 +90,7 @@
           type="is-success"
           @click="changeToPanelMode"
           :disabled="isButtonDisabled"
-          ><b-icon icon="arrow-left" />&nbsp;&nbsp;Wróć do panelu koła</b-button
+          ><mdicon name="arrow-left" /> Wróć do panelu projektu</b-button
         >
       </div>
       <div class="column is-3" id="col" v-else>
@@ -96,7 +101,7 @@
           type="is-success"
           v-if="isAdminOrOwner()"
           @click="changeToEditMode"
-          >Edytuj koło naukowe</b-button
+          >Edytuj projekt</b-button
         >
       </div>
       <div class="columns"></div>
@@ -115,16 +120,9 @@
         <b-button
           id="btn"
           size="is-medium"
-          v-on:click="showAboutUs"
+          v-on:click="showProjectDescription"
           :disabled="isButtonDisabled"
-          >O Nas</b-button
-        >
-        <b-button
-          id="btn"
-          size="is-medium"
-          v-on:click="showWhatWeDo"
-          :disabled="isButtonDisabled"
-          >Czym się zajmujemy</b-button
+          >Opis projektu</b-button
         >
         <b-button
           id="btn"
@@ -136,63 +134,13 @@
         <b-button
           id="btn"
           size="is-medium"
-          v-on:click="showContact"
-          :disabled="isButtonDisabled"
-          >Kontakt</b-button
-        >
-        <b-button
-          id="btn"
-          size="is-medium"
           tag="router-link"
-          to="/group-tutorials"
+          to="/project-tutorials"
           :disabled="isButtonDisabled"
           >Materiały dydaktyczne</b-button
         >
       </div>
       <div class="box column is-6" id="centerDiv">
-        <div class="outer" v-if="selectedTabTitle === 'Czym się zajmujemy'">
-          <div class="div-title">
-            <h2 class="centerDivHeader">{{ selectedTabTitle }}</h2>
-            <div id="btnsDiv">
-              <b-button
-                :disabled="isButtonDisabled"
-                id="btnPencil"
-                @click="changeWhatWeDo"
-                v-if="!editWhatWeDo && isBeingEdited"
-              >
-                <b-icon icon="lead-pencil" />
-              </b-button>
-            </div>
-          </div>
-          <div class="inner" v-if="!editWhatWeDo">
-            <markdown-it-vue
-              class="md-body"
-              :content="whatWeDo"
-              :options="markdownOptions"
-            />
-          </div>
-          <div v-else>
-            <b-field>
-              <b-input
-                v-model="whatWeDo"
-                id="editableText"
-                type="textarea"
-                size="is-medium"
-              >
-              </b-input>
-            </b-field>
-            <div id="btnsDiv">
-              <b-button
-                id="btnSave"
-                class="button is-primary is-success"
-                @click="saveWhatWeDo"
-                >Zapisz</b-button
-              >
-              <b-button @click="cancelWhatWeDo">Anuluj</b-button>
-            </div>
-          </div>
-        </div>
-
         <div class="outer" v-if="selectedTabTitle === 'Członkowie'">
           <div class="div-title">
             <h2 class="centerDivHeader">{{ selectedTabTitle }}</h2>
@@ -203,7 +151,7 @@
                 @click="changeMembers"
                 v-if="!editMembers && isBeingEdited"
               >
-                <b-icon icon="lead-pencil" />
+                <mdicon name="lead-pencil" />
               </b-button>
             </div>
           </div>
@@ -252,8 +200,8 @@
                         {{ member.role }}
                       </b-button>
                     </template>
-                    <b-dropdown-item value="Creator" aria-role="listitem">
-                      <span>Creator</span>
+                    <b-dropdown-item value="Owner" aria-role="listitem">
+                      <span>Owner</span>
                     </b-dropdown-item>
                     <b-dropdown-item value="Moderator" aria-role="listitem">
                       <span>Moderator</span>
@@ -295,8 +243,8 @@
                         {{ addRole }}
                       </b-button>
                     </template>
-                    <b-dropdown-item value="Creator" aria-role="listitem">
-                      <span>Creator</span>
+                    <b-dropdown-item value="Owner" aria-role="listitem">
+                      <span>Owner</span>
                     </b-dropdown-item>
                     <b-dropdown-item value="Moderator" aria-role="listitem">
                       <span>Moderator</span>
@@ -321,35 +269,35 @@
           </div>
         </div>
 
-        <div class="outer" v-if="selectedTabTitle === 'O Nas'">
+        <div class="outer" v-if="selectedTabTitle === 'Opis projektu'">
           <div class="div-title">
             <h2 class="centerDivHeader">{{ selectedTabTitle }}</h2>
             <div id="btnsDiv">
               <b-button
                 :disabled="isButtonDisabled"
                 id="btnPencil"
-                @click="changeAboutUs"
-                v-if="!editAboutUs && isBeingEdited"
+                @click="changeProjectDescription"
+                v-if="!editProjectDescription && isBeingEdited"
               >
-                <b-icon icon="lead-pencil" />
+                <mdicon name="lead-pencil" />
               </b-button>
             </div>
           </div>
-          <div class="inner" v-if="!editAboutUs">
+          <div class="inner" v-if="!editProjectDescription">
             <markdown-it-vue
               class="md-body"
-              :content="aboutUs"
+              :content="projectDescription"
               :options="markdownOptions"
             />
           </div>
           <div v-else>
             <b-field
-              :message="aboutUsGiven"
-              :type="aboutUsGiven ? 'is-danger' : ''"
+              :message="projectDescriptionGiven"
+              :type="projectDescriptionGiven ? 'is-danger' : ''"
             >
               <b-input
-                @focus="aboutUsGiven = ''"
-                v-model="aboutUs"
+                @focus="projectDescriptionGiven = ''"
+                v-model="projectDescription"
                 id="editableText"
                 type="textarea"
                 size="is-medium"
@@ -359,63 +307,10 @@
               <b-button
                 id="btnSave"
                 class="button is-primary is-success"
-                @click="saveAboutUs"
+                @click="saveDescription"
                 >Zapisz</b-button
               >
-              <b-button @click="cancelAboutUs">Anuluj</b-button>
-            </div>
-          </div>
-        </div>
-        <div class="outer" v-if="selectedTabTitle === 'Kontakt'">
-          <div class="div-title">
-            <h2 class="centerDivHeader">{{ selectedTabTitle }}</h2>
-            <div id="btnsDiv">
-              <b-button
-                :disabled="isButtonDisabled"
-                id="btnPencil"
-                @click="changeContact"
-                v-if="!editContact && isBeingEdited"
-              >
-                <b-icon icon="lead-pencil" />
-              </b-button>
-            </div>
-          </div>
-          <div class="inner" v-if="!editContact">
-            <markdown-it-vue
-              class="md-body"
-              :content="contact"
-              :options="markdownOptions"
-            />
-            <div class="container-send-email">
-              <button
-                class="button"
-                id="btnSendEmail"
-                @click="popupEmail = !popupEmail"
-              >
-                WYŚLIJ WIADOMOŚĆ
-              </button>
-
-              <popupEmail v-if="popupEmail" @close="popupEmail = false" />
-            </div>
-          </div>
-          <div v-else>
-            <b-field>
-              <b-input
-                v-model="contact"
-                id="editableText"
-                type="textarea"
-                size="is-medium"
-              >
-              </b-input>
-            </b-field>
-            <div id="btnsDiv">
-              <b-button
-                id="btnSave"
-                class="button is-primary is-success"
-                @click="saveContact"
-                >Zapisz</b-button
-              >
-              <b-button @click="cancelContact">Anuluj</b-button>
+              <b-button @click="cancelDescription">Anuluj</b-button>
             </div>
           </div>
         </div>
@@ -460,76 +355,49 @@
 </template>
 
 <script>
-import popupEmail from "@/components/popup/PopupEmail.vue";
 import { mapActions, mapState, mapGetters } from "vuex";
 
 export default {
-  name: "groupPanel",
-  components: {
-    popupEmail,
-  },
+  name: "projectPanel",
   data() {
     return {
       loading: true,
       addEmail: "",
       addRole: "Member",
 
-      selectedTabTitle: "O Nas",
+      selectedTabTitle: "Opis projektu",
 
       // beforeEditGroupName: "Koło naukowe", //aktualna nazwa koła z bazy
-      groupName: "",
-      editGroupName: false,
-      invalidGroupName: "",
+      projectName: "",
+      editProjectName: false,
+      invalidProjectName: "",
 
-      groupCategory: "",
-      editGroupCategory: false,
+      projectCategory: "",
+      editProjectCategory: false,
 
-      whatWeDo: "",
-      testMarkdown: "::: success\nTest success.\n:::",
-      editWhatWeDo: false,
+      projectDescription: "",
+      editProjectDescription: false,
 
       members: [],
       editMembers: false,
 
-      aboutUs: "",
-      editAboutUs: false,
-
-      contact: "",
-      editContact: false,
-
-      popupEmail: false,
-
       isBeingEdited: false,
       isButtonDisabled: false,
-
-      markdownOptions: {
-        markdownIt: {
-          linkify: true,
-        },
-        linkAttributes: {
-          attrs: {
-            target: "_self",
-            rel: "noopener",
-          },
-        },
-      },
     };
   },
   mounted() {
-    document.title = "Panel koła";
-    this.getResearchGroup(this.$route.params.id)
+    document.title = "Edycja projektu";
+    this.getProject(this.$route.params.id)
       .then(
         () => (
-          (this.groupName = this.researchGroup.name),
-          (this.groupCategory = this.researchGroup.category),
-          (this.whatWeDo = this.researchGroup.what_we_do),
-          (this.aboutUs = this.researchGroup.about_us),
-          (this.contact = this.researchGroup.contact)
+          (this.projectName = this.project.name),
+          (this.projectCategory = this.project.category),
+          (this.projectDescription = this.project.description)
         )
       )
       .then(() => {
-        this.getResearchGroupMembers(this.researchGroup.id).then(
-          () => (this.members = this.researchGroupMembers)
+        this.getProjectMembers(this.project.id).then(
+          () => (this.members = this.projectMembers)
         );
       })
       .then(() => {
@@ -537,15 +405,15 @@ export default {
       });
   },
   methods: {
-    ...mapActions("researchGroup", ["getResearchGroup", "updateResearchGroup"]),
-    ...mapActions("researchGroupMember", [
-      "getResearchGroupMembers",
-      "updateResearchGroupMembers",
+    ...mapActions("project", ["getProject", "updateProject"]),
+    ...mapActions("projectMember", [
+      "getProjectMembers",
+      "updateProjectMembers",
     ]),
 
     isMember() {
       if (this.isAuthenticated) {
-        if (this.researchGroup.members.includes(this.authUser.email)) {
+        if (this.project.members.includes(this.authUser.email)) {
           return true;
         }
       }
@@ -553,14 +421,14 @@ export default {
     },
 
     isAdminOrOwner() {
-      for (var i = 0; i < this.researchGroupMembers.length; i++) {
+      for (var i = 0; i < this.projectMembers.length; i++) {
         if (
           this.isMember() &&
-          this.researchGroupMembers[i]["person"] == this.authUser.email
+          this.projectMembers[i]["person"] == this.authUser.email
         ) {
           if (
-            this.researchGroupMembers[i]["role"] == "Creator" ||
-            this.researchGroupMembers[i]["role"] == "Moderator"
+            this.projectMembers[i]["role"] == "Owner" ||
+            this.projectMembers[i]["role"] == "Moderator"
           ) {
             return true;
           }
@@ -574,41 +442,35 @@ export default {
       this.members.splice(index, 1);
     },
 
-    updateGroupInfo() {
-      this.updateResearchGroup({
+    updateProjectInfo() {
+      this.updateProject({
         id: this.$route.params.id,
         payload: {
-          name: this.groupName,
-          category: this.groupCategory,
-          about_us: this.aboutUs,
-          what_we_do: this.whatWeDo,
-          contact: this.contact,
+          name: this.projectName,
+          description: this.projectDescription,
+          category: this.projectCategory,
         },
       }).catch((err) => {
-        this.groupName = this.researchGroup.name;
-        this.groupCategory = this.researchGroup.category;
-        this.aboutUs = this.researchGroup.about_us;
-        this.whatWeDo = this.researchGroup.what_we_do;
-        this.contact = this.researchGroup.contact;
+        this.projectName = this.project.name;
+        this.projectDescription = this.project.description;
+        this.projectCategory = this.project.category;
         this.$buefy.toast.open({
           message: err.response.data[Object.keys(err.response.data)[0]],
           type: "is-danger",
         });
       });
 
-      this.updateResearchGroupMembers({
-        researchGroupId: this.$route.params.id,
+      this.updateProjectMembers({
+        projectId: this.$route.params.id,
         members: this.members,
       })
         .then((response) => {
           this.members = response.members;
         })
         .catch((err) => {
-          this.getResearchGroupMembers(this.$route.params.id).then(
-            (response) => {
-              this.members = response.members;
-            }
-          );
+          this.getProjectMembers(this.$route.params.id).then((response) => {
+            this.members = response.members;
+          });
           this.$buefy.toast.open({
             message: err.response.data[Object.keys(err.response.data)[0]],
             type: "is-danger",
@@ -641,103 +503,72 @@ export default {
       this.addEmail = "";
     },
 
-    showAboutUs() {
-      this.selectedTabTitle = "O Nas";
-    },
-    showWhatWeDo() {
-      this.selectedTabTitle = "Czym się zajmujemy";
+    showProjectDescription() {
+      this.selectedTabTitle = "Opis projektu";
     },
     showMembers() {
       this.selectedTabTitle = "Członkowie";
     },
-    showContact() {
-      this.selectedTabTitle = "Kontakt";
-    },
 
-    changeGroupName() {
-      this.editGroupName = !this.editGroupName;
+    changeProjectName() {
+      this.editProjectName = !this.editProjectName;
       this.isButtonDisabled = !this.isButtonDisabled;
     },
-    changeGroupCategory() {
-      this.editGroupCategory = !this.editGroupCategory;
+    changeProjectCategory() {
+      this.editProjectCategory = !this.editProjectCategory;
       this.isButtonDisabled = !this.isButtonDisabled;
     },
-    saveGroupName() {
-      if (this.groupName === "") {
-        this.invalidGroupName = "Podaj nazwę koła";
+    saveProjectName() {
+      if (this.projectName === "") {
+        this.invalidProjectName = "Podaj nazwę Projektu";
       }
       // if nazwa koła już istnieje w bazie ...
       else {
-        this.updateGroupInfo();
-        this.changeGroupName();
+        this.updateProjectInfo();
+        this.changeProjectName();
       }
     },
-    saveGroupCategory() {
-      this.updateGroupInfo();
-      this.changeGroupCategory();
+    saveProjectCategory() {
+      this.updateProjectInfo();
+      this.changeProjectCategory();
     },
-    cancelGroupName() {
-      this.groupName = this.researchGroup.name;
-      this.changeGroupName();
+    cancelProjectName() {
+      this.projectName = this.project.name;
+      this.changeProjectName();
     },
-    cancelGroupCategory() {
-      this.groupCategory = this.researchGroup.category;
-      this.changeGroupCategory();
-    },
-
-    changeWhatWeDo() {
-      this.editWhatWeDo = !this.editWhatWeDo;
-      this.isButtonDisabled = !this.isButtonDisabled;
-    },
-    saveWhatWeDo() {
-      this.updateGroupInfo();
-      this.changeWhatWeDo();
-    },
-    cancelWhatWeDo() {
-      this.whatWeDo = this.researchGroup.what_we_do;
-      this.changeWhatWeDo();
+    cancelProjectCategory() {
+      this.projectCategory = this.project.category;
+      this.changeProjectCategory();
     },
     changeMembers() {
       this.editMembers = !this.editMembers;
       this.isButtonDisabled = !this.isButtonDisabled;
     },
     saveMembers() {
-      this.updateGroupInfo();
+      this.updateProjectInfo();
       this.changeMembers();
     },
     cancelMembers() {
-      this.getResearchGroupMembers(this.$route.params.id).then((response) => {
+      this.getProjectMembers(this.$route.params.id).then((response) => {
         this.members = response.members;
       });
       this.changeMembers();
     },
-    changeAboutUs() {
-      this.editAboutUs = !this.editAboutUs;
+    changeProjectDescription() {
+      this.editProjectDescription = !this.editProjectDescription;
       this.isButtonDisabled = !this.isButtonDisabled;
     },
-    saveAboutUs() {
-      if (this.aboutUs === "") {
-        this.aboutUsGiven = "Wypełnij sekcję o nas";
+    saveProjectDescription() {
+      if (this.projectDescription === "") {
+        this.projectDescriptionGiven = "Wypełnij sekcję o nas";
       } else {
-        this.updateGroupInfo();
-        this.changeAboutUs();
+        this.updateProjectInfo();
+        this.changeProjectDescription();
       }
     },
-    cancelAboutUs() {
-      this.aboutUs = this.researchGroup.about_us;
-      this.changeAboutUs();
-    },
-    changeContact() {
-      this.editContact = !this.editContact;
-      this.isButtonDisabled = !this.isButtonDisabled;
-    },
-    saveContact() {
-      this.updateGroupInfo();
-      this.changeContact();
-    },
-    cancelContact() {
-      this.contact = this.researchGroup.contact;
-      this.changeContact();
+    cancelProjectDescription() {
+      this.projectDescription = this.project.description;
+      this.changeProjectDescription();
     },
     changeToPanelMode() {
       this.isBeingEdited = false;
@@ -751,19 +582,17 @@ export default {
     $route() {
       this.loading = true;
       this.isBeingEdited = false;
-      this.getResearchGroup(this.$route.params.id)
+      this.getProject(this.$route.params.id)
         .then(
           () => (
-            (this.groupName = this.researchGroup.name),
-            (this.groupCategory = this.researchGroup.category),
-            (this.whatWeDo = this.researchGroup.what_we_do),
-            (this.aboutUs = this.researchGroup.about_us),
-            (this.contact = this.researchGroup.contact)
+            (this.projectName = this.project.name),
+            (this.projectCategory = this.project.category),
+            (this.projectDescription = this.project.description)
           )
         )
         .then(() => {
-          this.getResearchGroupMembers(this.researchGroup.id).then(
-            () => (this.members = this.researchGroupMembers)
+          this.getProjectMembers(this.project.id).then(
+            () => (this.members = this.projectMembers)
           );
         })
         .then(() => {
@@ -774,11 +603,10 @@ export default {
 
   computed: {
     ...mapState({
-      researchGroup: (state) => state.researchGroup.researchGroup,
+      project: (state) => state.project.project,
     }),
     ...mapState({
-      researchGroupMembers: (state) =>
-        state.researchGroupMember.researchGroupMembers,
+      projectMembers: (state) => state.projectMember.projectMembers,
     }),
     ...mapGetters("auth", ["isAuthenticated", "authUser"]),
   },

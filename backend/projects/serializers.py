@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from backend.utilsx.serializers import QuerySerializerMixin
 from backend.projects.models import (
     Project,
     ProjectPost,
@@ -7,8 +8,12 @@ from backend.projects.models import (
 )
 
 
-class ProjectSerializer(serializers.ModelSerializer):
+class ProjectSerializer(QuerySerializerMixin, serializers.ModelSerializer):
     members = serializers.SlugRelatedField(many=True, slug_field="email", queryset=User.objects.all())
+    project_owner = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
+
+    RELATED_FIELDS = ["project_owner"]
+    PREFETCH_FIELDS = ["members"]
 
     class Meta:
         model = Project
@@ -20,10 +25,20 @@ class ProjectSerializer(serializers.ModelSerializer):
         return representation
 
 
-class ProjectUserSerializer(serializers.ModelSerializer):
+class ProjectUserSerializer(QuerySerializerMixin, serializers.ModelSerializer):
+    person = serializers.SlugRelatedField(slug_field="email", queryset=User.objects.all())
+    project = serializers.SlugRelatedField(slug_field="id", queryset=Project.objects.all())
+
+    RELATED_FIELDS = ["project", "person"]
+
     class Meta:
         model = ProjectUser
         fields = "__all__"
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["role"] = instance.get_role_display()
+        return representation
 
 
 class ProjectPostSerializer(serializers.ModelSerializer):
