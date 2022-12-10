@@ -87,6 +87,7 @@ class ResearchGroupUserViewSet(viewsets.ModelViewSet):
 class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     queryset = ResearchGroup.objects.all().order_by("name")
     serializer_class = ResearchGroupSerializer
+    permission_classes = [AllowAny]
     permission_classes_per_method = {
         "create": [
             IsAuthenticated,
@@ -116,7 +117,9 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
                     email=member_email,
                 )
 
+        print("test1")
         response = super().create(request, *args, **kwargs)
+        print("test2")
 
         ownerMember = ResearchGroupUser.objects.filter(
             research_group__id=response.data["id"], person__email=self.request.user.email

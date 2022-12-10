@@ -86,6 +86,7 @@ class ProjectUserViewSet(viewsets.ModelViewSet):
 class ProjectViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     queryset = Project.objects.all().order_by("name")
     serializer_class = ProjectSerializer
+    permission_classes = [AllowAny]
     permission_classes_per_method = {
         "create": [
             IsAuthenticated,
