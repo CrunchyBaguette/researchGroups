@@ -117,9 +117,7 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
                     email=member_email,
                 )
 
-        print("test1")
         response = super().create(request, *args, **kwargs)
-        print("test2")
 
         ownerMember = ResearchGroupUser.objects.filter(
             research_group__id=response.data["id"], person__email=self.request.user.email
