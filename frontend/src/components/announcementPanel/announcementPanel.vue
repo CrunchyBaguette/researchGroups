@@ -3,7 +3,7 @@
     <div id="titleDiv" v-if="!isBeingEdited">
       <p class="title" id="tit">Panel Ogłoszenia</p>
       <b-button
-          v-if="isAuthenticated"
+          v-if="isOwner()"
           id="btnTitle"
           rounded
           size="is-medium"
@@ -193,6 +193,7 @@ export default {
       announcementContentGiven: "",
 
       announcementAuthor: "",
+      announcementAuthorId: 0,
 
       //beforeEditAnnouncementDate: "12.08.2022 21:21",
       announcementAdded: "",
@@ -211,6 +212,7 @@ export default {
           (this.announcementCategory = this.announcement.ann_type),
           (this.announcementContent = this.announcement.text),
           (this.announcementAuthor = this.announcement.author_full_name),
+          (this.announcementAuthorId = this.announcement.author),
           (this.announcementAdded = this.announcement.added),
           (this.announcementEdited = this.announcement.edited)
         )
@@ -221,6 +223,14 @@ export default {
   },
   methods: {
     ...mapActions("announcement", ["getAnnouncement", "updateAnnouncement"]),
+
+    isOwner() {
+      if (this.announcementAuthorId === this.authUser.id) {
+        return true;
+      } else {
+        return false;
+      }
+    },
 
     updateAnnouncementInfo() {
       this.updateAnnouncement({
@@ -319,6 +329,7 @@ export default {
             (this.announcementCategory = this.announcement.ann_type),
             (this.announcementContent = this.announcement.text),
             (this.announcementAuthor = this.announcement.author_full_name), //
+            (this.announcementAuthorId = this.announcement.author),
             (this.announcementAdded = this.announcement.added),
             (this.announcementEdited = this.announcement.edited)
           )
@@ -334,7 +345,7 @@ export default {
       announcement: (state) => state.announcement.announcement,
     }),
     //...mapGetters("auth", ["isAuthenticated"]),
-    ...mapGetters("auth", ["isAuthenticated", "authUser"]),
+    ...mapGetters("auth", ["authUser"]),
   },
 
 };
