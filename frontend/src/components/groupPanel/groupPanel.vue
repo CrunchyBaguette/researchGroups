@@ -492,6 +492,7 @@ export default {
       editMembers: false,
 
       aboutUs: "",
+      aboutUsGiven: "",
       editAboutUs: false,
 
       contact: "",

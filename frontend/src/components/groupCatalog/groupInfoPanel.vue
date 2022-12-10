@@ -48,6 +48,22 @@ export default {
   props: {
     researchGroup: { type: Object },
   },
+
+  data() {
+    return {
+      markdownOptions: {
+        markdownIt: {
+          linkify: true,
+        },
+        linkAttributes: {
+          attrs: {
+            target: "_self",
+            rel: "noopener",
+          },
+        },
+      },
+    };
+  },
 };
 </script>
 
