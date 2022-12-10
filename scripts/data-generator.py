@@ -8,28 +8,29 @@ from sqlalchemy.ext.declarative import declarative_base
 
 # Aby wywołać generator trzeba w folderze researchGroup wpisać "python manage.py runscript data-generator"
 # falga do printowania danych do konsoli
-is_printing = False
+is_printing = True
 
 number_of_announcements = 10
 number_of_projects = 10
-number_of_users = 10
+number_of_users = 20
 number_of_guides = 10
 number_of_research_groups = 10
-number_of_research_group_users = 10
+number_of_research_group_users = 20
 number_of_research_group_guides = 10
 number_of_research_group_posts = 10
 number_of_research_group_post_comments = 10
 number_of_research_group_disks = 10
 number_of_research_group_links = 10
 number_of_guide_projects = 10
-number_of_project_users = 10
+number_of_project_users = 20
 number_of_tutorials = 10
 number_of_ratings = 10
 
 fake = Faker()
 engine = create_engine(
     # "postgresql://admin:pleasechangeme@postgres:5432/backend", echo=False
-    "postgresql://admin:pleasechangeme@localhost:5432/backend", echo=False
+    "postgresql://admin:pleasechangeme@localhost:5432/backend",
+    echo=False,
 )
 
 
@@ -38,6 +39,7 @@ def run():
     dropTables()
     genrateTables()
     print("Script end successfully")
+
 
 def dropTables():
     DeleteTableData("projects_projectlink")
@@ -59,6 +61,8 @@ def dropTables():
     DeleteTableData("tutorials_tutorial")
     DeleteTableData("projects_project")
     DeleteTableData("research_groups_researchgroup")
+    DeleteTableData("token_blacklist_blacklistedtoken")
+    DeleteTableData("token_blacklist_outstandingtoken")
     DeleteTableData("auth_user")
 
 
@@ -75,9 +79,7 @@ def genrateTables():
     announcements = generate_announcement(users, research_groups)
     research_group_users = generate_research_group_users(users, research_groups)
     research_group_posts = generate_research_group_post(users, research_groups)
-    research_group_post_comments = generate_research_group_post_comment(
-        users, research_group_posts
-    )
+    research_group_post_comments = generate_research_group_post_comment(users, research_group_posts)
     research_group_disks = generate_research_group_disk(projects)
     research_group_links = generate_research_group_link(projects)
     research_group_guides = generate_research_group_guides(research_groups, tutorials)
@@ -88,16 +90,23 @@ def genrateTables():
 
 
 def DeleteTableData(name):
-    sql = text('DELETE FROM '+name+';')
-    engine.execute(sql)
-    if is_printing:
-        print("data deleted from table: " + name)
+    sql = text("DELETE FROM " + name + ";")
+    try:
+        engine.execute(sql)
+    except Exception as e:
+        if is_printing:
+            print(e)
+            print("couldn't delete from table: " + name)
+    else:
+        if is_printing:
+            print("data deleted from table: " + name)
+
 
 def generate_user():
     users = defaultdict(list)
     users["id"].append(10000)
     users["username"].append("admin")
-    users["password"].append(make_password("admin"))# "admin" po szyfrowaniu
+    users["password"].append(make_password("admin"))  # "admin" po szyfrowaniu
     users["last_login"].append(fake.date())
     users["is_superuser"].append(True)
     users["first_name"].append("admin")
@@ -134,17 +143,13 @@ def generate_research_group(users):
         research_groups["about_us"].append(fake.text())
         research_groups["what_we_do"].append(fake.text())
         research_groups["contact"].append(fake.text())
-        categories = ["math", "med", "chem", "def"]
-        research_groups["category"].append(
-            categories[fake.pyint(0, len(categories) - 1)]
-        )
+        categories = ["math", "med", "chem"]
+        research_groups["category"].append(categories[fake.pyint(0, len(categories) - 1)])
         research_groups["group_owner_id"].append(users["id"].values[i % len(users["id"])])
     df_research_groups = pd.DataFrame(research_groups)
     if is_printing:
         print(df_research_groups)
-    df_research_groups.to_sql(
-        "research_groups_researchgroup", con=engine, index=False, if_exists="append"
-    )
+    df_research_groups.to_sql("research_groups_researchgroup", con=engine, index=False, if_exists="append")
     return df_research_groups
 
 
@@ -156,11 +161,9 @@ def generate_project(users):
         projects["description"].append(fake.text())
         projects["deadline"].append(fake.date())
         projects["funds"].append(fake.pyfloat(10))
-        categories = ["MATH", "MEDICAL", "CHEMISTRY", "DEFAULT"]
-        projects["category"].append(
-            categories[fake.pyint(0, len(categories) - 1)]
-        )
-        projects["group_owner_id"].append(users["id"].values[i % len(users["id"])])
+        categories = ["def"]
+        projects["category"].append(categories[fake.pyint(0, len(categories) - 1)])
+        projects["project_owner_id"].append(users["id"].values[i % len(users["id"])])
     df_projects = pd.DataFrame(projects)
     if is_printing:
         print(df_projects)
@@ -193,16 +196,12 @@ def generate_tutorial_user(tutorials, users):
     tutorial_users = defaultdict(list)
     for i in range(number_of_tutorials):
         tutorial_users["id"].append(1000 + i)
-        tutorial_users["tutorial_id"].append(
-            tutorials["id"].values[i % len(tutorials["id"])]
-        )
+        tutorial_users["tutorial_id"].append(tutorials["id"].values[i % len(tutorials["id"])])
         tutorial_users["user_id"].append(users["id"].values[i % len(users["id"])])
     df_tutorial_users = pd.DataFrame(tutorial_users)
     if is_printing:
         print(df_tutorial_users)
-    df_tutorial_users.to_sql(
-        "tutorials_tutorial_editors", con=engine, index=False, if_exists="append"
-    )
+    df_tutorial_users.to_sql("tutorials_tutorial_editors", con=engine, index=False, if_exists="append")
     return df_tutorial_users
 
 
@@ -225,17 +224,12 @@ def generate_project_research_group(projects, research_groups):
     project_research_groups = defaultdict(list)
     for i in range(number_of_guides):
         project_research_groups["id"].append(1000 + i)
-        project_research_groups["researchgroup_id"].append(
-            research_groups["id"].values[i % len(research_groups["id"])])
-        project_research_groups["project_id"].append(
-            projects["id"].values[i % len(projects["id"])]
-        )
+        project_research_groups["researchgroup_id"].append(research_groups["id"].values[i % len(research_groups["id"])])
+        project_research_groups["project_id"].append(projects["id"].values[i % len(projects["id"])])
     df_project_research_groups = pd.DataFrame(project_research_groups)
     if is_printing:
         print(df_project_research_groups)
-    df_project_research_groups.to_sql(
-        "projects_project_research_groups", con=engine, index=False, if_exists="append"
-    )
+    df_project_research_groups.to_sql("projects_project_research_groups", con=engine, index=False, if_exists="append")
     return df_project_research_groups
 
 
@@ -245,16 +239,12 @@ def generate_guide_project(guides, projects):
         guides_projects["id"].append(1000 + i)
         guides_projects["is_public"].append(fake.boolean())
         guides_projects["guide_id"].append(guides["id"].values[i % len(guides["id"])])
-        guides_projects["project_id"].append(
-            projects["id"].values[i % len(projects["id"])]
-        )
+        guides_projects["project_id"].append(projects["id"].values[i % len(projects["id"])])
         guides_projects["added"].append(fake.past_date())
     df_guides_projects = pd.DataFrame(guides_projects)
     if is_printing:
         print(df_guides_projects)
-    df_guides_projects.to_sql(
-        "projects_guideproject", con=engine, index=False, if_exists="append"
-    )
+    df_guides_projects.to_sql("projects_guideproject", con=engine, index=False, if_exists="append")
     return df_guides_projects
 
 
@@ -264,7 +254,10 @@ def generate_project_user(users, projects):
         project_users["id"].append(1000 + i)
         project_users["person_id"].append(users["id"].values[i % len(users["id"])])
         project_users["project_id"].append(projects["id"].values[i % len(projects["id"])])
-        roles = ["UNSPECIFIED", "MEMBER", "MODERATOR", "OWNER"]
+        if i >= number_of_projects:
+            roles = ["mem", "mod"]
+        else:
+            roles = ["own"]
         project_users["role"].append(roles[fake.pyint(0, len(roles) - 1)])
         created = fake.past_date()
         project_users["created"].append(created)
@@ -272,9 +265,7 @@ def generate_project_user(users, projects):
     df_project_users = pd.DataFrame(project_users)
     if is_printing:
         print(df_project_users)
-    df_project_users.to_sql(
-        "project_projectuser", con=engine, index=False, if_exists="append"
-    )
+    df_project_users.to_sql("project_projectuser", con=engine, index=False, if_exists="append")
     return df_project_users
 
 
@@ -308,9 +299,7 @@ def generate_project_post_comment(users, post):
     df_project_post = pd.DataFrame(project_post)
     if is_printing:
         print(df_project_post)
-    df_project_post.to_sql(
-        "projects_projectpostcomment", con=engine, index=False, if_exists="append"
-    )
+    df_project_post.to_sql("projects_projectpostcomment", con=engine, index=False, if_exists="append")
     return df_project_post
 
 
@@ -318,23 +307,22 @@ def generate_research_group_users(df_users, df_research_group):
     research_group_users = defaultdict(list)
     for i in range(number_of_research_group_users):
         research_group_users["id"].append(1000 + i)
-        roles = ["UNSPECIFIED", "MEMBER", "MODERATOR", "CREATOR"]
+        if i >= number_of_research_groups:
+            roles = ["mem", "mod"]
+        else:
+            roles = ["cr"]
         research_group_users["role"].append(roles[fake.pyint(0, len(roles) - 1)])
         created = fake.past_date()
         research_group_users["created"].append(created)
         research_group_users["edited"].append(fake.date_between(created))
-        research_group_users["person_id"].append(
-            df_users["id"].values[i % len(df_users["id"])]
-        )
+        research_group_users["person_id"].append(df_users["id"].values[i % len(df_users["id"])])
         research_group_users["research_group_id"].append(
             df_research_group["id"].values[i % len(df_research_group["id"])]
         )
     df_research_group_users = pd.DataFrame(research_group_users)
     if is_printing:
         print(df_research_group_users)
-    df_research_group_users.to_sql(
-        "research_groups_researchgroupuser", con=engine, index=False, if_exists="append"
-    )
+    df_research_group_users.to_sql("research_groups_researchgroupuser", con=engine, index=False, if_exists="append")
     return df_research_group_users
 
 
@@ -346,15 +334,11 @@ def generate_research_group_guides(df_research_groups, df_guides):
         research_group_guides["research_group_id"].append(
             df_research_groups["id"].values[i % len(df_research_groups["id"])]
         )
-        research_group_guides["guide_id"].append(
-            df_guides["id"].values[i % len(df_guides["id"])]
-        )
+        research_group_guides["guide_id"].append(df_guides["id"].values[i % len(df_guides["id"])])
     df_research_group_guides = pd.DataFrame(research_group_guides)
     if is_printing:
         print(df_research_group_guides)
-    df_research_group_guides.to_sql(
-        "research_groups_researchgroupguide", con=engine, index=False, if_exists="append"
-    )
+    df_research_group_guides.to_sql("research_groups_researchgroupguide", con=engine, index=False, if_exists="append")
     return df_research_group_guides
 
 
@@ -363,9 +347,7 @@ def generate_research_group_post(df_users, df_research_group):
     for i in range(number_of_research_group_posts):
         research_group_post["id"].append(1000 + i)
         research_group_post["title"].append(fake.sentence())
-        research_group_post["author_id"].append(
-            df_users["id"].values[i % len(df_users["id"])]
-        )
+        research_group_post["author_id"].append(df_users["id"].values[i % len(df_users["id"])])
         research_group_post["text"].append(fake.text())
         added = fake.past_datetime()
         research_group_post["added"].append(added)
@@ -376,9 +358,7 @@ def generate_research_group_post(df_users, df_research_group):
     df_research_group_post = pd.DataFrame(research_group_post)
     if is_printing:
         print(df_research_group_post)
-    df_research_group_post.to_sql(
-        "research_groups_researchgrouppost", con=engine, index=False, if_exists="append"
-    )
+    df_research_group_post.to_sql("research_groups_researchgrouppost", con=engine, index=False, if_exists="append")
     return df_research_group_post
 
 
@@ -386,9 +366,7 @@ def generate_research_group_post_comment(df_users, df_research_group_post):
     research_group_post_comment = defaultdict(list)
     for i in range(number_of_research_group_post_comments):
         research_group_post_comment["id"].append(1000 + i)
-        research_group_post_comment["author_id"].append(
-            df_users["id"].values[i % len(df_users["id"])]
-        )
+        research_group_post_comment["author_id"].append(df_users["id"].values[i % len(df_users["id"])])
         research_group_post_comment["text"].append(fake.text())
         research_group_post_comment["added"].append(fake.past_datetime())
         research_group_post_comment["post_id"].append(
@@ -410,15 +388,11 @@ def generate_research_group_disk(df_research_groups):
         research_group_disk["link"].append(fake.url())
         research_group_disk["name"].append(fake.word() + " " + fake.word())
         research_group_disk["is_public"].append(fake.boolean())
-        research_group_disk["project_id"].append(
-            df_research_groups["id"].values[i % len(df_research_groups["id"])]
-        )
+        research_group_disk["project_id"].append(df_research_groups["id"].values[i % len(df_research_groups["id"])])
     df_research_group_disk = pd.DataFrame(research_group_disk)
     if is_printing:
         print(df_research_group_disk)
-    df_research_group_disk.to_sql(
-        "research_groups_researchgroupdisk", con=engine, index=False, if_exists="append"
-    )
+    df_research_group_disk.to_sql("research_groups_researchgroupdisk", con=engine, index=False, if_exists="append")
     return df_research_group_disk
 
 
@@ -429,15 +403,11 @@ def generate_research_group_link(df_research_groups):
         research_group_link["link"].append(fake.url())
         research_group_link["name"].append(fake.word() + " " + fake.word())
         research_group_link["is_public"].append(fake.boolean())
-        research_group_link["project_id"].append(
-            df_research_groups["id"].values[i % len(df_research_groups["id"])]
-        )
+        research_group_link["project_id"].append(df_research_groups["id"].values[i % len(df_research_groups["id"])])
     df_research_group_link = pd.DataFrame(research_group_link)
     if is_printing:
         print(df_research_group_link)
-    df_research_group_link.to_sql(
-        "research_groups_researchgrouplink", con=engine, index=False, if_exists="append"
-    )
+    df_research_group_link.to_sql("research_groups_researchgrouplink", con=engine, index=False, if_exists="append")
     return df_research_group_link
 
 
@@ -448,9 +418,7 @@ def generate_project_disk(df_projects):
         project_disk["link"].append(fake.url())
         project_disk["name"].append(fake.word() + " " + fake.word())
         project_disk["is_public"].append(fake.boolean())
-        project_disk["project_id"].append(
-            df_projects["id"].values[i % len(df_projects["id"])]
-        )
+        project_disk["project_id"].append(df_projects["id"].values[i % len(df_projects["id"])])
 
     df_project_disk = pd.DataFrame(project_disk)
     if is_printing:
@@ -466,9 +434,7 @@ def generate_project_link(df_projects):
         project_link["link"].append(fake.url())
         project_link["name"].append(fake.word() + " " + fake.word())
         project_link["is_public"].append(fake.boolean())
-        project_link["project_id"].append(
-            df_projects["id"].values[i % len(df_projects["id"])]
-        )
+        project_link["project_id"].append(df_projects["id"].values[i % len(df_projects["id"])])
     df_project_link = pd.DataFrame(project_link)
     if is_printing:
         print(df_project_link)
@@ -484,15 +450,11 @@ def generate_announcement(df_users, df_research_group):
         announcements["text"].append(fake.text())
         announcements["author_id"].append(df_users["id"].values[i % len(df_users["id"])])
         announcements["date"].append(fake.past_datetime())
-        announcements["research_group_id_id"].append(
-            df_research_group["id"].values[i % len(df_research_group["id"])]
-        )
+        announcements["research_group_id_id"].append(df_research_group["id"].values[i % len(df_research_group["id"])])
         types = ["def", "Default"]
         announcements["ann_type"].append(types[fake.pyint(0, len(types) - 1)])
     df_announcements = pd.DataFrame(announcements)
     if is_printing:
         print(df_announcements)
-    df_announcements.to_sql(
-        "announcements_announcement", con=engine, index=False, if_exists="append"
-    )
+    df_announcements.to_sql("announcements_announcement", con=engine, index=False, if_exists="append")
     return df_announcements
