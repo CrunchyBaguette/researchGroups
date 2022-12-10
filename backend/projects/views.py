@@ -165,7 +165,7 @@ class ProjectPostViewSet(viewsets.ModelViewSet):
             )
         postsQueryset = self.queryset.filter(project=project).order_by("added").all()
         serializer = serializer_class(postsQueryset, many=True)
-        participation = ProjectPost.objects.filter(author_id=userId).filter(project_id=project)
+        participation = ProjectUser.objects.filter(person_id=userId, project_id=project)
         return Response({"project": project, "isParticipant": participation.exists(), "posts": serializer.data})
 
     def retrieve(self, request, pk=None, *args, **kwargs):

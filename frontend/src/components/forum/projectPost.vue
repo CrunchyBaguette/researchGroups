@@ -2,7 +2,7 @@
   <div v-if="loading">
     <div class="columns">
       <div class="column is-4">
-        <b-button class="button is-rounded"
+        <b-button class="button is-success is-rounded"
                   v-on:click="$router.back()">Powrót
         </b-button>
         <p class="author-decor">{{ forumPost.author.first_name }} {{forumPost.author.last_name}}</p>
