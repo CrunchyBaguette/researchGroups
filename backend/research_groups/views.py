@@ -133,7 +133,6 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
 
 
 class ResearchGroupPostViewSet(viewsets.ModelViewSet):
-
     queryset = ResearchGroupPost.objects.all()
     serializer_class = ResearchGroupPostSerializer
     permission_classes = [IsAuthenticated]
@@ -156,7 +155,8 @@ class ResearchGroupPostViewSet(viewsets.ModelViewSet):
         postsQueryset = self.queryset.filter(research_group=researchGroup).order_by("added").all()
         serializer = serializer_class(postsQueryset, many=True)
         participation = ResearchGroupUser.objects.filter(person_id=userId, research_group_id=researchGroup)
-        return Response({"researchGroup": researchGroup, "isParticipant": participation.exists(), "posts": serializer.data})
+        return Response(
+            {"researchGroup": researchGroup, "isParticipant": participation.exists(), "posts": serializer.data})
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         serializer_class = ResearchGroupPostSerializerWithUser

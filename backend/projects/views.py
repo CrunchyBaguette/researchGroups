@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from backend.projects.serializers import (
     ProjectSerializer,
     ProjectUserSerializer,
-    ProjectPostSerializer,ProjectPostSerializerWithUser
+    ProjectPostSerializer, ProjectPostSerializerWithUser
 )
 from backend.projects.models import (
     Project,
