@@ -171,7 +171,7 @@ class ProjectPostViewSet(viewsets.ModelViewSet):
         participation = ProjectPost.objects.filter(author_id=userId, project_id=project)
         return Response({"project": project, "isParticipant": participation.exists(), "posts": serializer.data})
 
-    def retrieve(self, request, pk=None, *args, **kwargs):
+    def retrieve(self, request, *args, pk=None, **kwargs):
         serializer_class = ProjectPostSerializerWithUser
         post = get_object_or_404(self.queryset, pk=pk)
         serializer = serializer_class(post)

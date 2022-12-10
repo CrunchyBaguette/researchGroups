@@ -161,7 +161,7 @@ class ResearchGroupPostViewSet(viewsets.ModelViewSet):
             {"researchGroup": researchGroup, "isParticipant": participation.exists(), "posts": serializer.data}
         )
 
-    def retrieve(self, request, pk=None, *args, **kwargs):
+    def retrieve(self, request, *args, pk=None, **kwargs):
         serializer_class = ResearchGroupPostSerializerWithUser
         post = get_object_or_404(self.queryset, pk=pk)
         serializer = serializer_class(post)
