@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from collections import Counter
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from backend.projects.serializers import (
     ProjectSerializer,
     ProjectUserSerializer,
-    ProjectPostSerializer,ProjectPostSerializerWithUser
+    ProjectPostSerializer,
 )
 from backend.projects.models import (
     Project,
@@ -146,33 +146,15 @@ class ProjectViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
 class ProjectPostViewSet(viewsets.ModelViewSet):
     queryset = ProjectPost.objects.all()
     serializer_class = ProjectPostSerializer
-    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=["get"])
     def grouped(self, request):
-        serializer_class = ProjectPostSerializerWithUser
         project = request.query_params.get("project", None)
-        userId = request.query_params.get("userId", None)
         if not project:
             return Response(
                 {"project": ["'project' parameter is required."]},
                 status=400,
             )
-        if not userId:
-            return Response(
-                {"userId": ["'userId' parameter is required."]},
-                status=400,
-            )
         postsQueryset = ProjectPost.objects.filter(project=project).order_by("added").all()
-        serializer = serializer_class(postsQueryset, many=True)
-        participation = ProjectPost.objects.filter(author_id=userId).filter(project_id=project)
-        isParticipant = False
-        if (participation):
-            isParticipant = True
-        return Response({"project": project, "isParticipant": isParticipant, "posts": serializer.data})
-
-    def retrieve(self, request, pk=None, *args, **kwargs):
-        serializer_class = ProjectPostSerializerWithUser
-        post = get_object_or_404(self.queryset, pk=pk)
-        serializer = serializer_class(post)
-        return Response(serializer.data)
+        serializer = self.get_serializer(postsQueryset, many=True)
+        return Response({"project": project, "posts": serializer.data})
