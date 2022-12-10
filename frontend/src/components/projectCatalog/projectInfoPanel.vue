@@ -18,7 +18,11 @@
         Opis projektu:
       </p>
       <p style="font-size: 20px">
-        {{ project.description }}
+        <markdown-it-vue
+          class="md-body"
+          :content="project.description"
+          :options="markdownOptions"
+        />
       </p>
     </div>
     <div style="width: 100%; text-align: center; margin-top: 40px">

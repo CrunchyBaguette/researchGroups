@@ -49,9 +49,9 @@
           <div class="div-edit" v-else>
             <b-field label="Kategoria koła">
               <b-select v-model="groupCategory" placeholder="Wybierz kategorię">
-                <option value="Matematyka">Matematyczne</option>
-                <option value="Medycyna">Medyczne</option>
-                <option value="Chemia">Chemiczne</option>
+                <option value="Matematyka">Matematyka</option>
+                <option value="Medycyna">Medycyna</option>
+                <option value="Chemia">Chemia</option>
               </b-select>
             </b-field>
             <div id="btnsDiv">
@@ -94,7 +94,7 @@
           rounded
           size="is-medium"
           type="is-success"
-          v-if="this.isAuthenticated && isAdminOrOwner()"
+          v-if="isAdminOrOwner()"
           @click="changeToEditMode"
           >Edytuj koło naukowe</b-button
         >
@@ -108,10 +108,10 @@
           size="is-medium"
           tag="router-link"
           to="/forum"
+          v-if="isMember()"
           :disabled="isButtonDisabled"
           >Forum</b-button
         >
-        <br />
         <b-button
           id="btn"
           size="is-medium"
@@ -165,7 +165,11 @@
             </div>
           </div>
           <div class="inner" v-if="!editWhatWeDo">
-            {{ whatWeDo }}
+            <markdown-it-vue
+              class="md-body"
+              :content="whatWeDo"
+              :options="markdownOptions"
+            />
           </div>
           <div v-else>
             <b-field>
@@ -258,7 +262,10 @@
                       <span>Member</span>
                     </b-dropdown-item>
                   </b-dropdown>
-                  <b-icon icon="close" @click="removeMemberFromList(email)" />
+                  <b-icon
+                    icon="close"
+                    @click.native="removeMemberFromList(member.person)"
+                  />
                 </div>
               </div>
               <div
@@ -329,7 +336,11 @@
             </div>
           </div>
           <div class="inner" v-if="!editAboutUs">
-            {{ aboutUs }}
+            <markdown-it-vue
+              class="md-body"
+              :content="aboutUs"
+              :options="markdownOptions"
+            />
           </div>
           <div v-else>
             <b-field
@@ -370,7 +381,11 @@
             </div>
           </div>
           <div class="inner" v-if="!editContact">
-            {{ contact }}
+            <markdown-it-vue
+              class="md-body"
+              :content="contact"
+              :options="markdownOptions"
+            />
             <div class="container-send-email">
               <button
                 class="button"
@@ -484,6 +499,7 @@ export default {
       editGroupCategory: false,
 
       whatWeDo: "",
+      testMarkdown: "::: success\nTest success.\n:::",
       editWhatWeDo: false,
 
       members: [],
@@ -499,6 +515,18 @@ export default {
 
       isBeingEdited: false,
       isButtonDisabled: false,
+
+      markdownOptions: {
+        markdownIt: {
+          linkify: true,
+        },
+        linkAttributes: {
+          attrs: {
+            target: "_self",
+            rel: "noopener",
+          },
+        },
+      },
     };
   },
   mounted() {
@@ -535,9 +563,21 @@ export default {
       this.editLink = true;
     },
 
+    isMember() {
+      if (this.isAuthenticated) {
+        if (this.researchGroup.members.includes(this.authUser.email)) {
+          return true;
+        }
+      }
+      return false;
+    },
+
     isAdminOrOwner() {
       for (var i = 0; i < this.researchGroupMembers.length; i++) {
-        if (this.researchGroupMembers[i]["person"] == this.authUser.email) {
+        if (
+          this.isMember() &&
+          this.researchGroupMembers[i]["person"] == this.authUser.email
+        ) {
           if (
             this.researchGroupMembers[i]["role"] == "Creator" ||
             this.researchGroupMembers[i]["role"] == "Moderator"
@@ -549,17 +589,24 @@ export default {
       return false;
     },
 
+    removeMemberFromList(email) {
+      let index = this.members.indexOf(email);
+      this.members.splice(index, 1);
+    },
+
     updateGroupInfo() {
       this.updateResearchGroup({
         id: this.$route.params.id,
         payload: {
           name: this.groupName,
+          category: this.groupCategory,
           about_us: this.aboutUs,
           what_we_do: this.whatWeDo,
           contact: this.contact,
         },
       }).catch((err) => {
         this.groupName = this.researchGroup.name;
+        this.groupCategory = this.researchGroup.category;
         this.aboutUs = this.researchGroup.about_us;
         this.whatWeDo = this.researchGroup.what_we_do;
         this.contact = this.researchGroup.contact;
@@ -654,7 +701,7 @@ export default {
       this.changeGroupName();
     },
     cancelGroupCategory() {
-      this.groupCategory = this.researchGroup.groupCategory;
+      this.groupCategory = this.researchGroup.category;
       this.changeGroupCategory();
     },
 

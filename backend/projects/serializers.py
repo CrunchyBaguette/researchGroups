@@ -27,10 +27,20 @@ class ProjectSerializer(QuerySerializerMixin, serializers.ModelSerializer):
         return representation
 
 
-class ProjectUserSerializer(serializers.ModelSerializer):
+class ProjectUserSerializer(QuerySerializerMixin, serializers.ModelSerializer):
+    person = serializers.SlugRelatedField(slug_field="email", queryset=User.objects.all())
+    project = serializers.SlugRelatedField(slug_field="id", queryset=Project.objects.all())
+
+    RELATED_FIELDS = ["project", "person"]
+
     class Meta:
         model = ProjectUser
         fields = "__all__"
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["role"] = instance.get_role_display()
+        return representation
 
 
 class ProjectPostSerializer(serializers.ModelSerializer):

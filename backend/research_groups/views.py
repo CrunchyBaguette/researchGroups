@@ -23,7 +23,7 @@ from backend.common.views import PermissionPolicyMixin
 
 
 class ResearchGroupUserViewSet(viewsets.ModelViewSet):
-    queryset = ResearchGroupUser.objects.all()
+    queryset = ResearchGroupUser.objects.all().order_by("created")
     serializer_class = ResearchGroupUserSerializer
     permission_classes = [AllowAny]
 
@@ -87,8 +87,9 @@ class ResearchGroupUserViewSet(viewsets.ModelViewSet):
 
 # Create your views here.
 class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
-    queryset = ResearchGroup.objects.all()
+    queryset = ResearchGroup.objects.all().order_by("name")
     serializer_class = ResearchGroupSerializer
+    permission_classes = [AllowAny]
     permission_classes_per_method = {
         "create": [
             IsAuthenticated,
@@ -96,6 +97,12 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         "partial_update": [
             IsAuthenticated,
         ],
+    }
+
+    categoryCodes = {
+        "Matematyka": "math",
+        "Medycyna": "med",
+        "Chemia": "chem",
     }
 
     def create(self, request, *args, **kwargs):
@@ -121,6 +128,10 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         ownerMember.save()
 
         return response
+
+    def update(self, request, *args, **kwargs):
+        request.data["category"] = self.categoryCodes.get(request.data["category"])
+        return super().update(request, *args, **kwargs)
 
 
 class ResearchGroupPostViewSet(viewsets.ModelViewSet):
