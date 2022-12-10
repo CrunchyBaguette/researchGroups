@@ -36,9 +36,6 @@ var mdiRequest = new Request(
   "https://cdn.materialdesignicons.com/5.8.55/css/materialdesignicons.min.css"
 );
 
-var mdiRequest = new Request(
-  "https://cdn.materialdesignicons.com/5.8.55/css/materialdesignicons.min.css"
-);
 
 fetch(mdiRequest)
   .then(function (value) {
