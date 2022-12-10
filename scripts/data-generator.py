@@ -28,9 +28,8 @@ number_of_ratings = 10
 
 fake = Faker()
 engine = create_engine(
-    # "postgresql://admin:pleasechangeme@postgres:5432/backend", echo=False
-    "postgresql://admin:pleasechangeme@localhost:5432/backend",
-    echo=False,
+    "postgresql://admin:pleasechangeme@postgres:5432/backend", echo=False
+    # "postgresql://admin:pleasechangeme@localhost:5432/backend", echo=False
 )
 
 
@@ -90,16 +89,10 @@ def genrateTables():
 
 
 def DeleteTableData(name):
-    sql = text("DELETE FROM " + name + ";")
-    try:
-        engine.execute(sql)
-    except Exception as e:
-        if is_printing:
-            print(e)
-            print("couldn't delete from table: " + name)
-    else:
-        if is_printing:
-            print("data deleted from table: " + name)
+    sql = text('DELETE FROM ' + name + ';')
+    engine.execute(sql)
+    if is_printing:
+        print("data deleted from table: " + name)
 
 
 def generate_user():
@@ -265,7 +258,9 @@ def generate_project_user(users, projects):
     df_project_users = pd.DataFrame(project_users)
     if is_printing:
         print(df_project_users)
-    df_project_users.to_sql("project_projectuser", con=engine, index=False, if_exists="append")
+    df_project_users.to_sql(
+        "projects_projectuser", con=engine, index=False, if_exists="append"
+    )
     return df_project_users
 
 
