@@ -28,8 +28,8 @@ number_of_ratings = 10
 
 fake = Faker()
 engine = create_engine(
-    # "postgresql://admin:pleasechangeme@postgres:5432/backend", echo=False
-    "postgresql://admin:pleasechangeme@localhost:5432/backend", echo=False
+    "postgresql://admin:pleasechangeme@postgres:5432/backend", echo=False
+    # "postgresql://admin:pleasechangeme@localhost:5432/backend", echo=False
 )
 
 
@@ -38,6 +38,7 @@ def run():
     dropTables()
     genrateTables()
     print("Script end successfully")
+
 
 def dropTables():
     DeleteTableData("projects_projectlink")
@@ -59,6 +60,8 @@ def dropTables():
     DeleteTableData("tutorials_tutorial")
     DeleteTableData("projects_project")
     DeleteTableData("research_groups_researchgroup")
+    DeleteTableData("token_blacklist_blacklistedtoken")
+    DeleteTableData("token_blacklist_outstandingtoken")
     DeleteTableData("auth_user")
 
 
@@ -88,16 +91,17 @@ def genrateTables():
 
 
 def DeleteTableData(name):
-    sql = text('DELETE FROM '+name+';')
+    sql = text('DELETE FROM ' + name + ';')
     engine.execute(sql)
     if is_printing:
         print("data deleted from table: " + name)
+
 
 def generate_user():
     users = defaultdict(list)
     users["id"].append(10000)
     users["username"].append("admin")
-    users["password"].append(make_password("admin"))# "admin" po szyfrowaniu
+    users["password"].append(make_password("admin"))  # "admin" po szyfrowaniu
     users["last_login"].append(fake.date())
     users["is_superuser"].append(True)
     users["first_name"].append("admin")
@@ -160,7 +164,7 @@ def generate_project(users):
         projects["category"].append(
             categories[fake.pyint(0, len(categories) - 1)]
         )
-        projects["group_owner_id"].append(users["id"].values[i % len(users["id"])])
+        projects["project_owner_id"].append(users["id"].values[i % len(users["id"])])
     df_projects = pd.DataFrame(projects)
     if is_printing:
         print(df_projects)
@@ -273,7 +277,7 @@ def generate_project_user(users, projects):
     if is_printing:
         print(df_project_users)
     df_project_users.to_sql(
-        "project_projectuser", con=engine, index=False, if_exists="append"
+        "projects_projectuser", con=engine, index=False, if_exists="append"
     )
     return df_project_users
 
