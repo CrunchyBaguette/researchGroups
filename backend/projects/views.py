@@ -1,22 +1,25 @@
+from collections import Counter
+
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.contrib.auth.models import User
-from backend.projects.serializers import (
-    ProjectSerializer,
-    ProjectUserSerializer,
-    ProjectPostSerializer,ProjectPostSerializerWithUser
-)
+
+from backend.common.views import PermissionPolicyMixin
 from backend.projects.models import (
     Project,
     ProjectPost,
     ProjectUser,
 )
-
-from backend.common.views import PermissionPolicyMixin
+from backend.projects.serializers import (
+    ProjectSerializer,
+    ProjectUserSerializer,
+    ProjectPostSerializer,
+    ProjectPostSerializerWithUser,
+)
 
 
 class ProjectUserViewSet(viewsets.ModelViewSet):
@@ -165,11 +168,8 @@ class ProjectPostViewSet(viewsets.ModelViewSet):
             )
         postsQueryset = ProjectPost.objects.filter(project=project).order_by("added").all()
         serializer = serializer_class(postsQueryset, many=True)
-        participation = ProjectPost.objects.filter(author_id=userId).filter(project_id=project)
-        isParticipant = False
-        if (participation):
-            isParticipant = True
-        return Response({"project": project, "isParticipant": isParticipant, "posts": serializer.data})
+        participation = ProjectPost.objects.filter(author_id=userId, project_id=project)
+        return Response({"project": project, "isParticipant": participation.exists(), "posts": serializer.data})
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         serializer_class = ProjectPostSerializerWithUser

@@ -1,23 +1,25 @@
 from collections import Counter
+
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.decorators import action
 from rest_framework.response import Response
-from backend.research_groups.serializers import (
-    ResearchGroupUserSerializer,
-    ResearchGroupSerializer,
-    ResearchGroupPostSerializer, ResearchGroupPostSerializerWithUser,
-)
+
+from backend.common.views import PermissionPolicyMixin
 from backend.research_groups.models import (
     ResearchGroup,
     ResearchGroupPost,
     ResearchGroupUser,
 )
-
-from backend.common.views import PermissionPolicyMixin
+from backend.research_groups.serializers import (
+    ResearchGroupUserSerializer,
+    ResearchGroupSerializer,
+    ResearchGroupPostSerializer,
+    ResearchGroupPostSerializerWithUser,
+)
 
 
 class ResearchGroupUserViewSet(viewsets.ModelViewSet):
@@ -133,7 +135,6 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
 
 
 class ResearchGroupPostViewSet(viewsets.ModelViewSet):
-
     queryset = ResearchGroupPost.objects.all()
     serializer_class = ResearchGroupPostSerializer
     permission_classes = [IsAuthenticated]
@@ -156,7 +157,9 @@ class ResearchGroupPostViewSet(viewsets.ModelViewSet):
         postsQueryset = self.queryset.filter(research_group=researchGroup).order_by("added").all()
         serializer = serializer_class(postsQueryset, many=True)
         participation = ResearchGroupUser.objects.filter(person_id=userId, research_group_id=researchGroup)
-        return Response({"researchGroup": researchGroup, "isParticipant": participation.exists(), "posts": serializer.data})
+        return Response(
+            {"researchGroup": researchGroup, "isParticipant": participation.exists(), "posts": serializer.data}
+        )
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         serializer_class = ResearchGroupPostSerializerWithUser
