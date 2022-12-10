@@ -284,7 +284,11 @@
             </div>
           </div>
           <div class="inner" v-if="!editProjectDescription">
-            {{ projectDescription }}
+            <markdown-it-vue
+              class="md-body"
+              :content="projectDescription"
+              :options="markdownOptions"
+            />
           </div>
           <div v-else>
             <b-field
@@ -418,7 +422,10 @@ export default {
 
     isAdminOrOwner() {
       for (var i = 0; i < this.projectMembers.length; i++) {
-        if (this.isMember()) {
+        if (
+          this.isMember() &&
+          this.projectMembers[i]["person"] == this.authUser.email
+        ) {
           if (
             this.projectMembers[i]["role"] == "Owner" ||
             this.projectMembers[i]["role"] == "Moderator"
