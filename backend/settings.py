@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "backend.announcements",
     "backend.projects",
     "backend.users",
+    "backend.common",
     "corsheaders",
     "django_extensions",
 ]

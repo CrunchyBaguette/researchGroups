@@ -103,10 +103,7 @@ export default {
           })
           .catch((err) => {
             this.$buefy.toast.open({
-              message:
-                "Błąd przy logowaniu (" +
-                (err.response ? err.response.status : 500) +
-                ")",
+              message: err.response.data[Object.keys(err.response.data)[0]],
               type: "is-danger",
             });
           });

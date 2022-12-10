@@ -62,7 +62,7 @@ const mutations = {
     },
     setGroup(state, data) {
         state.researchGroup = data;
-    }
+    },
 };
 
 export default {

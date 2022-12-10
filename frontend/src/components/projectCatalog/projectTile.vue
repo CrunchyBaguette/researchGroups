@@ -2,8 +2,8 @@
   <div id="group-tile" class="box">
     <div class="groupTileContainer">
       <div class="groupTileTitleContainer">
-        <p class="groupTileTitle">{{ group.name }}</p>
-        <p class="groupTileCategory">{{ group.category }}</p>
+        <p class="groupTileTitle">{{ project.name }}</p>
+        <p class="groupTileCategory">{{ project.category }}</p>
       </div>
     </div>
   </div>
@@ -11,10 +11,10 @@
 
 <script>
 export default {
-  name: "groupTile",
+  name: "projectTile",
 
   props: {
-    group: { type: Object },
+    project: { type: Object },
   },
 };
 </script>
@@ -64,8 +64,6 @@ export default {
 }
 
 .groupTileDesc {
-  height: 80%;
-  overflow: hidden;
   text-align: left;
   padding: 5px;
 }
