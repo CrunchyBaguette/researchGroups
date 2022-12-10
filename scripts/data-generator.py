@@ -1,10 +1,9 @@
+from collections import defaultdict
 from faker import Faker
 import pandas as pd
 from django.contrib.auth.hashers import make_password
 from sqlalchemy import create_engine, text
-from collections import defaultdict
 
-from sqlalchemy.ext.declarative import declarative_base
 
 # Aby wywołać generator trzeba w folderze researchGroup wpisać "python manage.py runscript data-generator"
 # falga do printowania danych do konsoli
@@ -28,7 +27,8 @@ number_of_ratings = 10
 
 fake = Faker()
 engine = create_engine(
-    "postgresql://admin:pleasechangeme@postgres:5432/backend", echo=False
+    "postgresql://admin:pleasechangeme@postgres:5432/backend",
+    echo=False
     # "postgresql://admin:pleasechangeme@localhost:5432/backend", echo=False
 )
 
@@ -66,6 +66,7 @@ def dropTables():
 
 
 def genrateTables():
+    # pylint: disable=unused-variable
     users = generate_user()
     research_groups = generate_research_group(users)
     projects = generate_project(users)
@@ -89,7 +90,7 @@ def genrateTables():
 
 
 def DeleteTableData(name):
-    sql = text('DELETE FROM ' + name + ';')
+    sql = text("DELETE FROM " + name + ";")
     engine.execute(sql)
     if is_printing:
         print("data deleted from table: " + name)
@@ -258,9 +259,7 @@ def generate_project_user(users, projects):
     df_project_users = pd.DataFrame(project_users)
     if is_printing:
         print(df_project_users)
-    df_project_users.to_sql(
-        "projects_projectuser", con=engine, index=False, if_exists="append"
-    )
+    df_project_users.to_sql("projects_projectuser", con=engine, index=False, if_exists="append")
     return df_project_users
 
 
