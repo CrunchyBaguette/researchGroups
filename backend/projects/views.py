@@ -163,13 +163,10 @@ class ProjectPostViewSet(viewsets.ModelViewSet):
                 {"userId": ["'userId' parameter is required."]},
                 status=400,
             )
-        postsQueryset = ProjectPost.objects.filter(project=project).order_by("added").all()
+        postsQueryset = self.queryset.filter(project=project).order_by("added").all()
         serializer = serializer_class(postsQueryset, many=True)
         participation = ProjectPost.objects.filter(author_id=userId).filter(project_id=project)
-        isParticipant = False
-        if (participation):
-            isParticipant = True
-        return Response({"project": project, "isParticipant": isParticipant, "posts": serializer.data})
+        return Response({"project": project, "isParticipant": participation.exists(), "posts": serializer.data})
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         serializer_class = ProjectPostSerializerWithUser

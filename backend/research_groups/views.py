@@ -155,13 +155,10 @@ class ResearchGroupPostViewSet(viewsets.ModelViewSet):
                 {"userId": ["'userId' parameter is required."]},
                 status=400,
             )
-        postsQueryset = ResearchGroupPost.objects.filter(research_group=researchGroup).order_by("added").all()
+        postsQueryset = self.queryset.filter(research_group=researchGroup).order_by("added").all()
         serializer = serializer_class(postsQueryset, many=True)
-        participation = ResearchGroupUser.objects.filter(person_id=userId).filter(research_group_id=researchGroup)
-        isParticipant = False
-        if(participation):
-            isParticipant = True
-        return Response({"researchGroup": researchGroup, "isParticipant": isParticipant, "posts": serializer.data})
+        participation = ResearchGroupUser.objects.filter(person_id=userId, research_group_id=researchGroup)
+        return Response({"researchGroup": researchGroup, "isParticipant": participation.exists(), "posts": serializer.data})
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         serializer_class = ResearchGroupPostSerializerWithUser
