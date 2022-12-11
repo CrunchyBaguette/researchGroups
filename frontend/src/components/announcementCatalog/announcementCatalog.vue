@@ -75,15 +75,15 @@ export default {
       // console.log('colkolwiek');
       // console.log('Lista: ' + this.userAdminGroups.toString());
       // return true;
+      //console.log('Lista: ' + this.userAdminGroups.toString());
       
       if (
         this.isAuthenticated &&
-        this.userAdminGroups !== []
+        this.userAdminGroups.length >= 1
       ) {
         // for (var i = 0; i < this.authUser.researchGroupUsers.length; i++) {
         //   this.authUser.researchGroupUsers[i].name
         // }
-        console.log('Lista: ' + this.userAdminGroups.toString());
         return true;
       } else {
         return false;
@@ -127,7 +127,7 @@ export default {
     this.getUserAdminResearchGroups(this.authUser.id)
     .then(
       () => {
-        this.userAdminGroups = this.getUserAdminResearchGroups(this.authUser.id);
+        this.userAdminGroups = this.userAdminResearchGroups;
       }
     )
     .then(() => {
