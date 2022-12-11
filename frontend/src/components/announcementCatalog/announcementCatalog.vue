@@ -112,6 +112,7 @@ export default {
       userAdminResearchGroups: (state) => state.user.userAdminResearchGroups,
     }),
     ...mapGetters("auth", ["isAuthenticated", "authUser"]),
+
     paginatedAnnouncements() {
       let page_number = this.current - 1;
 
@@ -124,15 +125,17 @@ export default {
 
   mounted() {
     this.getAnnouncements().then(() => (this.loading = false));
-    this.getUserAdminResearchGroups(this.authUser.id)
-    .then(
-      () => {
-        this.userAdminGroups = this.userAdminResearchGroups;
-      }
-    )
-    .then(() => {
-      this.loading = false;
-    });
+    if (this.isAuthenticated) {
+      this.getUserAdminResearchGroups(this.authUser.id)
+      .then(
+        () => {
+          this.userAdminGroups = this.userAdminResearchGroups;
+        }
+      )
+      .then(() => {
+        this.loading = false;
+      });
+    }
   },
 };
 </script>
