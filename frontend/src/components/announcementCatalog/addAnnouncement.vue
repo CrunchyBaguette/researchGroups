@@ -127,6 +127,6 @@
     },
     computed: {
     ...mapGetters("auth", ["authUser"]),
-  },
+    },
   }
 </script>

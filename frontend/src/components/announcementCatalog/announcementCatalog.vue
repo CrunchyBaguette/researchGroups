@@ -1,18 +1,19 @@
 <template>
-  <div id="content">
+  <div id="content" v-if="!this.loading">
     <div id="titleDiv">
       <p class="title" id="tit">Ogłoszenia</p>
       <b-button
+          v-if="isAdminOrOwner()"
           id="btnTitle"
           tag="router-link"
-          :to="isAuthenticated ? { name: 'addAnnouncement' } : { name: 'login' }"
+          :to="{ name: 'addAnnouncement' }"
           rounded
           size="is-medium"
           type="is-success"
           >Dodaj nowe ogłoszenie</b-button
         >
     </div>
-    <div id="announcementsContainer" v-if="!loading">
+    <div id="announcementsContainer">
       <div class="box" id="box">
           <div
             v-for="announcement in paginatedAnnouncements"
@@ -63,10 +64,37 @@ export default {
       perPage: 20,
       loading: true,
       pageOfItems: [],
+      userAdminGroups: [],
     };
   },
   methods: {
     ...mapActions("announcement", ["getAnnouncements"]),
+    ...mapActions("user", ["getUserAdminResearchGroups"]),
+
+    isAdminOrOwner() {
+      // console.log('colkolwiek');
+      // console.log('Lista: ' + this.userAdminGroups.toString());
+      // return true;
+      
+      if (
+        this.isAuthenticated &&
+        this.userAdminGroups !== []
+      ) {
+        // for (var i = 0; i < this.authUser.researchGroupUsers.length; i++) {
+        //   this.authUser.researchGroupUsers[i].name
+        // }
+        console.log('Lista: ' + this.userAdminGroups.toString());
+        return true;
+      } else {
+        return false;
+      }
+
+        // for (var i = 0; i < researchGroups.length; i++) {
+
+        // }
+
+    },
+
     onChangePage(pageOfItems) {
       // update page of items
       this.pageOfItems = pageOfItems;
@@ -80,7 +108,10 @@ export default {
     ...mapState({
       announcements: (state) => state.announcement.announcements,
     }),
-    ...mapGetters("auth", ["isAuthenticated"]),
+    ...mapState({
+      userAdminResearchGroups: (state) => state.user.userAdminResearchGroups,
+    }),
+    ...mapGetters("auth", ["isAuthenticated", "authUser"]),
     paginatedAnnouncements() {
       let page_number = this.current - 1;
 
@@ -93,6 +124,15 @@ export default {
 
   mounted() {
     this.getAnnouncements().then(() => (this.loading = false));
+    this.getUserAdminResearchGroups(this.authUser.id)
+    .then(
+      () => {
+        this.userAdminGroups = this.getUserAdminResearchGroups(this.authUser.id);
+      }
+    )
+    .then(() => {
+      this.loading = false;
+    });
   },
 };
 </script>
