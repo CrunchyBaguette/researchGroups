@@ -390,7 +390,7 @@ def generate_research_group_disk(df_research_groups):
         research_group_disk["link"].append(fake.url())
         research_group_disk["name"].append(fake.word() + " " + fake.word())
         research_group_disk["is_public"].append(fake.boolean())
-        research_group_disk["project_id"].append(df_research_groups["id"].values[i % len(df_research_groups["id"])])
+        research_group_disk["research_group_id"].append(df_research_groups["id"].values[i % len(df_research_groups["id"])])
     df_research_group_disk = pd.DataFrame(research_group_disk)
     if is_printing:
         print(df_research_group_disk)
