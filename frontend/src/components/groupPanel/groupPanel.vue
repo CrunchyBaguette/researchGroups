@@ -566,6 +566,7 @@ export default {
 
       markdownOptions: {
         markdownIt: {
+          html: true,
           linkify: true,
         },
         linkAttributes: {
