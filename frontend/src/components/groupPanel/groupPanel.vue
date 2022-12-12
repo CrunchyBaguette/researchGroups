@@ -94,7 +94,7 @@
           rounded
           size="is-medium"
           type="is-success"
-          v-if="this.isAuthenticated && isAdminOrOwner()"
+          v-if="isAdminOrOwner()"
           @click="changeToEditMode"
           >Edytuj koło naukowe</b-button
         >
@@ -543,7 +543,7 @@ export default {
     ]),
 
     isMember() {
-      if (this.authUser) {
+      if (this.isAuthenticated) {
         if (this.researchGroup.members.includes(this.authUser.email)) {
           return true;
         }
