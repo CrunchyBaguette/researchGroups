@@ -94,7 +94,7 @@
           rounded
           size="is-medium"
           type="is-success"
-          v-if="isAdminOrOwner()"
+          v-if="this.isAuthenticated && isAdminOrOwner()"
           @click="changeToEditMode"
           >Edytuj koło naukowe</b-button
         >
@@ -108,6 +108,7 @@
           size="is-medium"
           tag="router-link"
           :to="{ name: 'groupForum', params: { groupId: this.$route.params.id} }"
+          v-if="isMember()"
           :disabled="isButtonDisabled"
           >Forum</b-button
         >
@@ -543,7 +544,7 @@ export default {
     ]),
 
     isMember() {
-      if (this.isAuthenticated) {
+      if (this.authUser) {
         if (this.researchGroup.members.includes(this.authUser.email)) {
           return true;
         }
