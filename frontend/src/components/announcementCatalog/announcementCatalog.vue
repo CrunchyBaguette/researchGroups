@@ -22,7 +22,7 @@
             <announcement
               id="ann"
               :author="announcement.author_full_name"
-              :group="annoucement.research_group_name"
+              :group="announcement.research_group_name"
               :category="announcement.ann_type"
               :added="announcement.added"
               :edited="announcement.edited"
@@ -74,6 +74,7 @@ export default {
 
     isAdminOrOwner() {
       console.log('Koła: ' + this.userAdminGroups.toString());
+      console.log(announcement.research_group_name);
       if (
         this.isAuthenticated &&
         this.userAdminGroups.length >= 1

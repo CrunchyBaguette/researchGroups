@@ -41,52 +41,53 @@
       <div id="root-container" class="box">
         <div class="container">
           <div class="author-category-container">
-            <p class="author-in-edit-mode">{{ announcementAuthor }}</p>
+            <div class="author-group-container">
+              <p class="author-in-edit-mode">{{ announcementAuthor }}</p>
 
-            <div class="group-edit-container">
-              <p
-                class="group"
-                v-if="!editAnnouncementGroup || !isBeingEdited"
-              >
-                {{ announcementGroup }}
-              </p>
-              <div class="div-edit" v-else>
-                <b-field label="Twoje koła">
-                  <b-select
-                    v-model="announcementGroup"
-                    placeholder="Wybierz koło"
-                  >
-                    <option :value="group.id" v-for="group in userAdminGroups" v-bind:key="group.id">
-                      {{ group.name }}
-                    </option>
-                  </b-select>
-                </b-field>
+              <div class="div-title">
+                <p
+                  class="group"
+                  v-if="!editAnnouncementGroup || !isBeingEdited"
+                >
+                  {{ announcementGroup }}
+                </p>
+                <div class="div-edit" v-else>
+                  <b-field label="Twoje koła">
+                    <b-select
+                      v-model="announcementGroup"
+                      placeholder="Wybierz koło"
+                    >
+                      <option :value="group.name" v-for="group in userAdminGroups" v-bind:key="group.id">
+                        {{ group.name }}
+                      </option>
+                    </b-select>
+                  </b-field>
+                  <div id="btnsDiv">
+                    <b-button
+                      id="btnSave"
+                      class="button is-primary is-success"
+                      @click="saveAnnouncementGroup"
+                      >Zapisz</b-button
+                    >
+                    <b-button @click="cancelAnnouncementGroup"
+                      >Anuluj</b-button
+                    >
+                  </div>
+                </div>
                 <div id="btnsDiv">
                   <b-button
-                    id="btnSave"
-                    class="button is-primary is-success"
-                    @click="saveAnnouncementGroup"
-                    >Zapisz</b-button
+                    :disabled="isButtonDisabled"
+                    id="btnPencil"
+                    @click="changeAnnouncementGroup"
+                    v-if="!editAnnouncementGroup && isBeingEdited"
                   >
-                  <b-button @click="cancelAnnouncementGroup"
-                    >Anuluj</b-button
-                  >
+                    <b-icon icon="lead-pencil" />
+                  </b-button>
                 </div>
-              </div>
-              <div id="btnsDiv">
-                <b-button
-                  :disabled="isButtonDisabled"
-                  id="btnPencil"
-                  @click="changeAnnouncementGroup"
-                  v-if="!editAnnouncementGroup && isBeingEdited"
-                >
-                  <b-icon icon="lead-pencil" />
-                </b-button>
               </div>
             </div>
 
-
-            <div class="category-edit-container">
+            <div class="div-title">
               <p
                 class="category"
                 v-if="!editAnnouncementCategory || !isBeingEdited"
@@ -378,7 +379,7 @@ export default {
       this.updateAnnouncementInfo();
       this.changeAnnouncementGroup();
     },
-    cancelAnnouncmentGroup() {
+    cancelAnnouncementGroup() {
       this.announcementGroup = this.announcement.research_group_name;
       this.changeAnnouncementGroup();
     },
@@ -557,9 +558,11 @@ export default {
   align-items: center;
 }
 
-.category-edit-container .group-edit-container {
+/* .di {
   display: flex;
-}
+  flex-direction: row;
+  justify-content: center;
+} */
 
 .title-edit-container {
   display: flex;
@@ -580,6 +583,11 @@ export default {
   padding-left: 5px;
   font-weight: bold;
   font-size: 20px;
+}
+
+.author-group-container {
+  display: flex;
+  flex-direction: row;
 }
 
 </style>
