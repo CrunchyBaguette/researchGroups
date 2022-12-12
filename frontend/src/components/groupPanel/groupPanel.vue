@@ -544,7 +544,7 @@ export default {
     ]),
 
     isMember() {
-      if (this.authUser) {
+      if (this.isAuthenticated) {
         if (this.researchGroup.members.includes(this.authUser.email)) {
           return true;
         }

@@ -1,5 +1,5 @@
 <template>
-  <div class="card mx-4 ">
+  <div class="card mx-4 pb-2">
     <div class="px-5">
       <div class="columns m-0">
         <p class="column is-4 p-1">{{ post.author.first_name }} {{post.author.last_name}}</p>

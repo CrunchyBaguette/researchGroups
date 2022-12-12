@@ -5,17 +5,20 @@
         <b-button class="button is-success is-rounded"
                   v-on:click="$router.back()">Powrót
         </b-button>
-        <p class="author-decor">{{ forumPost.author.first_name }} {{forumPost.author.last_name}}</p>
+        <p class="author-decor">{{ forumPost.author.first_name }} {{ forumPost.author.last_name }}</p>
       </div>
-      <div class="column is-2 is-offset-6" v-if="forumPost.author.id === authUser.id">
-        <b-button v-if="!isUpdate" class="button is-success is-rounded mr-2" v-on:click="showEdit">Edytuj</b-button>
-        <b-button v-if="isUpdate" class="button is-success is-rounded mr-2" v-on:click="isUpdate = false">Anuluj</b-button>
-        <b-button class="button is-success is-rounded" v-on:click="confirmDeleting">Usuń</b-button>
+      <div class="column is-2 is-offset-6">
+        <b-button v-if="forumPost.author.id === authUser.id && !isUpdate" class="button is-success is-rounded mr-2"
+                  v-on:click="showEdit">Edytuj
+        </b-button>
+        <b-button v-if="isUpdate" class="button is-success is-rounded mr-2" v-on:click="isUpdate = false">Anuluj
+        </b-button>
+        <b-button class="button is-success is-rounded" v-if="canDelete" v-on:click="confirmDeleting">Usuń</b-button>
       </div>
     </div>
     <div>
       <p v-if="!isUpdate" class="title">{{ forumPost.title }}</p>
-      <p v-if="!isUpdate" class="postText"> {{ forumPost.text}}</p>
+      <p v-if="!isUpdate" class="postText"> {{ forumPost.text }}</p>
 
       <div v-if="isUpdate">
         <label for="title">Tytuł:</label>
@@ -54,6 +57,7 @@ export default {
     ...mapActions("researchGroupPost", ["getForumPost"]),
     ...mapActions("researchGroupPost", ["updateForumPost"]),
     ...mapActions("researchGroupPost", ["deleteForumPost"]),
+    ...mapActions("researchGroupMember", ["getResearchGroupMembers"]),
 
     showEdit() {
       this.isUpdate = !this.isUpdate;
@@ -88,6 +92,19 @@ export default {
         );
 
       }
+    },
+    canDelete() {
+      if (this.forumPost.author.id === this.authUser.id) {
+        return true;
+      }
+      this.getResearchGroupMembers(this.$route.params.groupId).then((data) => {
+        for (let i = 0; i < data.members.length; i++) {
+          if (data.members[i]['person'] === this.authUser.email && (data.members[i]['role'] === "Creator" || data.members[i]['role'] === "Moderator")) {
+            return true;
+          }
+        }
+      });
+      return false;
     },
     confirmDeleting() {
       this.$buefy.dialog.confirm({
@@ -138,7 +155,7 @@ export default {
 </script>
 
 <style scoped>
-.postText{
+.postText {
   white-space: pre-line;
 }
 </style>
