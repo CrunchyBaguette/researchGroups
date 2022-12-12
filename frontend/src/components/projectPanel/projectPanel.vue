@@ -320,7 +320,7 @@
           <b-menu-list>
             <b-menu-item label="Linki" v-if="!isBeingEdited">
               <b-menu-item
-                v-for="link in links"
+                v-for="link in this.canAccessLinks(links)"
                 :key="link.name"
                 :label="link.name"
                 target="_blank"
@@ -495,6 +495,21 @@ export default {
       "deleteProjectDisk",
       "updateProjectDisk",
     ]),
+
+    canAccessLinks(links) {
+      let canAccessLinks = [];
+      for (let i = 0; i < links.length; i++) {
+        if (links[i].is_public) {
+          canAccessLinks.push(links[i]);
+        } else if (
+          this.isMember() ||
+          (this.isAuthenticated && links[i].users.includes(this.authUser.email))
+        ) {
+          canAccessLinks.push(links[i]);
+        }
+      }
+      return canAccessLinks;
+    },
 
     openLinkModal(
       modalMessage,
