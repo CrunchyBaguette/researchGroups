@@ -4,10 +4,9 @@ import pandas as pd
 from django.contrib.auth.hashers import make_password
 from sqlalchemy import create_engine, text
 
-
 # Aby wywołać generator trzeba w folderze researchGroup wpisać "python manage.py runscript data-generator"
 # falga do printowania danych do konsoli
-is_printing = True
+is_printing = False
 
 number_of_announcements = 10
 number_of_projects = 10
@@ -16,10 +15,11 @@ number_of_guides = 10
 number_of_research_groups = 10
 number_of_research_group_users = 20
 number_of_research_group_guides = 10
-number_of_research_group_posts = 10
-number_of_research_group_post_comments = 10
-number_of_research_group_disks = 10
-number_of_research_group_links = 10
+number_of_posts = 10
+number_of_post_comments = 10
+number_of_links = 10
+number_of_disks = 10
+number_of_link_users = 10
 number_of_guide_projects = 10
 number_of_project_users = 20
 number_of_tutorials = 10
@@ -27,9 +27,9 @@ number_of_ratings = 10
 
 fake = Faker()
 engine = create_engine(
-    "postgresql://admin:pleasechangeme@postgres:5432/backend",
+    # "postgresql://admin:pleasechangeme@postgres:5432/backend",
+    "postgresql://admin:pleasechangeme@localhost:5432/backend",
     echo=False
-    # "postgresql://admin:pleasechangeme@localhost:5432/backend", echo=False
 )
 
 
@@ -41,12 +41,16 @@ def run():
 
 
 def dropTables():
+    DeleteTableData("projects_projectlink_users")
     DeleteTableData("projects_projectlink")
+    DeleteTableData("projects_projectdisk_users")
     DeleteTableData("projects_projectdisk")
     DeleteTableData("projects_projectpostcomment")
     DeleteTableData("projects_projectpost")
     DeleteTableData("research_groups_researchgroupguide")
+    DeleteTableData("research_groups_researchgrouplink_users")
     DeleteTableData("research_groups_researchgrouplink")
+    DeleteTableData("research_groups_researchgroupdisk_users")
     DeleteTableData("research_groups_researchgroupdisk")
     DeleteTableData("research_groups_researchgrouppostcomment")
     DeleteTableData("research_groups_researchgrouppost")
@@ -81,12 +85,16 @@ def genrateTables():
     research_group_posts = generate_research_group_post(users, research_groups)
     research_group_post_comments = generate_research_group_post_comment(users, research_group_posts)
     research_group_disks = generate_research_group_disk(projects)
+    research_group_disk_users = generate_research_group_disk_users(research_group_disks, users)
     research_group_links = generate_research_group_link(projects)
+    research_group_link_users = generate_research_group_link_users(research_group_links, users)
     research_group_guides = generate_research_group_guides(research_groups, tutorials)
     project_posts = generate_project_post(users, projects)
     project_post_comments = generate_project_post_comment(users, project_posts)
     project_disks = generate_project_disk(projects)
+    project_disk_users = generate_project_disk_users(project_disks, users)
     project_links = generate_project_link(projects)
+    project_link_users = generate_project_link_users(project_links, users)
 
 
 def DeleteTableData(name):
@@ -338,7 +346,7 @@ def generate_research_group_guides(df_research_groups, df_guides):
 
 def generate_research_group_post(df_users, df_research_group):
     research_group_post = defaultdict(list)
-    for i in range(number_of_research_group_posts):
+    for i in range(number_of_posts):
         research_group_post["id"].append(1000 + i)
         research_group_post["title"].append(fake.sentence())
         research_group_post["author_id"].append(df_users["id"].values[i % len(df_users["id"])])
@@ -358,7 +366,7 @@ def generate_research_group_post(df_users, df_research_group):
 
 def generate_research_group_post_comment(df_users, df_research_group_post):
     research_group_post_comment = defaultdict(list)
-    for i in range(number_of_research_group_post_comments):
+    for i in range(number_of_post_comments):
         research_group_post_comment["id"].append(1000 + i)
         research_group_post_comment["author_id"].append(df_users["id"].values[i % len(df_users["id"])])
         research_group_post_comment["text"].append(fake.text())
@@ -377,7 +385,7 @@ def generate_research_group_post_comment(df_users, df_research_group_post):
 
 def generate_research_group_disk(df_research_groups):
     research_group_disk = defaultdict(list)
-    for i in range(number_of_research_group_disks):
+    for i in range(number_of_disks):
         research_group_disk["id"].append(1000 + i)
         research_group_disk["link"].append(fake.url())
         research_group_disk["name"].append(fake.word() + " " + fake.word())
@@ -390,14 +398,31 @@ def generate_research_group_disk(df_research_groups):
     return df_research_group_disk
 
 
+def generate_research_group_disk_users(df_research_group_disks, df_users):
+    research_group_disk_users = defaultdict(list)
+    for i in range(number_of_link_users):
+        research_group_disk_users["id"].append(1000 + i)
+        research_group_disk_users["researchgroupdisk_id"].append(
+            df_research_group_disks["id"].values[i % len(df_research_group_disks["id"])]
+        )
+        research_group_disk_users["user_id"].append(df_users["id"].values[i % len(df_users["id"])])
+    df_research_group_disk_users = pd.DataFrame(research_group_disk_users)
+    if is_printing:
+        print(df_research_group_disk_users)
+    df_research_group_disk_users.to_sql("research_groups_researchgroupdisk_users", con=engine, index=False,
+                                        if_exists="append")
+    return df_research_group_disk_users
+
+
 def generate_research_group_link(df_research_groups):
     research_group_link = defaultdict(list)
-    for i in range(number_of_research_group_links):
+    for i in range(number_of_links):
         research_group_link["id"].append(1000 + i)
         research_group_link["link"].append(fake.url())
         research_group_link["name"].append(fake.word() + " " + fake.word())
         research_group_link["is_public"].append(fake.boolean())
-        research_group_link["project_id"].append(df_research_groups["id"].values[i % len(df_research_groups["id"])])
+        research_group_link["research_group_id"].append(
+            df_research_groups["id"].values[i % len(df_research_groups["id"])])
     df_research_group_link = pd.DataFrame(research_group_link)
     if is_printing:
         print(df_research_group_link)
@@ -405,9 +430,25 @@ def generate_research_group_link(df_research_groups):
     return df_research_group_link
 
 
+def generate_research_group_link_users(df_research_group_links, df_users):
+    research_group_link_users = defaultdict(list)
+    for i in range(number_of_link_users):
+        research_group_link_users["id"].append(1000 + i)
+        research_group_link_users["researchgrouplink_id"].append(
+            df_research_group_links["id"].values[i % len(df_research_group_links["id"])]
+        )
+        research_group_link_users["user_id"].append(df_users["id"].values[i % len(df_users["id"])])
+    df_research_group_link_users = pd.DataFrame(research_group_link_users)
+    if is_printing:
+        print(df_research_group_link_users)
+    df_research_group_link_users.to_sql("research_groups_researchgrouplink_users", con=engine, index=False,
+                                        if_exists="append")
+    return df_research_group_link_users
+
+
 def generate_project_disk(df_projects):
     project_disk = defaultdict(list)
-    for i in range(number_of_research_group_disks):
+    for i in range(number_of_disks):
         project_disk["id"].append(1000 + i)
         project_disk["link"].append(fake.url())
         project_disk["name"].append(fake.word() + " " + fake.word())
@@ -421,9 +462,24 @@ def generate_project_disk(df_projects):
     return df_project_disk
 
 
+def generate_project_disk_users(df_project_disks, df_users):
+    project_disk_users = defaultdict(list)
+    for i in range(number_of_link_users):
+        project_disk_users["id"].append(1000 + i)
+        project_disk_users["projectdisk_id"].append(
+            df_project_disks["id"].values[i % len(df_project_disks["id"])]
+        )
+        project_disk_users["user_id"].append(df_users["id"].values[i % len(df_users["id"])])
+    df_project_disk_users = pd.DataFrame(project_disk_users)
+    if is_printing:
+        print(df_project_disk_users)
+    df_project_disk_users.to_sql("projects_projectdisk_users", con=engine, index=False, if_exists="append")
+    return df_project_disk_users
+
+
 def generate_project_link(df_projects):
     project_link = defaultdict(list)
-    for i in range(number_of_research_group_links):
+    for i in range(number_of_links):
         project_link["id"].append(1000 + i)
         project_link["link"].append(fake.url())
         project_link["name"].append(fake.word() + " " + fake.word())
@@ -434,6 +490,21 @@ def generate_project_link(df_projects):
         print(df_project_link)
     df_project_link.to_sql("projects_projectlink", con=engine, index=False, if_exists="append")
     return df_project_link
+
+
+def generate_project_link_users(df_project_links, df_users):
+    project_link_users = defaultdict(list)
+    for i in range(number_of_link_users):
+        project_link_users["id"].append(1000 + i)
+        project_link_users["projectlink_id"].append(
+            df_project_links["id"].values[i % len(df_project_links["id"])]
+        )
+        project_link_users["user_id"].append(df_users["id"].values[i % len(df_users["id"])])
+    df_project_link_users = pd.DataFrame(project_link_users)
+    if is_printing:
+        print(df_project_link_users)
+    df_project_link_users.to_sql("projects_projectlink_users", con=engine, index=False, if_exists="append")
+    return df_project_link_users
 
 
 def generate_announcement(df_users, df_research_group):
