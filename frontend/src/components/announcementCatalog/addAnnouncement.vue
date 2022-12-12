@@ -11,7 +11,6 @@
             ><p style="font-size: 20px">Koło naukowe</p></template
           >
           <b-select
-            id="selectGroup"
             @focus="groupGiven = true"
             v-model="announcementGroup"
             expanded
@@ -163,14 +162,14 @@ export default {
   },
   mounted() {
     this.getUserAdminResearchGroups(this.authUser.id)
-    .then(
-      () => {
-        this.userAdminGroups = this.userAdminResearchGroups;
-      }
-    )
-    .then(() => {
-      this.loading = false;
-    });
+      .then(
+        () => {
+          this.userAdminGroups = this.userAdminResearchGroups;
+        }
+      )
+      .then(() => {
+        this.loading = false;
+      });
   }
 }
 </script>

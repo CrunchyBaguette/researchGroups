@@ -22,6 +22,7 @@
             <announcement
               id="ann"
               :author="announcement.author_full_name"
+              :group="annoucement.research_group_name"
               :category="announcement.ann_type"
               :added="announcement.added"
               :edited="announcement.edited"

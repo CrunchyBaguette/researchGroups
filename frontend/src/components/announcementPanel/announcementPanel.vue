@@ -30,6 +30,7 @@
       v-if="!isBeingEdited"
       id="annx"
       :author="announcementAuthor"
+      :group="announcementGroup"
       :category="announcementCategory"
       :added="announcementAdded"
       :edited="announcementEdited"
@@ -41,6 +42,50 @@
         <div class="container">
           <div class="author-category-container">
             <p class="author-in-edit-mode">{{ announcementAuthor }}</p>
+
+            <div class="group-edit-container">
+              <p
+                class="group"
+                v-if="!editAnnouncementGroup || !isBeingEdited"
+              >
+                {{ announcementGroup }}
+              </p>
+              <div class="div-edit" v-else>
+                <b-field label="Twoje koła">
+                  <b-select
+                    v-model="announcementGroup"
+                    placeholder="Wybierz koło"
+                  >
+                    <option :value="group.id" v-for="group in userAdminGroups" v-bind:key="group.id">
+                      {{ group.name }}
+                    </option>
+                  </b-select>
+                </b-field>
+                <div id="btnsDiv">
+                  <b-button
+                    id="btnSave"
+                    class="button is-primary is-success"
+                    @click="saveAnnouncementGroup"
+                    >Zapisz</b-button
+                  >
+                  <b-button @click="cancelAnnouncementGroup"
+                    >Anuluj</b-button
+                  >
+                </div>
+              </div>
+              <div id="btnsDiv">
+                <b-button
+                  :disabled="isButtonDisabled"
+                  id="btnPencil"
+                  @click="changeAnnouncementGroup"
+                  v-if="!editAnnouncementGroup && isBeingEdited"
+                >
+                  <b-icon icon="lead-pencil" />
+                </b-button>
+              </div>
+            </div>
+
+
             <div class="category-edit-container">
               <p
                 class="category"
@@ -218,12 +263,18 @@ export default {
       announcementAuthor: "",
       announcementAuthorId: 0,
 
+      announcementGroup: "",
+      announcementGroupId: 0,
+      editAnnouncementGroup: false,
+
       //beforeEditAnnouncementDate: "12.08.2022 21:21",
       announcementAdded: "",
       announcementEdited: "",
 
       isBeingEdited: false,
       isButtonDisabled: false,
+
+      userAdminGroups: [],
     };
   },
   mounted() {
@@ -236,6 +287,8 @@ export default {
           (this.announcementContent = this.announcement.text),
           (this.announcementAuthor = this.announcement.author_full_name),
           (this.announcementAuthorId = this.announcement.author),
+          (this.announcementGroup = this.announcement.research_group_name),
+          (this.announcementGroupId = this.announcement.research_group_id),
           (this.announcementAdded = this.announcement.added),
           (this.announcementEdited = this.announcement.edited)
         )
@@ -243,9 +296,20 @@ export default {
       .then(() => {
         this.loading = false;
       });
+
+    this.getUserAdminResearchGroups(this.authUser.id)
+      .then(
+        () => {
+          this.userAdminGroups = this.userAdminResearchGroups;
+        }
+      )
+      .then(() => {
+        this.loading = false;
+      });
   },
   methods: {
     ...mapActions("announcement", ["getAnnouncement", "updateAnnouncement"]),
+    ...mapActions("user", ["getUserAdminResearchGroups"]),
 
     isOwner() {
       if (
@@ -265,6 +329,7 @@ export default {
           title: this.announcementTitle,
           ann_type: this.announcementCategory,
           text: this.announcementContent,
+          research_group_id: this.announcementGroupId,
           //author_full_name: this.announcementAuthor,
           //author: this.authUser.id,
           //edited: this.announcementEdited,
@@ -274,6 +339,7 @@ export default {
         this.announcementTitle = this.announcement.title;
         this.announcementCategory = this.announcement.ann_type;
         this.announcementContent = this.announcement.text;
+        this.announcementGroupId = this.announcement.research_group_id;
         //this.announcementEdited = this.announcement.edited;
 
         this.$buefy.toast.open({
@@ -303,6 +369,18 @@ export default {
     cancelAnnouncementCategory() {
       this.announcementCategory = this.announcement.ann_type;
       this.changeAnnouncementCategory();
+    },
+    changeAnnouncementGroup() {
+      this.editAnnouncementGroup = !this.editAnnouncementGroup;
+      this.isButtonDisabled = !this.isButtonDisabled;
+    },
+    saveAnnouncementGroup() {
+      this.updateAnnouncementInfo();
+      this.changeAnnouncementGroup();
+    },
+    cancelAnnouncmentGroup() {
+      this.announcementGroup = this.announcement.research_group_name;
+      this.changeAnnouncementGroup();
     },
     changeAnnouncementTitle() {
       this.editAnnouncementTitle = !this.editAnnouncementTitle;
@@ -354,6 +432,8 @@ export default {
             (this.announcementContent = this.announcement.text),
             (this.announcementAuthor = this.announcement.author_full_name), //
             (this.announcementAuthorId = this.announcement.author),
+            (this.announcementGroup = this.announcement.research_group_name), //
+            (this.announcementGroupId = this.announcement.research_group_id),
             (this.announcementAdded = this.announcement.added),
             (this.announcementEdited = this.announcement.edited)
           )
@@ -367,6 +447,9 @@ export default {
   computed: {
     ...mapState({
       announcement: (state) => state.announcement.announcement,
+    }),
+    ...mapState({
+      userAdminResearchGroups: (state) => state.user.userAdminResearchGroups,
     }),
     //...mapGetters("auth", ["isAuthenticated"]),
     ...mapGetters("auth", ["authUser", "isAuthenticated"]),
@@ -474,7 +557,7 @@ export default {
   align-items: center;
 }
 
-.category-edit-container {
+.category-edit-container .group-edit-container {
   display: flex;
 }
 
@@ -492,5 +575,12 @@ export default {
   height: 36vh;
   /* width: 800px !important; */
 }
+
+.group {
+  padding-left: 5px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
 </style>
 

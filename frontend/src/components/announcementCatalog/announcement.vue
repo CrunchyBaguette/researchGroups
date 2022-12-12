@@ -2,7 +2,8 @@
     <div id="root-container" class="box">
       <div class="container">
         <div class="author-category-container">
-          <p class="author">{{ author }}</p>
+          <p class="author">{{ author }} <span id="spanGroup">(koło: </span> 
+            {{ group }}<span id="spanGroup">)</span></p>
           <p class="category">{{ category }}</p>
         </div>
         <div class="date-container">
@@ -26,6 +27,7 @@
     name: "announcement",
     props: {
       author: {type: String},
+      group: {type: String},
       added: {type: String},
       edited: {type: String},
       title: {type: String},
@@ -90,6 +92,11 @@
   
   #da {
     color: grey;
+  }
+
+  #spanGroup {
+    font-size: 20px;
+    font-weight: normal;
   }
 
   </style>
