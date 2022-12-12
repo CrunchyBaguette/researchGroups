@@ -117,7 +117,7 @@ export default {
       if (this.announcementContent == "") this.contentGiven = false;
 
       if (this.groupGiven && this.titleGiven && this.categoryGiven && this.contentGiven) {
-        const researchGroup = document.getElementById('selectGroup');
+        //const researchGroup = document.getElementById('selectGroup');
         
         this.addAnnouncement({
           title: this.announcementTitle,
@@ -125,7 +125,8 @@ export default {
           ann_type: this.announcementCategory,
           
           author: this.authUser.id,
-          research_group_id: researchGroup.value,
+          //research_group_id: researchGroup.value,
+          research_group_id: this.announcementGroup,
         })
           .then((newAnnouncement) => {
             this.$buefy.toast.open({
