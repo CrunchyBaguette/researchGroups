@@ -72,27 +72,15 @@ export default {
     ...mapActions("user", ["getUserAdminResearchGroups"]),
 
     isAdminOrOwner() {
-      // console.log('colkolwiek');
-      // console.log('Lista: ' + this.userAdminGroups.toString());
-      // return true;
-      //console.log('Lista: ' + this.userAdminGroups.toString());
-      
+      console.log('Koła: ' + this.userAdminGroups.toString());
       if (
         this.isAuthenticated &&
         this.userAdminGroups.length >= 1
       ) {
-        // for (var i = 0; i < this.authUser.researchGroupUsers.length; i++) {
-        //   this.authUser.researchGroupUsers[i].name
-        // }
         return true;
       } else {
         return false;
       }
-
-        // for (var i = 0; i < researchGroups.length; i++) {
-
-        // }
-
     },
 
     onChangePage(pageOfItems) {
