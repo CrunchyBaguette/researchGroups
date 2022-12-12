@@ -112,7 +112,7 @@
           id="btn"
           size="is-medium"
           tag="router-link"
-          to="/forum"
+          :to="{ name: 'projectForum', params: { projectId: this.$route.params.id} }"
           v-if="isMember()"
           :disabled="isButtonDisabled"
           >Forum</b-button

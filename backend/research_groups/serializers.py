@@ -44,7 +44,6 @@ class ResearchGroupUserSerializer(QuerySerializerMixin, serializers.ModelSeriali
 
 
 class ResearchGroupPostSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = ResearchGroupPost
         fields = "__all__"

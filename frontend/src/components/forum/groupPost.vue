@@ -8,7 +8,8 @@
         <p class="author-decor">{{ forumPost.author.first_name }} {{forumPost.author.last_name}}</p>
       </div>
       <div class="column is-2 is-offset-6" v-if="forumPost.author.id === authUser.id">
-        <b-button class="button is-success is-rounded mr-2" v-on:click="showEdit">Edytuj</b-button>
+        <b-button v-if="!isUpdate" class="button is-success is-rounded mr-2" v-on:click="showEdit">Edytuj</b-button>
+        <b-button v-if="isUpdate" class="button is-success is-rounded mr-2" v-on:click="isUpdate = false">Anuluj</b-button>
         <b-button class="button is-success is-rounded" v-on:click="confirmDeleting">Usuń</b-button>
       </div>
     </div>
@@ -21,7 +22,7 @@
         <b-input id="title" v-model="title"></b-input>
         <label for="text">Treść:</label>
         <b-input type="textarea" id="text" v-model="text"></b-input>
-        <b-button v-on:click="updatePost">Akceptuj zmiany</b-button>
+        <b-button class="button is-success is-rounded mt-2" v-on:click="updatePost">Akceptuj zmiany</b-button>
       </div>
     </div>
     <!--    <div>-->

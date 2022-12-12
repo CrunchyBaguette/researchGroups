@@ -169,14 +169,14 @@ export default {
           members: this.groupMembers,
           group_owner: this.authUser.username,
         })
-          .then(() => {
+          .then((response) => {
             this.$buefy.toast.open({
               message: "Pomyślnie dodano koło naukowe",
               type: "is-success",
             });
 
             this.$router.replace(
-              this.$route.query.redirect || "/group-catalog"
+              this.$route.query.redirect || `/group/${response.id}`
             );
           })
           .catch((err) => {

@@ -8,6 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         exclude = ["password", "groups", "last_login", "user_permissions"]
 
+
 class UserSerializerName(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()

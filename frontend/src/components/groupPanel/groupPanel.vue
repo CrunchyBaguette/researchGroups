@@ -108,6 +108,7 @@
           size="is-medium"
           tag="router-link"
           :to="{ name: 'groupForum', params: { groupId: this.$route.params.id} }"
+          v-if="isMember()"
           :disabled="isButtonDisabled"
           >Forum</b-button
         >
