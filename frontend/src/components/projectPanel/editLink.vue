@@ -60,7 +60,7 @@
               display: flex;
             "
           >
-            <div style="flex: 0 1 auto">
+            <div style="flex: 0 1 75%">
               <b-input v-model="addEmail" style="bottom: 5px"></b-input>
             </div>
             <div style="flex: 1 0 auto; text-align: right">
