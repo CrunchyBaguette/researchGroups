@@ -24,3 +24,4 @@ RUN poetry config virtualenvs.create false \
   && poetry install $(test "$YOUR_ENV" == production && echo "--no-dev") --no-interaction --no-ansi --only main
 
 COPY backend /researchGroups/backend
+COPY scripts /researchGroups/scripts
