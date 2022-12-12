@@ -428,6 +428,7 @@
                 v-for="link in this.canAccessLinks(links)"
                 :key="link.name"
                 :label="link.name"
+                :icon="link.is_public ? '' : 'lock'"
                 target="_blank"
                 :href="link.link"
               ></b-menu-item>
@@ -437,6 +438,7 @@
                 v-for="link in links"
                 :key="link.name"
                 :label="link.name"
+                :icon="link.is_public ? '' : 'lock'"
                 @click="
                   openLinkModal(
                     `Edytuj link`,
@@ -459,6 +461,7 @@
                 v-for="disk in disks"
                 :key="disk.name"
                 :label="disk.name"
+                :icon="disk.is_public ? '' : 'lock'"
                 target="_blank"
                 :href="disk.link"
               ></b-menu-item>
@@ -468,6 +471,7 @@
                 v-for="disk in disks"
                 :key="disk.name"
                 :label="disk.name"
+                :icon="disk.is_public ? '' : 'lock'"
                 @click="
                   openLinkModal(
                     `Edytuj dysk`,
@@ -897,8 +901,12 @@ export default {
     },
 
     removeMemberFromList(email) {
-      let index = this.members.indexOf(email);
-      this.members.splice(index, 1);
+      for (let i = 0; i < this.members.length; i++) {
+        if (this.members[i].person == email) {
+          this.members.splice(i, 1);
+          break;
+        }
+      }
     },
 
     updateGroupInfo() {
