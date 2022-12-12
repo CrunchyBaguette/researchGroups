@@ -318,52 +318,112 @@
       <div class="box column is-3" id="divLinks">
         <b-menu :activable="false" :accordion="false" id="menu">
           <b-menu-list>
-            <b-menu-item label="Linki">
+            <b-menu-item label="Linki" v-if="!isBeingEdited">
               <b-menu-item
-                label="Github"
+                v-for="link in links"
+                :key="link.name"
+                :label="link.name"
                 target="_blank"
-                href="https://github.com"
-              ></b-menu-item>
-              <b-menu-item
-                label="Facebook"
-                target="_blank"
-                href="https://facebook.com"
-              ></b-menu-item>
-              <b-menu-item
-                label="Discord"
-                target="_blank"
-                href="https://discord.com"
+                :href="link.link"
               ></b-menu-item>
             </b-menu-item>
-            <b-menu-item label="Dyski">
+            <b-menu-item label="Linki" v-else>
               <b-menu-item
-                label="Dysk 1"
-                target="_blank"
-                href="https://drive.google.com/drive/folders/1QMHnaSuOPcfOX16190I9D8q_Fa5pzeOF?usp=sharing"
+                v-for="link in links"
+                :key="link.name"
+                :label="link.name"
+                @click="
+                  openLinkModal(
+                    `Edytuj link`,
+                    `link`,
+                    link.id,
+                    link.name,
+                    link.link,
+                    link.is_public,
+                    link.users
+                  )
+                "
               ></b-menu-item>
               <b-menu-item
-                label="Dysk 2"
+                label="+"
+                @click="openLinkModal(`Dodaj link`, `link`)"
+              ></b-menu-item>
+            </b-menu-item>
+            <b-menu-item label="Dyski" v-if="!isBeingEdited">
+              <b-menu-item
+                v-for="disk in disks"
+                :key="disk.name"
+                :label="disk.name"
                 target="_blank"
-                href="https://drive.google.com/drive/folders/1vGf8f0nVkJcAZQ6S7mZ74vFhpJK0Gbeo?usp=sharing"
+                :href="disk.link"
+              ></b-menu-item>
+            </b-menu-item>
+            <b-menu-item label="Dyski" v-else>
+              <b-menu-item
+                v-for="disk in disks"
+                :key="disk.name"
+                :label="disk.name"
+                @click="
+                  openLinkModal(
+                    `Edytuj dysk`,
+                    `disk`,
+                    disk.id,
+                    disk.name,
+                    disk.link,
+                    disk.is_public,
+                    disk.users
+                  )
+                "
+              ></b-menu-item>
+              <b-menu-item
+                label="+"
+                @click="openLinkModal(`Dodaj dysk`, `disk`)"
               ></b-menu-item>
             </b-menu-item>
           </b-menu-list>
         </b-menu>
       </div>
     </div>
+    <b-modal has-modal-card :active.sync="this.editLink" trap-focus>
+      <editLinkModal
+        :message="this.modalMessage"
+        :linkId="this.linkId"
+        :linkTitle="this.linkTitle"
+        :linkUrl="this.linkUrl"
+        :linkPublic="this.linkPublic"
+        :linkUsers="this.linkUsers"
+        :linkType="this.linkType"
+        v-on:save="updateLink"
+        v-on:cancel="closeEditLinkModal"
+        v-on:delete="deleteLink"
+      />
+    </b-modal>
   </div>
 </template>
 
 <script>
+import editLinkModal from "@/components/projectPanel/editLink.vue";
 import { mapActions, mapState, mapGetters } from "vuex";
 
 export default {
   name: "projectPanel",
+  components: {
+    editLinkModal,
+  },
   data() {
     return {
       loading: true,
       addEmail: "",
       addRole: "Member",
+
+      modalMessage: "",
+      linkId: null,
+      linkTitle: "",
+      linkUrl: "",
+      linkPublic: false,
+      linkUsers: [],
+      linkType: "",
+      editLink: false,
 
       selectedTabTitle: "Opis projektu",
 
@@ -380,6 +440,9 @@ export default {
 
       members: [],
       editMembers: false,
+
+      links: [],
+      disks: [],
 
       isBeingEdited: false,
       isButtonDisabled: false,
@@ -401,6 +464,16 @@ export default {
         );
       })
       .then(() => {
+        this.getProjectLinks({
+          projectId: this.project.id,
+        }).then(() => (this.links = this.projectLinks));
+      })
+      .then(() => {
+        this.getProjectDisks({
+          projectId: this.project.id,
+        }).then(() => (this.disks = this.projectDisks));
+      })
+      .then(() => {
         this.loading = false;
       });
   },
@@ -410,6 +483,245 @@ export default {
       "getProjectMembers",
       "updateProjectMembers",
     ]),
+    ...mapActions("projectLink", [
+      "getProjectLinks",
+      "addProjectLink",
+      "deleteProjectLink",
+      "updateProjectLink",
+    ]),
+    ...mapActions("projectDisk", [
+      "getProjectDisks",
+      "addProjectDisk",
+      "deleteProjectDisk",
+      "updateProjectDisk",
+    ]),
+
+    openLinkModal(
+      modalMessage,
+      linkType,
+      linkId = null,
+      linkTitle = null,
+      linkUrl = null,
+      linkPublic = null,
+      linkUsers = []
+    ) {
+      this.modalMessage = modalMessage;
+      this.linkId = linkId;
+      this.linkTitle = linkTitle;
+      this.linkUrl = linkUrl;
+      this.linkPublic = linkPublic;
+      this.linkUsers = linkUsers;
+      this.linkType = linkType;
+      this.editLink = true;
+    },
+
+    openAddLinkModal() {
+      this.editLink = true;
+    },
+
+    updateLinkInList(list, newTitle, newUrl, newPublic, newUsers) {
+      for (let i = 0; i < list.length; i++) {
+        if (this.links[i].id == this.linkId) {
+          list[i].name = newTitle;
+          list[i].link = newUrl;
+          list[i].is_public = newPublic;
+          list[i].users = newUsers;
+          break;
+        }
+      }
+    },
+
+    addLinkToList(
+      list,
+      newId,
+      newTitle,
+      newUrl,
+      newPublic,
+      newUsers,
+      newResearch_group
+    ) {
+      list.push({
+        id: newId,
+        name: newTitle,
+        link: newUrl,
+        is_public: newPublic,
+        users: newUsers,
+        research_group: newResearch_group,
+      });
+    },
+
+    updateLink(event) {
+      if (event["linkType"] == "link") {
+        if (this.linkId != null) {
+          this.updateProjectLink({
+            linkId: this.linkId,
+            projectId: this.$route.params.id,
+            link: {
+              name: event["newTitle"],
+              link: event["newUrl"],
+              is_public: event["newPublic"],
+              users: event["newUsers"],
+            },
+          })
+            .then(() => {
+              this.updateLinkInList(
+                this.links,
+                event["newTitle"],
+                event["newUrl"],
+                event["newPublic"],
+                event["newUsers"]
+              );
+              this.closeEditLinkModal();
+            })
+            .catch((err) => {
+              this.$buefy.toast.open({
+                message: err.response.data[Object.keys(err.response.data)[0]],
+                type: "is-danger",
+              });
+            });
+        } else {
+          this.addProjectLink({
+            projectId: this.$route.params.id,
+            link: {
+              name: event["newTitle"],
+              link: event["newUrl"],
+              is_public: event["newPublic"],
+              users: event["newUsers"],
+              project: this.$route.params.id,
+            },
+          })
+            .then((response) => {
+              this.addLinkToList(
+                this.links,
+                response["id"],
+                response["name"],
+                response["link"],
+                response["is_public"],
+                response["users"],
+                response["project"]
+              );
+              this.closeEditLinkModal();
+            })
+            .catch((err) => {
+              this.$buefy.toast.open({
+                message: err.response.data[Object.keys(err.response.data)[0]],
+                type: "is-danger",
+              });
+            });
+        }
+      } else {
+        if (this.linkId != null) {
+          this.updateProjectDisk({
+            diskId: this.linkId,
+            projectId: this.$route.params.id,
+            disk: {
+              name: event["newTitle"],
+              link: event["newUrl"],
+              is_public: event["newPublic"],
+              users: event["newUsers"],
+            },
+          })
+            .then(() => {
+              this.updateLinkInList(
+                this.disks,
+                event["newTitle"],
+                event["newUrl"],
+                event["newPublic"],
+                event["newUsers"]
+              );
+              this.closeEditLinkModal();
+            })
+            .catch((err) => {
+              this.$buefy.toast.open({
+                message: err.response.data[Object.keys(err.response.data)[0]],
+                type: "is-danger",
+              });
+            });
+        } else {
+          this.addProjectDisk({
+            projectId: this.$route.params.id,
+            disk: {
+              name: event["newTitle"],
+              link: event["newUrl"],
+              is_public: event["newPublic"],
+              users: event["newUsers"],
+              project: this.$route.params.id,
+            },
+          })
+            .then((response) => {
+              this.addLinkToList(
+                this.disks,
+                response["id"],
+                response["name"],
+                response["link"],
+                response["is_public"],
+                response["users"],
+                response["project"]
+              );
+              this.closeEditLinkModal();
+            })
+            .catch((err) => {
+              this.$buefy.toast.open({
+                message: err.response.data[Object.keys(err.response.data)[0]],
+                type: "is-danger",
+              });
+            });
+        }
+      }
+    },
+
+    deleteLink(event) {
+      if (event["linkType"] == "link") {
+        this.deleteProjectLink({
+          projectId: this.$route.params.id,
+          linkId: this.linkId,
+        })
+          .then(() => {
+            for (let i = 0; i < this.links.length; i++) {
+              if (this.links[i].id == this.linkId) {
+                this.links.splice(i, 1);
+                break;
+              }
+            }
+            this.closeEditLinkModal();
+          })
+          .catch((err) => {
+            this.$buefy.toast.open({
+              message: err.response.data[Object.keys(err.response.data)[0]],
+              type: "is-danger",
+            });
+          });
+      } else {
+        this.deleteProjectDisk({
+          projectId: this.$route.params.id,
+          diskId: this.linkId,
+        })
+          .then(() => {
+            for (let i = 0; i < this.disks.length; i++) {
+              if (this.disks[i].id == this.linkId) {
+                this.disks.splice(i, 1);
+                break;
+              }
+            }
+            this.closeEditLinkModal();
+          })
+          .catch((err) => {
+            this.$buefy.toast.open({
+              message: err.response.data[Object.keys(err.response.data)[0]],
+              type: "is-danger",
+            });
+          });
+      }
+    },
+
+    closeEditLinkModal() {
+      this.linkId = null;
+      this.linkTitle = "";
+      this.linkUrl = "";
+      this.linkUsers = [];
+      this.linkType = "";
+      this.editLink = false;
+    },
 
     isMember() {
       if (this.isAuthenticated) {
@@ -607,6 +919,12 @@ export default {
     }),
     ...mapState({
       projectMembers: (state) => state.projectMember.projectMembers,
+    }),
+    ...mapState({
+      projectLinks: (state) => state.projectLink.projectLinks,
+    }),
+    ...mapState({
+      projectDisks: (state) => state.projectDisk.projectDisks,
     }),
     ...mapGetters("auth", ["isAuthenticated", "authUser"]),
   },

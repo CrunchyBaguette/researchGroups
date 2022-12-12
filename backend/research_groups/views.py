@@ -10,6 +10,7 @@ from backend.research_groups.serializers import (
     ResearchGroupSerializer,
     ResearchGroupPostSerializer,
     ResearchGroupLinkSerializer,
+    ResearchGroupDiskSerializer,
 )
 from backend.research_groups.models import (
     ResearchGroup,
@@ -154,6 +155,7 @@ class ResearchGroupPostViewSet(viewsets.ModelViewSet):
 class ResearchGroupLinkViewSet(viewsets.ModelViewSet):
     queryset = ResearchGroupLink.objects.all()
     serializer_class = ResearchGroupLinkSerializer
+    permission_classes = [AllowAny]
 
     @action(detail=False, methods=["post"])
     def groupLinks(self, request):
@@ -164,11 +166,93 @@ class ResearchGroupLinkViewSet(viewsets.ModelViewSet):
                 status=400,
             )
         links = self.get_queryset()
-        researchGroupLinks = links.filter(research_group__id=researchGroupId).all()
+        researchGroupLinks = links.filter(research_group=researchGroupId).all()
         serializer = self.get_serializer(researchGroupLinks, many=True)
         return Response({"researchGroup": researchGroupId, "links": serializer.data})
+
+    @action(detail=False, methods=["post"])
+    def updateLinks(self, request):
+        researchGroupId = request.data["researchGroupId"]
+        if not researchGroupId:
+            return Response(
+                {"researchGroupId": ["'researchGroupId' parameter is required."]},
+                status=400,
+            )
+        links = self.get_queryset()
+        newLinks = request.data["links"]
+
+        researchGroupLinks = links.filter(research_group=researchGroupId).all()
+        researchGroupLinks.delete()
+
+        newLinksResponseList = []
+
+        for newLink in newLinks:
+            newLinkSerialized = self.get_serializer(
+                data={
+                    "research_group": researchGroupId,
+                    "link": newLink["link"],
+                    "name": newLink["name"],
+                    "is_public": newLink["is_public"],
+                    "users": newLink["users"],
+                }
+            )
+            if newLinkSerialized.is_valid():
+                newLinkSerialized.save()
+                newLinksResponseList.append(newLink)
+            else:
+                print(newLinkSerialized.errors)
+
+        return Response({"researchGroup": researchGroupId, "links": newLinksResponseList})
 
 
 class ResearchGroupDiskViewSet(viewsets.ModelViewSet):
     queryset = ResearchGroupDisk.objects.all()
-    serializer_class = ResearchGroupLinkSerializer
+    serializer_class = ResearchGroupDiskSerializer
+    permission_classes = [AllowAny]
+
+    @action(detail=False, methods=["post"])
+    def groupDisks(self, request):
+        researchGroupId = request.data["researchGroupId"]
+        if not researchGroupId:
+            return Response(
+                {"researchGroupId": ["'researchGroupId' parameter is required."]},
+                status=400,
+            )
+        disks = self.get_queryset()
+        researchGroupDisks = disks.filter(research_group=researchGroupId).all()
+        serializer = self.get_serializer(researchGroupDisks, many=True)
+        return Response({"researchGroup": researchGroupId, "disks": serializer.data})
+
+    @action(detail=False, methods=["post"])
+    def updateDisks(self, request):
+        researchGroupId = request.data["researchGroupId"]
+        if not researchGroupId:
+            return Response(
+                {"researchGroupId": ["'researchGroupId' parameter is required."]},
+                status=400,
+            )
+        disks = self.get_queryset()
+        newDisks = request.data["disks"]
+
+        researchGroupDisks = disks.filter(research_group=researchGroupId).all()
+        researchGroupDisks.delete()
+
+        newDisksResponseList = []
+
+        for newDisk in newDisks:
+            newDiskSerialized = self.get_serializer(
+                data={
+                    "research_group": researchGroupId,
+                    "link": newDisk["link"],
+                    "name": newDisk["name"],
+                    "is_public": newDisk["is_public"],
+                    "users": newDisk["users"],
+                }
+            )
+            if newDiskSerialized.is_valid():
+                newDiskSerialized.save()
+                newDisksResponseList.append(newDisk)
+            else:
+                print(newDiskSerialized.errors)
+
+        return Response({"researchGroup": researchGroupId, "disks": newDisksResponseList})

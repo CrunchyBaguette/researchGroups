@@ -102,8 +102,8 @@ export default {
   },
 
   methods: {
-    ...mapActions("researchGroupLink", ["updateResearchGroupLink"]),
-    ...mapActions("researchGroupDisk", ["updateResearchGroupDisk"]),
+    ...mapActions("projectLink", ["updateProjectLink"]),
+    ...mapActions("projectDisk", ["updateProjectDisk"]),
     addMemberToList() {
       if (
         !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(

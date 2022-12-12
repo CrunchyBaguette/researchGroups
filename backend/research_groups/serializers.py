@@ -49,13 +49,21 @@ class ResearchGroupPostSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ResearchGroupLinkSerializer(serializers.ModelSerializer):
+class ResearchGroupLinkSerializer(QuerySerializerMixin, serializers.ModelSerializer):
+    users = serializers.SlugRelatedField(many=True, slug_field="email", queryset=User.objects.all())
+
+    PREFETCH_FIELDS = ["users"]
+
     class Meta:
         model = ResearchGroupLink
         fields = "__all__"
 
 
-class ResearchGroupDiskSerializer(serializers.ModelSerializer):
+class ResearchGroupDiskSerializer(QuerySerializerMixin, serializers.ModelSerializer):
+    users = serializers.SlugRelatedField(many=True, slug_field="email", queryset=User.objects.all())
+
+    PREFETCH_FIELDS = ["users"]
+
     class Meta:
         model = ResearchGroupDisk
         fields = "__all__"

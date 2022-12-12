@@ -49,13 +49,21 @@ class ProjectPostSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ProjectLinkSerializer(serializers.ModelSerializer):
+class ProjectLinkSerializer(QuerySerializerMixin, serializers.ModelSerializer):
+    users = serializers.SlugRelatedField(many=True, slug_field="email", queryset=User.objects.all())
+
+    PREFETCH_FIELDS = ["users"]
+
     class Meta:
         model = ProjectLink
         fields = "__all__"
 
 
-class ProjectDiskSerializer(serializers.ModelSerializer):
+class ProjectDiskSerializer(QuerySerializerMixin, serializers.ModelSerializer):
+    users = serializers.SlugRelatedField(many=True, slug_field="email", queryset=User.objects.all())
+
+    PREFETCH_FIELDS = ["users"]
+
     class Meta:
         model = ProjectDisk
         fields = "__all__"
