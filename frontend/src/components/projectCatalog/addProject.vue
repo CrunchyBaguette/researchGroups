@@ -100,7 +100,7 @@
                   style="flex: 1 0 auto; text-align: right"
                   @click="removeMemberFromList(email)"
                 >
-                  <mdicon name="close" />
+                  <b-icon icon="close" />
                 </div>
               </div>
             </div>

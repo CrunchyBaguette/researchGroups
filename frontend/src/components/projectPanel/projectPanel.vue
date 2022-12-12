@@ -41,7 +41,7 @@
               @click="changeProjectName"
               v-if="!editProjectName && isBeingEdited"
             >
-              <mdicon name="lead-pencil" />
+              <b-icon icon="lead-pencil" />
             </b-button>
           </div>
         </div>
@@ -76,7 +76,7 @@
               @click="changeProjectCategory"
               v-if="!editProjectCategory && isBeingEdited"
             >
-              <mdicon name="lead-pencil" />
+              <b-icon icon="lead-pencil" />
             </b-button>
           </div>
         </div>
@@ -90,7 +90,7 @@
           type="is-success"
           @click="changeToPanelMode"
           :disabled="isButtonDisabled"
-          ><mdicon name="arrow-left" /> Wróć do panelu projektu</b-button
+          ><b-icon icon="arrow-left" /> Wróć do panelu projektu</b-button
         >
       </div>
       <div class="column is-3" id="col" v-else>
@@ -151,7 +151,7 @@
                 @click="changeMembers"
                 v-if="!editMembers && isBeingEdited"
               >
-                <mdicon name="lead-pencil" />
+                <b-icon icon="lead-pencil" />
               </b-button>
             </div>
           </div>
@@ -228,7 +228,7 @@
                 "
                 v-if="editMembers"
               >
-                <div style="flex: 0 1 auto">
+                <div style="flex: 0 1 50%">
                   <b-input v-model="addEmail" style="bottom: 5px"></b-input>
                 </div>
                 <div style="flex: 1 0 auto; text-align: right">
@@ -279,7 +279,7 @@
                 @click="changeProjectDescription"
                 v-if="!editProjectDescription && isBeingEdited"
               >
-                <mdicon name="lead-pencil" />
+                <b-icon icon="lead-pencil" />
               </b-button>
             </div>
           </div>
@@ -307,10 +307,10 @@
               <b-button
                 id="btnSave"
                 class="button is-primary is-success"
-                @click="saveDescription"
+                @click="saveProjectDescription"
                 >Zapisz</b-button
               >
-              <b-button @click="cancelDescription">Anuluj</b-button>
+              <b-button @click="cancelProjectDescription">Anuluj</b-button>
             </div>
           </div>
         </div>
@@ -502,7 +502,7 @@ export default {
       linkId = null,
       linkTitle = null,
       linkUrl = null,
-      linkPublic = null,
+      linkPublic = true,
       linkUsers = []
     ) {
       this.modalMessage = modalMessage;

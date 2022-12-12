@@ -11,7 +11,7 @@ export default {
         return api.delete(`project-disk/${params.diskId}`).then((response) => response.data)
     },
     updateProjectDisk(params) {
-        return api.post(`project-link/${params.DiskId}/`, params.disk).then((response) => response.data)
+        return api.patch(`project-link/${params.DiskId}/`, params.disk).then((response) => response.data)
     },
     updateProjectDisks(params) {
         return api.post(`project-disk/updateDisks/`, params).then((response) => response.data);

@@ -72,7 +72,7 @@
     </section>
     <footer class="modal-card-foot">
       <b-button type="is-success" @click="save">Zapisz</b-button>
-      <b-button type="is-danger" @click="remove">Usuń</b-button>
+      <b-button v-if="linkId" type="is-danger" @click="remove">Usuń</b-button>
       <b-button @click="cancel">Anuluj</b-button>
     </footer>
   </div>
