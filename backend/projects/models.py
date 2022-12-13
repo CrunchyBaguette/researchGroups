@@ -10,7 +10,8 @@ from backend.common.models import Link
 
 class Project(models.Model):
     name = models.CharField(max_length=120, null=False, blank=False)
-    description = models.TextField(blank=True)
+    description = models.TextField(null=False, blank=True)
+    contact = models.TextField(null=False, blank=True)
     deadline = models.DateField(null=True, blank=True)
     funds = models.DecimalField(decimal_places=2, max_digits=20, null=True)
     members = models.ManyToManyField(User, through="ProjectUser")
