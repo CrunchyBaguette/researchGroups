@@ -923,10 +923,6 @@ export default {
           this.aboutUs = response.about_us;
           this.whatWeDo = response.what_we_do;
           this.contact = response.contact;
-          this.$buefy.toast.open({
-            message: "Zaktualizowano koło naukowe",
-            type: "is-success",
-          });
         })
         .catch((err) => {
           this.groupName = this.researchGroup.name;

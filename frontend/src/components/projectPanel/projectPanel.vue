@@ -800,10 +800,6 @@ export default {
           this.projectName = response.name;
           this.projectCategory = response.category;
           this.projectDescription = response.description;
-          this.$buefy.toast.open({
-            message: "Zaktualizowano projekt",
-            type: "is-success",
-          });
         })
         .catch((err) => {
           this.projectName = this.project.name;
