@@ -343,10 +343,7 @@
             />
           </div>
           <div v-else>
-            <b-field
-              :message="aboutUsGiven"
-              :type="aboutUsGiven ? 'is-danger' : ''"
-            >
+            <b-field :type="this.aboutUs ? '' : 'is-danger'">
               <b-input
                 @focus="aboutUsGiven = ''"
                 v-model="aboutUs"
@@ -919,18 +916,29 @@ export default {
           what_we_do: this.whatWeDo,
           contact: this.contact,
         },
-      }).catch((err) => {
-        this.groupName = this.researchGroup.name;
-        this.groupCategory = this.researchGroup.category;
-        this.aboutUs = this.researchGroup.about_us;
-        this.whatWeDo = this.researchGroup.what_we_do;
-        this.contact = this.researchGroup.contact;
-        this.$buefy.toast.open({
-          message: err.response.data[Object.keys(err.response.data)[0]],
-          type: "is-danger",
+      })
+        .then((response) => {
+          this.groupName = response.name;
+          this.groupCategory = response.category;
+          this.aboutUs = response.about_us;
+          this.whatWeDo = response.what_we_do;
+          this.contact = response.contact;
+          this.$buefy.toast.open({
+            message: "Zaktualizowano koło naukowe",
+            type: "is-success",
+          });
+        })
+        .catch((err) => {
+          this.groupName = this.researchGroup.name;
+          this.groupCategory = this.researchGroup.category;
+          this.aboutUs = this.researchGroup.about_us;
+          this.whatWeDo = this.researchGroup.what_we_do;
+          this.contact = this.researchGroup.contact;
+          this.$buefy.toast.open({
+            message: err.response.data[Object.keys(err.response.data)[0]],
+            type: "is-danger",
+          });
         });
-      });
-
       this.updateResearchGroupMembers({
         researchGroupId: this.$route.params.id,
         members: this.members,
@@ -1051,9 +1059,7 @@ export default {
       this.isButtonDisabled = !this.isButtonDisabled;
     },
     saveAboutUs() {
-      if (this.aboutUs === "") {
-        this.aboutUsGiven = "Wypełnij sekcję o nas";
-      } else {
+      if (this.aboutUs != "") {
         this.updateGroupInfo();
         this.changeAboutUs();
       }

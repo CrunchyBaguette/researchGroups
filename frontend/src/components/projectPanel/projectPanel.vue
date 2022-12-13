@@ -291,10 +291,7 @@
             />
           </div>
           <div v-else>
-            <b-field
-              :message="projectDescriptionGiven"
-              :type="projectDescriptionGiven ? 'is-danger' : ''"
-            >
+            <b-field :type="this.projectDescription ? '' : 'is-danger'">
               <b-input
                 @focus="projectDescriptionGiven = ''"
                 v-model="projectDescription"
@@ -798,15 +795,25 @@ export default {
           description: this.projectDescription,
           category: this.projectCategory,
         },
-      }).catch((err) => {
-        this.projectName = this.project.name;
-        this.projectDescription = this.project.description;
-        this.projectCategory = this.project.category;
-        this.$buefy.toast.open({
-          message: err.response.data[Object.keys(err.response.data)[0]],
-          type: "is-danger",
+      })
+        .then((response) => {
+          this.projectName = response.name;
+          this.projectCategory = response.category;
+          this.projectDescription = response.description;
+          this.$buefy.toast.open({
+            message: "Zaktualizowano projekt",
+            type: "is-success",
+          });
+        })
+        .catch((err) => {
+          this.projectName = this.project.name;
+          this.projectDescription = this.project.description;
+          this.projectCategory = this.project.category;
+          this.$buefy.toast.open({
+            message: err.response.data[Object.keys(err.response.data)[0]],
+            type: "is-danger",
+          });
         });
-      });
 
       this.updateProjectMembers({
         projectId: this.$route.params.id,
@@ -907,9 +914,7 @@ export default {
       this.isButtonDisabled = !this.isButtonDisabled;
     },
     saveProjectDescription() {
-      if (this.projectDescription === "") {
-        this.projectDescriptionGiven = "Wypełnij sekcję o nas";
-      } else {
+      if (this.projectDescription != "") {
         this.updateProjectInfo();
         this.changeProjectDescription();
       }

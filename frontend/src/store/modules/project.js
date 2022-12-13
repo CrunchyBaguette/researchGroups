@@ -29,9 +29,9 @@ const actions = {
     },
     getProject({ commit }, params) {
         return new Promise((resolve, reject) => {
-            projectService.fetchProject(params).then((data) => {
-                commit("setProject", data);
-                resolve();
+            projectService.fetchProject(params).then((response) => {
+                commit("setProject", response);
+                resolve(response);
             }).catch((err) => {
                 reject(err);
             });
@@ -39,10 +39,9 @@ const actions = {
     },
     updateProject({ dispatch }, params) {
         return new Promise((resolve, reject) => {
-            projectService.patchProject(params).then(() => {
+            projectService.patchProject(params).then((response) => {
                 dispatch("getProjects");
-                dispatch("getGroupProjects");
-                resolve();
+                resolve(response);
             }).catch((err) => {
                 reject(err);
             });
@@ -50,17 +49,17 @@ const actions = {
     },
     getProjects({ commit }) {
         return new Promise((resolve, reject) => {
-            projectService.fetchProjects().then((data) => {
-                commit("setProjects", data);
-                resolve();
+            projectService.fetchProjects().then((response) => {
+                commit("setProjects", response);
+                resolve(response);
             }).catch((err) => reject(err));
         });
     },
     getGroupProjects({ commit }, group) {
         return new Promise((resolve, reject) => {
-            projectService.fetchGroupProjects(group).then((data) => {
-                commit("setGroupProjects", data);
-                resolve();
+            projectService.fetchGroupProjects(group).then((response) => {
+                commit("setGroupProjects", response);
+                resolve(response);
             }).catch((err) => reject(err));
         });
     },
