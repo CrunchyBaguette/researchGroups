@@ -15,12 +15,12 @@
             <b-field
               :message="invalidProjectName"
               :type="invalidProjectName ? 'is-danger' : ''"
-              label="Nazwa koła"
+              label="Nazwa projektu"
             >
               <b-input
                 @focus="invalidProjectName = ''"
                 v-model="projectName"
-                placeholder="Podaj nazwę koła"
+                placeholder="Podaj nazwę projektu"
                 maxlength="120"
               ></b-input>
             </b-field>
@@ -51,7 +51,7 @@
             {{ projectCategory }}
           </p>
           <div class="div-edit" v-else>
-            <b-field label="Kategoria koła">
+            <b-field label="Kategoria projektu">
               <b-select
                 v-model="projectCategory"
                 placeholder="Wybierz kategorię"
