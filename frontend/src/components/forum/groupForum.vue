@@ -80,9 +80,10 @@ export default {
 
   mounted() {
     document.title = "Forum koła naukowego";
-    this.getForumPosts({researchGroup: this.groupId, userId: this.authUser.id}).then((data) =>{
-            this.loading = true,
-        this.isParticipant = data.isParticipant}
+    this.getForumPosts({researchGroup: this.groupId, userId: this.authUser.id}).then((data) => {
+          this.loading = true,
+              this.isParticipant = data.isParticipant
+        }
     );
   },
 };

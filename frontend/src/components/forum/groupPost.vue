@@ -28,12 +28,6 @@
         <b-button class="button is-success is-rounded mt-2" v-on:click="updatePost">Akceptuj zmiany</b-button>
       </div>
     </div>
-    <!--    <div>-->
-    <!--      <h2>Komentarze: </h2>-->
-    <!--      <div v-for="comment in comments">-->
-    <!--        <Comment></Comment>-->
-    <!--      </div>-->
-    <!--    </div>-->
   </div>
 </template>
 
@@ -50,6 +44,7 @@ export default {
       groupId: this.$route.params.groupId,
       loading: false,
       isUpdate: false,
+      canDelete: false,
     };
   },
 
@@ -93,18 +88,17 @@ export default {
 
       }
     },
-    canDelete() {
+    isDeleting() {
       if (this.forumPost.author.id === this.authUser.id) {
-        return true;
+        this.canDelete = true;
       }
       this.getResearchGroupMembers(this.$route.params.groupId).then((data) => {
         for (let i = 0; i < data.members.length; i++) {
           if (data.members[i]['person'] === this.authUser.email && (data.members[i]['role'] === "Creator" || data.members[i]['role'] === "Moderator")) {
-            return true;
+            this.canDelete = true;
           }
         }
       });
-      return false;
     },
     confirmDeleting() {
       this.$buefy.dialog.confirm({
@@ -147,8 +141,10 @@ export default {
   },
 
   mounted() {
-    this.getForumPost({id: this.postId}).then(() =>
-        this.loading = true
+    this.getForumPost({id: this.postId}).then(() => {
+          this.isDeleting();
+          this.loading = true;
+        }
     );
   },
 };
