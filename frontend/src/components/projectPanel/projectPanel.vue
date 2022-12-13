@@ -383,6 +383,18 @@ export default {
 
       isBeingEdited: false,
       isButtonDisabled: false,
+
+      markdownOptions: {
+        markdownIt: {
+          linkify: true,
+        },
+        linkAttributes: {
+          attrs: {
+            target: "_self",
+            rel: "noopener",
+          },
+        },
+      },
     };
   },
   mounted() {
