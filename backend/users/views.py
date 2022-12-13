@@ -50,7 +50,7 @@ class UserViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=["get"])
     def adminResearchGroups(self, request, pk=None):  # pylint: disable=unused-argument
         user = self.get_object()
-        researchGroupUsers = ResearchGroupUser.objects.filter(person=user, role="mod").all().order_by("name")
+        researchGroupUsers = ResearchGroupUser.objects.filter(person=user, role__in=["mod", "cr"]).all()
         userResearchGroups = [researchGroupUser.research_group for researchGroupUser in researchGroupUsers]
         researchGroupSerializer = ResearchGroupSerializer(userResearchGroups, many=True)
         return Response(researchGroupSerializer.data)
