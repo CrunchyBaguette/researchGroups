@@ -20,6 +20,9 @@ class Project(models.Model):
     research_groups = models.ManyToManyField(ResearchGroup, blank=True)
 
     class Category(models.TextChoices):
+        MATH = "math", "Matematyka"
+        MEDICAL = "med", "Medycyna"
+        CHEMISTRY = "chem", "Chemia"
         DEFAULT = "def", "Default"
 
     category = models.CharField(max_length=20, choices=Category.choices, default=Category.DEFAULT)

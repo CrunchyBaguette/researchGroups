@@ -93,7 +93,11 @@ class ProjectViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         ]
     }
 
-    categoryCodes = {"Default": "def"}
+    categoryCodes = {
+        "Matematyka": "math",
+        "Medycyna": "med",
+        "Chemia": "chem",
+    }
 
     def create(self, request, *args, **kwargs):
         # Obecnie, w przypadku gdy nie ma użytkownika z podanym mailem, tworzony jest

@@ -51,12 +51,14 @@
             {{ projectCategory }}
           </p>
           <div class="div-edit" v-else>
-            <b-field label="Kategoria koła">
+            <b-field label="Kategoria projektu">
               <b-select
                 v-model="projectCategory"
                 placeholder="Wybierz kategorię"
               >
-                <option value="Default">Default</option>
+                <option value="Matematyka">Matematyka</option>
+                <option value="Medycyna">Medycyna</option>
+                <option value="Chemia">Chemia</option>
               </b-select>
             </b-field>
             <div id="btnsDiv">
