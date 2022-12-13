@@ -5,17 +5,20 @@
         <b-button class="button is-success is-rounded"
                   v-on:click="$router.back()">Powrót
         </b-button>
-        <p class="author-decor">{{ forumPost.author.first_name }} {{forumPost.author.last_name}}</p>
+        <p class="author-decor">{{ forumPost.author.first_name }} {{ forumPost.author.last_name }}</p>
       </div>
       <div class="column is-2 is-offset-6">
-        <b-button  v-if="forumPost.author.id === authUser.id && !isUpdate" class="button is-success is-rounded mr-2" v-on:click="showEdit">Edytuj</b-button>
-        <b-button v-if="isUpdate" class="button is-success is-rounded mr-2" v-on:click="isUpdate = false">Anuluj</b-button>
-        <b-button class="button is-success is-rounded" v-if="canDelete1" v-on:click="confirmDeleting">Usuń</b-button>
+        <b-button v-if="forumPost.author.id === authUser.id && !isUpdate" class="button is-success is-rounded mr-2"
+                  v-on:click="showEdit">Edytuj
+        </b-button>
+        <b-button v-if="isUpdate" class="button is-success is-rounded mr-2" v-on:click="isUpdate = false">Anuluj
+        </b-button>
+        <b-button class="button is-success is-rounded" v-if="canDelete" v-on:click="confirmDeleting">Usuń</b-button>
       </div>
     </div>
     <div>
       <p v-if="!isUpdate" class="title">{{ forumPost.title }}</p>
-      <p v-if="!isUpdate" class="postText"> {{ forumPost.text}}</p>
+      <p v-if="!isUpdate" class="postText"> {{ forumPost.text }}</p>
 
       <div v-if="isUpdate">
         <label for="title">Tytuł:</label>
@@ -41,6 +44,7 @@ export default {
       projectId: this.$route.params.projectId,
       loading: false,
       isUpdate: false,
+      canDelete: false,
     };
   },
 
@@ -84,18 +88,17 @@ export default {
 
       }
     },
-    canDelete1() {
+    isDeleting() {
       if (this.forumPost.author.id === this.authUser.id) {
-        return true;
+        this.canDelete = true;
       }
       this.getProjectMembers(this.$route.params.projectId).then((data) => {
         for (let i = 0; i < data.members.length; i++) {
           if (data.members[i]['person'] === this.authUser.email && (data.members[i]['role'] === "Owner" || data.members[i]['role'] === "Moderator")) {
-            return true;
+            this.canDelete = true;
           }
         }
       });
-      return false;
     },
     confirmDeleting() {
       this.$buefy.dialog.confirm({
@@ -133,20 +136,21 @@ export default {
   computed: {
     ...mapGetters("auth", ["authUser"]),
     ...mapState({
-      forumPost: (state) => state.projectPost.forumPost,
+      forumPost: (state) => state.projectPost.forumPost
     }),
   },
 
   mounted() {
-    this.getForumPost({id: this.postId}).then(() =>
-        this.loading = true
-    );
+    this.getForumPost({id: this.postId}).then(() => {
+      this.isDeleting();
+      this.loading = true;
+    })
   },
 };
 </script>
 
 <style scoped>
-.postText{
+.postText {
   white-space: pre-line;
 }
 </style>

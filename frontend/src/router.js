@@ -103,11 +103,6 @@ const router = new Router({
             component: passwordReminder,
         },
 
-        // { strona dla error 404 - router do dowolnego url
-        //     path: '/:pathMatch(.*)*',
-        //     name: 'NotFound',
-        //     component: NotFound
-        // },
 
     ],
 });

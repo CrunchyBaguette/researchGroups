@@ -2,7 +2,7 @@
   <div class="card mx-4 pb-2">
     <div class="px-5">
       <div class="columns m-0">
-        <p class="column is-4 p-1">{{ post.author.first_name }} {{post.author.last_name}}</p>
+        <p class="column is-4 p-1">{{ post.author.first_name }} {{ post.author.last_name }}</p>
         <p class="column is-4 title mb-2">{{ post.title }}</p>
         <p class="column is-4"></p>
       </div>
