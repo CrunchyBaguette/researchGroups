@@ -201,7 +201,9 @@ export default {
     filteredResearchGroupNames() {
       let listNames = [];
       this.filteredResearchGroupArray.map((rg) => {
-        listNames.push(rg.name);
+        if (rg.id != this.$route.params.id) {
+          listNames.push(rg.name);
+        }
       });
       return listNames;
     },

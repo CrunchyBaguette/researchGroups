@@ -413,7 +413,7 @@
             </b-menu-item>
             <b-menu-item label="Dyski" v-if="!isBeingEdited">
               <b-menu-item
-                v-for="disk in disks"
+                v-for="disk in this.canAccessLinks(disks)"
                 :key="disk.name"
                 :label="disk.name"
                 :icon="disk.is_public ? '' : 'lock'"
@@ -423,7 +423,7 @@
             </b-menu-item>
             <b-menu-item label="Dyski" v-else>
               <b-menu-item
-                v-for="disk in disks"
+                v-for="disk in this.canAccessLinks(disks)"
                 :key="disk.name"
                 :label="disk.name"
                 :icon="disk.is_public ? '' : 'lock'"
