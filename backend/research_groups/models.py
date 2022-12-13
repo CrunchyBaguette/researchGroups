@@ -35,7 +35,7 @@ class ResearchGroupUser(models.Model):
         CREATOR = "cr", "Creator"
 
     role = models.CharField(max_length=20, choices=Roles.choices, default=Roles.MEMBER)
-    created = models.DateField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 
 
@@ -62,8 +62,8 @@ class ResearchGroupPostComment(models.Model):
 
 
 class ResearchGroupDisk(Link):
-    project = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
+    research_group = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
 
 
 class ResearchGroupLink(Link):
-    project = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
+    research_group = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
