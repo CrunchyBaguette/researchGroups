@@ -13,10 +13,11 @@
       >
     </div>
     <div id="column-container" class="columns" v-if="loaded">
-      <div id="c1" class="box column is-two-thirds">
+      <div id="c1" class="box column is-two-thirds first-color">
         <div class="columns">
           <div class="column">
             <projectTile
+              class="first-color"
               v-for="project in this.splitToTwoColumns(projects)[0]"
               :key="project.name"
               :project="project"
@@ -26,6 +27,7 @@
           </div>
           <div class="column">
             <projectTile
+              class="first-color"
               v-for="project in this.splitToTwoColumns(projects)[1]"
               :key="project.name"
               :project="project"
@@ -35,7 +37,7 @@
           </div>
         </div>
       </div>
-      <div id="c2" class="box column">
+      <div id="c2" class="box column first-color">
         <projectInfoPanel :project="chosenProject" />
       </div>
     </div>
@@ -104,14 +106,12 @@ export default {
 }
 
 #c1 {
-  background-color: white;
   overflow: auto;
 }
 
 #c2 {
   margin-left: 10px;
   margin-bottom: 1.5rem;
-  background-color: rgb(196, 196, 196);
   overflow: auto;
 }
 

@@ -6,7 +6,7 @@
     <div style="flex: 1 1 auto; overflow: auto; padding: 10px">
       <div class="columns" style="width: 80%; margin: 50px auto">
         <div class="column" style="display: flex; flex-flow: column; margin: 0">
-          <div class="box" style="flex: 1 1 auto">
+          <div class="box first-color" style="flex: 1 1 auto">
             <b-field
               :message="!nameGiven ? 'Proszę podać nazwę koła' : ''"
               :type="!nameGiven ? 'is-danger' : ''"
@@ -69,15 +69,15 @@
           class="column"
           style="display: flex; flex-flow: column; margin: 0; height: 50%"
         >
-          <div style="flex: 1 1 auto" class="box">
+          <div style="flex: 1 1 auto" class="box first-color">
             <p style="font-size: 20px; color: #363636; font-weight: 600">
               Lista członków
             </p>
             <div
+              class="first-color"
               style="
                 width: 100%;
                 height: 400px;
-                background-color: rgb(240, 240, 240);
                 margin-top: 5px;
                 overflow: auto;
               "

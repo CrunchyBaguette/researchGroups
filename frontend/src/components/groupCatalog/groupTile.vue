@@ -1,5 +1,5 @@
 <template>
-  <div id="group-tile" class="box third-color">
+  <div id="group-tile" class="box">
     <div class="groupTileContainer">
       <div class="groupTileTitleContainer">
         <p class="groupTileTitle">{{ group.name }}</p>
@@ -21,7 +21,6 @@ export default {
 
 <style>
 #group-tile {
-  color: black;
   width: 100%;
   height: 150px;
   text-align: center;

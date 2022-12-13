@@ -1,5 +1,5 @@
 <template>
-  <b-navbar class="third-color">
+  <b-navbar class="first-color">
     <template #brand>
       <b-navbar-item tag="router-link" :to="{ name: 'announcements' }">
         <img src="../../assets/logo.png" />
@@ -74,9 +74,6 @@ export default {
 </script>
 
 <style>
-.navbar {
-  background-color: #a0ff42;
-}
 a {
   color: black;
 }

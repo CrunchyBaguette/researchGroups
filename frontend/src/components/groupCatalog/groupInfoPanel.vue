@@ -1,16 +1,13 @@
 <template>
   <div id="group-info-panel" v-if="researchGroup">
     <p class="group-info-panel-title">{{ researchGroup.name }}</p>
-    <div
-      class="box group-info-panel-desc-container"
-      style="background-color: white"
-    >
+    <div class="box group-info-panel-desc-container first-color">
       <p
+        class="first-color"
         style="
           font-size: 30px;
           position: sticky;
           top: 0;
-          background-color: rgb(196, 196, 196);
           border-radius: 10px;
           padding-left: 5px;
         "

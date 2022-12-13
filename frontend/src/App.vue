@@ -8,12 +8,12 @@
         <div class="columns" style="height: 100%">
           <div
             id="sidebar"
-            class="column is-2"
+            class="column is-2 first-color"
             v-if="!this.isLoginOrRegister()"
           >
             <SideBar />
           </div>
-          <div class="column fourth-color">
+          <div class="column first-color">
             <div id="content">
               <router-view />
             </div>

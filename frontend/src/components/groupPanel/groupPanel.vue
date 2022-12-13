@@ -102,9 +102,10 @@
       <div class="columns"></div>
     </div>
     <div class="columns" style="width: 100%">
-      <div class="box column is-3">
+      <div class="box column is-3 first-color">
         <b-button
           id="btn"
+          class="first-color"
           size="is-medium"
           tag="router-link"
           to="/forum"
@@ -114,6 +115,7 @@
         >
         <b-button
           id="btn"
+          class="first-color"
           size="is-medium"
           v-on:click="showAboutUs"
           :disabled="isButtonDisabled"
@@ -121,6 +123,7 @@
         >
         <b-button
           id="btn"
+          class="first-color"
           size="is-medium"
           v-on:click="showWhatWeDo"
           :disabled="isButtonDisabled"
@@ -128,6 +131,7 @@
         >
         <b-button
           id="btn"
+          class="first-color"
           size="is-medium"
           v-on:click="showMembers"
           :disabled="isButtonDisabled"
@@ -135,6 +139,7 @@
         >
         <b-button
           id="btn"
+          class="first-color"
           size="is-medium"
           v-on:click="showContact"
           :disabled="isButtonDisabled"
@@ -142,6 +147,7 @@
         >
         <b-button
           id="btn"
+          class="first-color"
           size="is-medium"
           tag="router-link"
           to="/group-tutorials"
@@ -149,7 +155,7 @@
           >Materiały dydaktyczne</b-button
         >
       </div>
-      <div class="box column is-6" id="centerDiv">
+      <div class="box column is-6 first-color" id="centerDiv">
         <div class="outer" v-if="selectedTabTitle === 'Czym się zajmujemy'">
           <div class="div-title">
             <h2 class="centerDivHeader">{{ selectedTabTitle }}</h2>
@@ -209,17 +215,17 @@
           </div>
           <div class="inner">
             <div
+              class="first-color"
               style="
                 width: 100%;
                 height: 80%;
-                background-color: rgb(240, 240, 240);
                 margin-top: 5px;
                 margin-bottom: 10px;
                 overflow: auto;
               "
             >
               <div
-                class="box"
+                class="box first-color"
                 style="
                   border-radius: 25px;
                   width: 95%;
@@ -269,7 +275,7 @@
                 </div>
               </div>
               <div
-                class="box"
+                class="box first-color"
                 style="
                   border-radius: 25px;
                   width: 95%;
@@ -420,7 +426,7 @@
           </div>
         </div>
       </div>
-      <div class="box column is-3" id="divLinks">
+      <div class="box column is-3 first-color" id="divLinks">
         <b-menu :activable="false" :accordion="false" id="menu">
           <b-menu-list>
             <b-menu-item label="Linki">
