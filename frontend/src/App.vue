@@ -31,9 +31,12 @@ mdiLink.id = "MaterialDesign";
 mdiLink.rel = "stylesheet";
 mdiLink.type = "text/css";
 mdiLink.media = "all";
+
 var mdiRequest = new Request(
   "https://cdn.materialdesignicons.com/5.8.55/css/materialdesignicons.min.css"
 );
+
+
 fetch(mdiRequest)
   .then(function (value) {
     if (value.status == 404) {
@@ -46,6 +49,7 @@ fetch(mdiRequest)
     mdiLink.href =
       "https://cdnjs.cloudflare.com/ajax/libs/materialDesign-Webfont/5.8.55/css/materialdesignicons.min.css";
   });
+
 head.appendChild(mdiLink);
 
 import NavBar from "./components/layout/NavBar.vue";
@@ -66,6 +70,7 @@ export default {
       );
     },
   },
+
 };
 </script>
 

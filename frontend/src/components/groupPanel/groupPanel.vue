@@ -37,7 +37,7 @@
               @click="changeGroupName"
               v-if="!editGroupName && isBeingEdited"
             >
-              <mdicon name="lead-pencil" />
+              <b-icon icon="lead-pencil" />
             </b-button>
           </div>
         </div>
@@ -71,7 +71,7 @@
               @click="changeGroupCategory"
               v-if="!editGroupCategory && isBeingEdited"
             >
-              <mdicon name="lead-pencil" />
+              <b-icon icon="lead-pencil" />
             </b-button>
           </div>
         </div>
@@ -85,7 +85,7 @@
           type="is-success"
           @click="changeToPanelMode"
           :disabled="isButtonDisabled"
-          ><mdicon name="arrow-left" /> Wróć do panelu koła</b-button
+          ><b-icon icon="arrow-left" />&nbsp;&nbsp;Wróć do panelu koła</b-button
         >
       </div>
       <div class="column is-3" id="col" v-else>
@@ -166,7 +166,7 @@
                 @click="changeWhatWeDo"
                 v-if="!editWhatWeDo && isBeingEdited"
               >
-                <mdicon name="lead-pencil" />
+                <b-icon icon="lead-pencil" />
               </b-button>
             </div>
           </div>
@@ -209,7 +209,7 @@
                 @click="changeMembers"
                 v-if="!editMembers && isBeingEdited"
               >
-                <mdicon name="lead-pencil" />
+                <b-icon icon="lead-pencil" />
               </b-button>
             </div>
           </div>
@@ -337,7 +337,7 @@
                 @click="changeAboutUs"
                 v-if="!editAboutUs && isBeingEdited"
               >
-                <mdicon name="lead-pencil" />
+                <b-icon icon="lead-pencil" />
               </b-button>
             </div>
           </div>
@@ -382,7 +382,7 @@
                 @click="changeContact"
                 v-if="!editContact && isBeingEdited"
               >
-                <mdicon name="lead-pencil" />
+                <b-icon icon="lead-pencil" />
               </b-button>
             </div>
           </div>
@@ -523,7 +523,7 @@ export default {
     };
   },
   mounted() {
-    document.title = "Edycja koła";
+    document.title = "Panel koła";
     this.getResearchGroup(this.$route.params.id)
       .then(
         () => (
