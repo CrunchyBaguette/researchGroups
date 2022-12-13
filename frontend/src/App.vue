@@ -8,12 +8,12 @@
         <div class="columns" style="height: 100%">
           <div
             id="sidebar"
-            class="column is-2 first-color"
+            class="column is-2 third-color"
             v-if="!this.isLoginOrRegister()"
           >
             <SideBar />
           </div>
-          <div class="column first-color">
+          <div class="column fifth-color">
             <div id="content">
               <router-view />
             </div>
@@ -35,7 +35,6 @@ mdiLink.media = "all";
 var mdiRequest = new Request(
   "https://cdn.materialdesignicons.com/5.8.55/css/materialdesignicons.min.css"
 );
-
 
 fetch(mdiRequest)
   .then(function (value) {
@@ -70,7 +69,6 @@ export default {
       );
     },
   },
-
 };
 </script>
 

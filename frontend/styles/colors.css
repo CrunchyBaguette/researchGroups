@@ -1,15 +1,19 @@
 .first-color {
-    background: #f4f3f3 !important;
+    background: #05668D !important;
 }
 
 .second-color {
-    background: #dfdfd8 !important;
+    background: #028090 !important;
 }
 
 .third-color {
-    background: #bfd8d5 !important;
+    background: #00A896 !important;
 }
 
 .fourth-color {
-    background: #b1bed5 !important;
+    background: #02C39A !important;
+}
+
+.fifth-color {
+    background: #F0F3BD !important;
 }
