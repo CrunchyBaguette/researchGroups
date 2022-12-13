@@ -37,6 +37,11 @@
         <button id="btnReset" class="button">Zmień hasło</button>
       </form>
     </div>
+    <b-loading
+      :is-full-page="true"
+      v-model="isLoading"
+      :can-cancel="false"
+    ></b-loading>
   </div>
 </template>
 
@@ -49,6 +54,7 @@ export default {
       password: "",
       repeatedPassword: "",
       errors: [],
+      isLoading: false,
     };
   },
   mounted() {
@@ -62,12 +68,13 @@ export default {
         this.errors.push("Hasła się nie zgadzają");
         return;
       }
-      console.log(this.$route.query.token);
+      this.isLoading = true;
       this.resetUserPassword({
         token: this.$route.query.token,
         password: this.password,
       })
         .then(() => {
+          this.isLoading = false;
           this.$buefy.toast.open({
             message: "Pomyślnie zmieniono hasło",
             type: "is-success",
@@ -75,6 +82,7 @@ export default {
           this.$router.replace(this.$route.query.redirect || "/login");
         })
         .catch((err) => {
+          this.isLoading = false;
           this.$buefy.toast.open({
             message: err.response.data[Object.keys(err.response.data)[0]],
             type: "is-danger",

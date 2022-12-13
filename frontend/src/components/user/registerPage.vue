@@ -55,6 +55,11 @@
         <p class="p-login">Zaloguj się.</p>
       </router-link>
     </form>
+    <b-loading
+      :is-full-page="true"
+      v-model="isLoading"
+      :can-cancel="false"
+    ></b-loading>
   </div>
 </template>
 
@@ -74,6 +79,7 @@ export default {
       password: "",
       repeatedPassword: "",
       errors: [],
+      isLoading: false,
     };
   },
   mounted() {
@@ -100,6 +106,7 @@ export default {
         this.errors.push("Hasła się nie zgadzają!");
       }
       if (!this.errors.length) {
+        this.isLoading = true;
         this.registerUser({
           first_name: this.name,
           last_name: this.surname,
@@ -114,12 +121,14 @@ export default {
             this.login = "";
             this.password = "";
             this.repeatedPassword = "";
+            this.isLoading = false;
             this.$buefy.toast.open({
               message: "Wysłano email z linkiem aktywacyjnym",
               type: "is-success",
             });
           })
           .catch((err) => {
+            this.isLoading = false;
             this.$buefy.toast.open({
               message: err.response.data[Object.keys(err.response.data)[0]],
               type: "is-danger",

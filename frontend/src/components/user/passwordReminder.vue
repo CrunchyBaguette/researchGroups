@@ -24,6 +24,11 @@
         <button id="btnReset" class="button">RESETUJ HASŁO</button>
       </form>
     </div>
+    <b-loading
+      :is-full-page="true"
+      v-model="isLoading"
+      :can-cancel="false"
+    ></b-loading>
   </div>
 </template>
   
@@ -34,6 +39,7 @@ export default {
   data() {
     return {
       email: "",
+      isLoading: false,
     };
   },
   mounted() {
@@ -42,14 +48,17 @@ export default {
   methods: {
     ...mapActions("register", ["sendResetEmail"]),
     async submitForm() {
+      this.isLoading = true;
       this.sendResetEmail({ email: this.email })
         .then(() => {
+          this.isLoading = false;
           this.$buefy.toast.open({
             message: "Na podany email wysłano link resetujący hasło",
             type: "is-success",
           });
         })
         .catch(() => {
+          this.isLoading = false;
           this.$buefy.toast.open({
             message: "Użytkownik z podanym adresem email nie istnieje",
             type: "is-danger",
