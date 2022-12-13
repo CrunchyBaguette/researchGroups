@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 //import axios from 'axios'
 //import { toast } from 'bulma-toast'
 
@@ -79,6 +80,7 @@ export default {
     document.title = "Zarejestruj się";
   },
   methods: {
+    ...mapActions("register", ["registerUser"]),
     submitForm() {
       this.errors = [];
 
@@ -97,43 +99,32 @@ export default {
       if (this.password !== this.repeatedPassword) {
         this.errors.push("Hasła się nie zgadzają!");
       }
-
       if (!this.errors.length) {
-        /*
-        const formData = {
-          name: this.name,
-          surname: this.surname,
+        this.registerUser({
+          first_name: this.name,
+          last_name: this.surname,
           email: this.email,
-          login: this.login,
-          password: this.password
-        }
-
-        axios
-          .post("api/v1/users/", formData) 
+          username: this.login,
+          password: this.password,
+        })
           .then(() => {
-            toast({
-              message: 'Konto zostało stworzone, można się zalogować!',
-              type: 'is-success',
-              dismissible: true,
-              pauseOnHover: true,
-              duration: 2000,
-              position: 'bottom-right'
-            })
-
-            this.$router.push('/login')
+            this.name = "";
+            this.surname = "";
+            this.email = "";
+            this.login = "";
+            this.password = "";
+            this.repeatedPassword = "";
+            this.$buefy.toast.open({
+              message: "Wysłano email z linkiem aktywacyjnym",
+              type: "is-success",
+            });
           })
-          .catch(error => {
-            if (error.response){
-              for (const property in error.response.data) {
-                this.errors.push(`${property}: ${error.response.data[property]}`)
-              }
-              console.log(error.response.data);
-            } else if (error.message) {
-              this.errors.push('Coś poszło nie tak. Spróbuj ponownie')
-              console.log(JSON.stringify(error));
-            }
-          })
-          */
+          .catch((err) => {
+            this.$buefy.toast.open({
+              message: err.response.data[Object.keys(err.response.data)[0]],
+              type: "is-danger",
+            });
+          });
       }
     },
   },

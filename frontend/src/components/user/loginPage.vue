@@ -45,9 +45,9 @@
         <p>{{ remindPasswordError }}</p>
       </div>
 
-      <button id="btnOther" class="button" v-on:click="moveToRemindPassword">
+      <router-link id="btnOther" :to="{ name: 'passwordReminder' }">
         Nie pamiętam hasła.
-      </button>
+      </router-link>
 
       <br />
 
@@ -75,9 +75,30 @@ export default {
   },
   mounted() {
     document.title = "Zaloguj się";
+    if (this.$route.query.token) {
+      this.finishRegisterUser(this.$route.query.token)
+        .then(() => {
+          this.$buefy.toast.open({
+            message: "Utworzono konto\nMożna się zalogować",
+            type: "is-success",
+          });
+        })
+        .catch(() => {
+          this.$buefy.toast.open({
+            message: "Niewłaściwy token",
+            type: "is-danger",
+          });
+        });
+    } else if (this.$route.query.message) {
+      this.$buefy.toast.open({
+        message: this.$route.query.message,
+        type: "is-success",
+      });
+    }
   },
   methods: {
     ...mapActions("auth", ["getTokenPairs"]),
+    ...mapActions("register", ["finishRegisterUser"]),
     async submitLoginForm() {
       this.loginBtnErrors = [];
       // if (this.login === '') {

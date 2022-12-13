@@ -11,6 +11,7 @@ import tutorialCatalog from "@/components/tutorialCatalog/tutorialCatalog"
 import loginPage from "@/components/user/loginPage"
 import registerPage from "@/components/user/registerPage"
 import passwordReminder from "@/components/user/passwordReminder"
+import passwordReset from "@/components/user/passwordReset"
 import groupPanel from "@/components/groupPanel/groupPanel"
 import groupTutorials from "@/components/tutorialCatalog/groupTutorials"
 import forum from "@/components/forum/forum"
@@ -83,6 +84,11 @@ const router = new Router({
             path: "/login/password-reminder",
             name: "passwordReminder",
             component: passwordReminder,
+        },
+        {
+            path: "/login/password-reset",
+            name: "passwordReset",
+            component: passwordReset,
         },
 
     ],

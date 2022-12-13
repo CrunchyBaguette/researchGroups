@@ -14,14 +14,10 @@
       <br />
 
       <form @submit.prevent="submitForm">
-        <b-field label="Podaj emaila/jeden z emaili">
+        <b-field label="Podaj adres email">
           <b-input type="email" v-model="email" maxlength="30" required>
           </b-input>
         </b-field>
-
-        <div class="notification is-danger" v-if="errors.length">
-          <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
-        </div>
 
         <br />
 
@@ -32,32 +28,33 @@
 </template>
   
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "passwordReminder",
   data() {
     return {
       email: "",
-      errors: [],
     };
   },
   mounted() {
     document.title = "Przypomnienie";
   },
   methods: {
+    ...mapActions("register", ["sendResetEmail"]),
     async submitForm() {
-      this.errors = [];
-      // if (this.login === '') {
-      //   this.errors.push('Nie podałeś emaila!')
-      // }
-      // axios.defaults.headers.common["Authorization"] = ""
-      // localStorage.removeItem("token")
-      if (!this.errors.length) {
-        // const formData = {
-        //   login: this.username,
-        //   password: this.password
-        // }
-        //code for sending email
-      }
+      this.sendResetEmail({ email: this.email })
+        .then(() => {
+          this.$buefy.toast.open({
+            message: "Na podany email wysłano link resetujący hasło",
+            type: "is-success",
+          });
+        })
+        .catch(() => {
+          this.$buefy.toast.open({
+            message: "Użytkownik z podanym adresem email nie istnieje",
+            type: "is-danger",
+          });
+        });
     },
   },
 };

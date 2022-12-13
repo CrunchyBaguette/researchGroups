@@ -59,7 +59,7 @@ class RegisterView(generics.GenericAPIView):
         token = RefreshToken.for_user(created_user).access_token
         token.lifetime = timedelta(days=1)
 
-        link = generate_registration_link(token, request)
+        link = generate_registration_link(token)
         email = get_registration_email(created_user, link)
         if email.send() == 1:
             logger.info("Email to user %s with register link sent", created_user.username)
@@ -108,7 +108,7 @@ class ResetPasswordRequestView(generics.GenericAPIView):
             token = RefreshToken.for_user(user).access_token
             token.lifetime = timedelta(minutes=30)
 
-            link = generate_reset_pass_link(token, request)
+            link = generate_reset_pass_link(token)
             mail: EmailMultiAlternatives = get_reset_pass_email(user, link)
             if mail.send() == 1:
                 logger.info("Email to user %s with register link sent", user.username)

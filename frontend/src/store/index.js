@@ -9,7 +9,8 @@ import projectMember from "./modules/projectMember";
 import projectPost from "./modules/projectPost";
 import announcement from "./modules/announcement";
 import auth from "./modules/auth";
-import user from "./modules/user"
+import user from "./modules/user";
+import register from "./modules/register";
 
 Vue.use(Vuex);
 
@@ -24,5 +25,6 @@ export default new Vuex.Store({
         announcement,
         user,
         auth,
+        register,
     },
 });
