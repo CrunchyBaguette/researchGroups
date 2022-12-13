@@ -7,10 +7,10 @@
         </b-button>
         <p class="author-decor">{{ forumPost.author.first_name }} {{forumPost.author.last_name}}</p>
       </div>
-      <div class="column is-2 is-offset-6" v-if="forumPost.author.id === authUser.id">
-        <b-button v-if="!isUpdate" class="button is-success is-rounded mr-2" v-on:click="showEdit">Edytuj</b-button>
+      <div class="column is-2 is-offset-6">
+        <b-button  v-if="forumPost.author.id === authUser.id && !isUpdate" class="button is-success is-rounded mr-2" v-on:click="showEdit">Edytuj</b-button>
         <b-button v-if="isUpdate" class="button is-success is-rounded mr-2" v-on:click="isUpdate = false">Anuluj</b-button>
-        <b-button class="button is-success is-rounded" v-on:click="confirmDeleting">Usuń</b-button>
+        <b-button class="button is-success is-rounded" v-if="canDelete1" v-on:click="confirmDeleting">Usuń</b-button>
       </div>
     </div>
     <div>
@@ -48,6 +48,7 @@ export default {
     ...mapActions("projectPost", ["getForumPost"]),
     ...mapActions("projectPost", ["updateForumPost"]),
     ...mapActions("projectPost", ["deleteForumPost"]),
+    ...mapActions("projectMember", ["getProjectMembers"]),
 
     showEdit() {
       this.isUpdate = !this.isUpdate;
@@ -82,6 +83,19 @@ export default {
         );
 
       }
+    },
+    canDelete1() {
+      if (this.forumPost.author.id === this.authUser.id) {
+        return true;
+      }
+      this.getProjectMembers(this.$route.params.projectId).then((data) => {
+        for (let i = 0; i < data.members.length; i++) {
+          if (data.members[i]['person'] === this.authUser.email && (data.members[i]['role'] === "Owner" || data.members[i]['role'] === "Moderator")) {
+            return true;
+          }
+        }
+      });
+      return false;
     },
     confirmDeleting() {
       this.$buefy.dialog.confirm({
