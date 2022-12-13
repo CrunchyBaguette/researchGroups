@@ -56,7 +56,9 @@
                 v-model="projectCategory"
                 placeholder="Wybierz kategorię"
               >
-                <option value="Default">Default</option>
+                <option value="Matematyka">Matematyka</option>
+                <option value="Medycyna">Medycyna</option>
+                <option value="Chemia">Chemia</option>
               </b-select>
             </b-field>
             <div id="btnsDiv">
@@ -130,6 +132,13 @@
           v-on:click="showMembers"
           :disabled="isButtonDisabled"
           >Członkowie</b-button
+        >
+        <b-button
+          id="btn"
+          size="is-medium"
+          v-on:click="showContact"
+          :disabled="isButtonDisabled"
+          >Kontakt</b-button
         >
         <b-button
           id="btn"
@@ -311,6 +320,60 @@
             </div>
           </div>
         </div>
+
+        <div class="outer" v-if="selectedTabTitle === 'Kontakt'">
+          <div class="div-title">
+            <h2 class="centerDivHeader">{{ selectedTabTitle }}</h2>
+            <div id="btnsDiv">
+              <b-button
+                :disabled="isButtonDisabled"
+                id="btnPencil"
+                @click="changeProjectContact"
+                v-if="!editProjectContact && isBeingEdited"
+              >
+                <b-icon icon="lead-pencil" />
+              </b-button>
+            </div>
+          </div>
+          <div class="inner" v-if="!editProjectContact">
+            <markdown-it-vue
+              class="md-body"
+              :content="projectContact"
+              :options="markdownOptions"
+            />
+            <div class="container-send-email">
+              <button
+                class="button"
+                id="btnSendEmail"
+                @click="popupEmail = !popupEmail"
+              >
+                WYŚLIJ WIADOMOŚĆ
+              </button>
+
+              <popupEmail v-if="popupEmail" @close="popupEmail = false" />
+            </div>
+          </div>
+          <div v-else>
+            <b-field>
+              <b-input
+                v-model="projectContact"
+                id="editableText"
+                type="textarea"
+                size="is-medium"
+              >
+              </b-input>
+            </b-field>
+            <div id="btnsDiv">
+              <b-button
+                id="btnSave"
+                class="button is-primary is-success"
+                @click="saveProjectContact"
+                >Zapisz</b-button
+              >
+              <b-button @click="cancelProjectContact">Anuluj</b-button>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="box column is-3" id="divLinks">
         <b-menu :activable="false" :accordion="false" id="menu">
@@ -404,12 +467,14 @@
 
 <script>
 import editLinkModal from "@/components/projectPanel/editLink.vue";
+import popupEmail from "@/components/popup/PopupEmail.vue";
 import { mapActions, mapState, mapGetters } from "vuex";
 
 export default {
   name: "projectPanel",
   components: {
     editLinkModal,
+    popupEmail,
   },
   data() {
     return {
@@ -438,6 +503,11 @@ export default {
 
       projectDescription: "",
       editProjectDescription: false,
+
+      projectContact: "",
+      editProjectContact: false,
+
+      popupEmail: false,
 
       members: [],
       editMembers: false,
@@ -469,7 +539,8 @@ export default {
         () => (
           (this.projectName = this.project.name),
           (this.projectCategory = this.project.category),
-          (this.projectDescription = this.project.description)
+          (this.projectDescription = this.project.description),
+          (this.projectContact = this.project.contact)
         )
       )
       .then(() => {
@@ -794,17 +865,20 @@ export default {
           name: this.projectName,
           description: this.projectDescription,
           category: this.projectCategory,
+          contact: this.projectContact,
         },
       })
         .then((response) => {
           this.projectName = response.name;
           this.projectCategory = response.category;
           this.projectDescription = response.description;
+          this.projectContact = response.contact;
         })
         .catch((err) => {
           this.projectName = this.project.name;
           this.projectDescription = this.project.description;
           this.projectCategory = this.project.category;
+          this.projectContact = this.project.contact;
           this.$buefy.toast.open({
             message: err.response.data[Object.keys(err.response.data)[0]],
             type: "is-danger",
@@ -859,6 +933,9 @@ export default {
     },
     showMembers() {
       this.selectedTabTitle = "Członkowie";
+    },
+    showContact() {
+      this.selectedTabTitle = "Kontakt";
     },
 
     changeProjectName() {
@@ -919,6 +996,18 @@ export default {
       this.projectDescription = this.project.description;
       this.changeProjectDescription();
     },
+    changeProjectContact() {
+      this.editProjectContact = !this.editProjectContact;
+      this.isButtonDisabled = !this.isButtonDisabled;
+    },
+    saveProjectContact() {
+      this.updateProjectInfo();
+      this.changeProjectContact();
+    },
+    cancelProjectContact() {
+      this.projectContact = this.project.contact;
+      this.changeProjectContact();
+    },
     changeToPanelMode() {
       this.isBeingEdited = false;
     },
@@ -936,7 +1025,8 @@ export default {
           () => (
             (this.projectName = this.project.name),
             (this.projectCategory = this.project.category),
-            (this.projectDescription = this.project.description)
+            (this.projectDescription = this.project.description),
+            (this.projectContact = this.project.contact)
           )
         )
         .then(() => {

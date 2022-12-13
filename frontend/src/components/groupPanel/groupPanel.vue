@@ -580,7 +580,7 @@ export default {
     };
   },
   mounted() {
-    document.title = "Edycja koła";
+    document.title = "Panel koła";
     this.getResearchGroup(this.$route.params.id)
       .then(
         () => (

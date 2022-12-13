@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import announcements from "@/components/announcements/announcements"
+import announcementsCatalog from "@/components/announcementCatalog/announcementCatalog"
+import addAnnouncement from "@/components/announcementCatalog/addAnnouncement"
+import announcementPanel from "@/components/announcementPanel/announcementPanel"
 import groupCatalog from "@/components/groupCatalog/groupCatalog"
 import addGroup from "@/components/groupCatalog/addGroup"
 import projectCatalog from "@/components/projectCatalog/projectCatalog"
@@ -22,7 +24,17 @@ const router = new Router({
         {
             path: "/",
             name: "announcements",
-            component: announcements,
+            component: announcementsCatalog,
+        },
+        {
+            path: "/announcement/:id",
+            name: "announcement",
+            component: announcementPanel,
+        },
+        {
+            path: "/add-announcement",
+            name: "addAnnouncement",
+            component: addAnnouncement,
         },
         {
             path: "/group-catalog",
