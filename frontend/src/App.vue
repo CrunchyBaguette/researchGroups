@@ -13,7 +13,7 @@
           >
             <SideBar />
           </div>
-          <div class="column" style="background-color: #fad6a5">
+          <div class="column fourth-color">
             <div id="content">
               <router-view />
             </div>
@@ -70,6 +70,8 @@ export default {
 </script>
 
 <style>
+@import "../styles/colors.css";
+
 html,
 body {
   height: 100%;

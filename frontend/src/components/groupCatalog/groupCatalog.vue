@@ -13,7 +13,7 @@
       >
     </div>
     <div id="column-container" class="columns" v-if="loaded">
-      <div id="c1" class="box column is-two-thirds">
+      <div id="c1" class="box column is-two-thirds second-color">
         <div class="columns">
           <div class="column">
             <groupTile

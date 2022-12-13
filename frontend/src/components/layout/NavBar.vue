@@ -1,5 +1,5 @@
 <template>
-  <b-navbar>
+  <b-navbar class="third-color">
     <template #brand>
       <b-navbar-item tag="router-link" :to="{ name: 'announcements' }">
         <img src="../../assets/logo.png" />
