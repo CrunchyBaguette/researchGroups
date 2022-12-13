@@ -95,7 +95,7 @@ export default {
       announcementTitle: "",
       announcementContent: "",
       announcementCategory: "",
-      announcementGroup: "",
+      announcementGroup: 0,
       groupGiven: true,
       titleGiven: true,
       contentGiven: true,
@@ -110,7 +110,7 @@ export default {
     ...mapActions("user", ["getUserAdminResearchGroups"]),
 
     clicked() {
-      if (this.announcementGroup == "") this.groupGiven = false;
+      if (this.announcementGroup == 0) this.groupGiven = false;
       if (this.announcementTitle == "") this.titleGiven = false;
       if (this.announcementCategory == "") this.categoryGiven = false;
       if (this.announcementContent == "") this.contentGiven = false;
@@ -147,7 +147,7 @@ export default {
             });
           });
         
-        this.announcementGroup = "";
+        this.announcementGroup = 0;
         this.announcementTitle = "";
         this.announcementContent = "";
         this.announcementCategory = "";

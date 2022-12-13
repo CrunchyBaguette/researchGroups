@@ -73,8 +73,8 @@ export default {
     ...mapActions("user", ["getUserAdminResearchGroups"]),
 
     isAdminOrOwner() {
-      console.log('Koła: ' + this.userAdminGroups.toString());
-      console.log(announcement.research_group_name);
+      //console.log('Koła: ' + this.userAdminGroups.toString());
+      //console.log(announcement.research_group_name);
       if (
         this.isAuthenticated &&
         this.userAdminGroups.length >= 1

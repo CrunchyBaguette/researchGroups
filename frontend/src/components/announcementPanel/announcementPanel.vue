@@ -54,10 +54,10 @@
                 <div class="div-edit" v-else>
                   <b-field label="Twoje koła">
                     <b-select
-                      v-model="announcementGroup"
+                      v-model="selectedGroup[0]"
                       placeholder="Wybierz koło"
                     >
-                      <option :value="group.name" v-for="group in userAdminGroups" v-bind:key="group.id">
+                      <option :value="group" v-for="group in userAdminGroups" v-bind:key="group.id">
                         {{ group.name }}
                       </option>
                     </b-select>
@@ -264,8 +264,11 @@ export default {
       announcementAuthor: "",
       announcementAuthorId: 0,
 
+      userAdminGroups: [],
+
       announcementGroup: "",
       announcementGroupId: 0,
+      selectedGroup: [{}],
       editAnnouncementGroup: false,
 
       //beforeEditAnnouncementDate: "12.08.2022 21:21",
@@ -274,12 +277,11 @@ export default {
 
       isBeingEdited: false,
       isButtonDisabled: false,
-
-      userAdminGroups: [],
     };
   },
   mounted() {
     document.title = "Panel ogłoszenia";
+
     this.getAnnouncement(this.$route.params.id)
       .then(
         () => (
@@ -297,16 +299,20 @@ export default {
       .then(() => {
         this.loading = false;
       });
-
-    this.getUserAdminResearchGroups(this.authUser.id)
-      .then(
-        () => {
-          this.userAdminGroups = this.userAdminResearchGroups;
-        }
-      )
-      .then(() => {
-        this.loading = false;
-      });
+    if (this.isAuthenticated) {
+      this.getUserAdminResearchGroups(this.authUser.id) 
+        .then(
+          () => {
+            this.userAdminGroups = this.userAdminResearchGroups;
+            this.selectedGroup = this.userAdminGroups.filter(element => element.id == this.announcementGroupId);
+            //console.log(this.selectedGroup[0].name);
+          }
+        )
+        .then(() => {
+          this.loading = false;
+        });
+    }
+    
   },
   methods: {
     ...mapActions("announcement", ["getAnnouncement", "updateAnnouncement"]),
@@ -324,6 +330,8 @@ export default {
     },
 
     updateAnnouncementInfo() {
+      this.announcementGroupId = this.selectedGroup[0].id;
+      this.announcementGroup = this.selectedGroup[0].name;
       this.updateAnnouncement({
         id: this.$route.params.id,
         payload: {
