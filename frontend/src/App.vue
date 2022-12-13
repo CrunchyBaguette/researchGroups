@@ -9,7 +9,7 @@
           <div
             id="sidebar"
             class="column is-2"
-            v-if="!this.isLoginOrRegister()"
+            v-if="this.isAuthenticated && !this.isLoginOrRegister()"
           >
             <SideBar />
           </div>
@@ -54,6 +54,7 @@ head.appendChild(mdiLink);
 
 import NavBar from "./components/layout/NavBar.vue";
 import SideBar from "./components/layout/SideBar.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "App",
@@ -70,6 +71,10 @@ export default {
       );
     },
   },
+  computed: {
+    ...mapGetters("auth", ["authUser", "isAuthenticated"]),
+  },
+
 };
 </script>
 
