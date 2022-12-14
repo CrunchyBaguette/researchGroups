@@ -85,15 +85,28 @@
         <br />
       </div>
       <div class="column is-3" id="col" v-if="isBeingEdited">
-        <b-button
-          id="title"
-          rounded
-          size="is-medium"
-          type="is-success"
-          @click="changeToPanelMode"
-          :disabled="isButtonDisabled"
-          ><b-icon icon="arrow-left" /> Wróć do panelu projektu</b-button
-        >
+        <div style="display: flex; flex-direction: column">
+          <b-button
+            id="title"
+            rounded
+            size="is-medium"
+            type="is-success"
+            @click="changeToPanelMode"
+            :disabled="isButtonDisabled"
+            ><b-icon icon="arrow-left" />&nbsp;&nbsp;Wróć do panelu
+            projektu</b-button
+          >
+          <b-button
+            id="title"
+            rounded
+            style="margin-top: 10px"
+            size="is-medium"
+            type="is-danger"
+            v-if="this.project.project_owner == this.authUser.username"
+            @click="deleteProjectConfirmation"
+            >Usuń projekt</b-button
+          >
+        </div>
       </div>
       <div class="column is-3" id="col" v-else>
         <b-button
@@ -563,7 +576,7 @@ export default {
       });
   },
   methods: {
-    ...mapActions("project", ["getProject", "updateProject"]),
+    ...mapActions("project", ["getProject", "updateProject", "removeProject"]),
     ...mapActions("projectMember", [
       "getProjectMembers",
       "updateProjectMembers",
@@ -901,10 +914,35 @@ export default {
             type: "is-danger",
           });
         });
+    },
 
-      // this.getResearchGroupMembers(this.$route.params.id).then((response) => {
-      //   this.members = response.members;
-      // });
+    deleteProjectConfirmation() {
+      this.$buefy.dialog.confirm({
+        title: "Usuwanie projektu",
+        message:
+          "<b>Czy na pewno chcesz usunąć projekt?</b></br>Wraz z projektem usunięte zostaną wpisy forum, linki oraz dyski",
+        confirmText: "Usuń projekt",
+        type: "is-danger",
+        hasIcon: true,
+        onConfirm: () => this.deleteProject(),
+      });
+    },
+
+    deleteProject() {
+      this.removeProject(this.$route.params.id)
+        .then(() => {
+          this.$router.push("/project-catalog");
+          this.$buefy.toast.open({
+            message: "Projekt został usunięty",
+            type: "is-success",
+          });
+        })
+        .catch((err) => {
+          this.$buefy.toast.open({
+            message: err.response.data[Object.keys(err.response.data)[0]],
+            type: "is-danger",
+          });
+        });
     },
 
     addMemberToList() {

@@ -43,6 +43,16 @@ const actions = {
             });
         });
     },
+    removeResearchGroup({ dispatch }, researchGroupId) {
+        return new Promise((resolve, reject) => {
+            researchGroupService.deleteGroup(researchGroupId).then(() => {
+                dispatch("getResearchGroups");
+                resolve();
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    },
     getResearchGroups({ commit }) {
         return new Promise((resolve, reject) => {
             researchGroupService.fetchGroups().then((response) => {
