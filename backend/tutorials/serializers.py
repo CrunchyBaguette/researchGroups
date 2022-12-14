@@ -45,6 +45,8 @@ class TutorialEditSerializer(serializers.ModelSerializer):
             if instance.owner not in users:
                 users.append(instance.owner)
             editors = users
+        elif instance.owner not in editors:
+            editors.append(instance.owner)
 
         instance.title = validated_data.get("title", instance.title)
         instance.text = validated_data.get("text", instance.text)
