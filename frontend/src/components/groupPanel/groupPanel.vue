@@ -78,15 +78,28 @@
         <br />
       </div>
       <div class="column is-3" id="col" v-if="isBeingEdited">
-        <b-button
-          id="title"
-          rounded
-          size="is-medium"
-          type="is-success"
-          @click="changeToPanelMode"
-          :disabled="isButtonDisabled"
-          ><b-icon icon="arrow-left" /> Wróć do panelu koła</b-button
-        >
+        <div style="display: flex; flex-direction: column">
+          <b-button
+            id="title"
+            rounded
+            size="is-medium"
+            type="is-success"
+            @click="changeToPanelMode"
+            :disabled="isButtonDisabled"
+            ><b-icon icon="arrow-left" />&nbsp;&nbsp;Wróć do panelu
+            koła</b-button
+          >
+          <b-button
+            id="title"
+            rounded
+            style="margin-top: 10px"
+            size="is-medium"
+            type="is-danger"
+            v-if="this.researchGroup.group_owner == this.authUser.username"
+            @click="deleteGroupConfirmation"
+            >Usuń koło naukowe</b-button
+          >
+        </div>
       </div>
       <div class="column is-3" id="col" v-else>
         <b-button
@@ -617,7 +630,11 @@ export default {
       });
   },
   methods: {
-    ...mapActions("researchGroup", ["getResearchGroup", "updateResearchGroup"]),
+    ...mapActions("researchGroup", [
+      "getResearchGroup",
+      "updateResearchGroup",
+      "removeResearchGroup",
+    ]),
     ...mapActions("researchGroupMember", [
       "getResearchGroupMembers",
       "updateResearchGroupMembers",
@@ -959,10 +976,35 @@ export default {
             type: "is-danger",
           });
         });
+    },
 
-      // this.getResearchGroupMembers(this.$route.params.id).then((response) => {
-      //   this.members = response.members;
-      // });
+    deleteGroupConfirmation() {
+      this.$buefy.dialog.confirm({
+        title: "Usuwanie koła naukowego",
+        message:
+          "<b>Czy na pewno chcesz usunąć koło naukowe?</b></br>Wraz z kołem naukowym usunięte zostaną wpisy forum, linki oraz dyski",
+        confirmText: "Usuń koło naukowe",
+        type: "is-danger",
+        hasIcon: true,
+        onConfirm: () => this.deleteGroup(),
+      });
+    },
+
+    deleteGroup() {
+      this.removeResearchGroup(this.$route.params.id)
+        .then(() => {
+          this.$router.push("/group-catalog");
+          this.$buefy.toast.open({
+            message: "Koło naukowe zostało usunięte",
+            type: "is-success",
+          });
+        })
+        .catch((err) => {
+          this.$buefy.toast.open({
+            message: err.response.data[Object.keys(err.response.data)[0]],
+            type: "is-danger",
+          });
+        });
     },
 
     addMemberToList() {

@@ -47,6 +47,17 @@ const actions = {
             });
         });
     },
+    removeProject({ dispatch }, projectId) {
+        return new Promise((resolve, reject) => {
+            projectService.deleteProject(projectId).then(() => {
+                dispatch("getProjects");
+                dispatch("getGroupProjects");
+                resolve();
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    },
     getProjects({ commit }) {
         return new Promise((resolve, reject) => {
             projectService.fetchProjects().then((response) => {
