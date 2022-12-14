@@ -1,22 +1,16 @@
 <template>
   <div id="app">
-    <div class="columns" style="height: 100%">
-      <div class="column">
-        <div>
-          <NavBar :loginOrRegister="this.isLoginOrRegister()" />
+    <div>
+      <NavBar :loginOrRegister="this.isLoginOrRegister()" />
+    </div>
+    <div style="height: 100%">
+      <div class="columns" style="height: 100%; margin-top: 0">
+        <div id="sidebar" class="column is-2" v-if="!this.isLoginOrRegister()">
+          <SideBar />
         </div>
-        <div class="columns" style="height: 100%">
-          <div
-            id="sidebar"
-            class="column is-2"
-            v-if="!this.isLoginOrRegister()"
-          >
-            <SideBar />
-          </div>
-          <div class="column" style="background-color: #fad6a5">
-            <div id="content">
-              <router-view />
-            </div>
+        <div class="column" style="background-color: #fad6a5">
+          <div id="content">
+            <router-view />
           </div>
         </div>
       </div>
@@ -87,7 +81,8 @@ body {
 
 #app {
   height: 100%;
-  overflow: hidden;
+  display: flex;
+  flex-flow: column;
 }
 
 #sidebar {

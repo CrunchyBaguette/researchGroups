@@ -1,4 +1,5 @@
 import axios from "axios";
+import store from "@/store"
 
 const api = axios.create({
     baseURL: "http://localhost:8000/api", //tu najlepiej żeby to dało się zmienić w jednym miejscu najlepiej żeby można to było ustawić w czasie buildu
@@ -27,6 +28,7 @@ api.interceptors.response.use(
     },
     function (error) {
         pendingRequests--;
+        store.dispatch["auth/logOut"];
         return Promise.reject(error);
     }
 );

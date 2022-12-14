@@ -9,11 +9,15 @@ from backend.projects.serializers import (
     ProjectSerializer,
     ProjectUserSerializer,
     ProjectPostSerializer,
+    ProjectLinkSerializer,
+    ProjectDiskSerializer,
 )
 from backend.projects.models import (
     Project,
     ProjectPost,
     ProjectUser,
+    ProjectLink,
+    ProjectDisk,
 )
 
 from backend.common.views import PermissionPolicyMixin
@@ -162,3 +166,109 @@ class ProjectPostViewSet(viewsets.ModelViewSet):
         postsQueryset = ProjectPost.objects.filter(project=project).order_by("added").all()
         serializer = self.get_serializer(postsQueryset, many=True)
         return Response({"project": project, "posts": serializer.data})
+
+
+class ProjectLinkViewSet(viewsets.ModelViewSet):
+    queryset = ProjectLink.objects.all()
+    serializer_class = ProjectLinkSerializer
+    permission_classes = [AllowAny]
+
+    @action(detail=False, methods=["post"])
+    def projectLinks(self, request):
+        projectId = request.data["projectId"]
+        if not projectId:
+            return Response(
+                {"projectId": ["'projectId' parameter is required."]},
+                status=400,
+            )
+        links = self.get_queryset()
+        projectLinks = links.filter(project=projectId).all()
+        serializer = self.get_serializer(projectLinks, many=True)
+        return Response({"project": projectId, "links": serializer.data})
+
+    @action(detail=False, methods=["post"])
+    def updateLinks(self, request):
+        projectId = request.data["projectId"]
+        if not projectId:
+            return Response(
+                {"projectId": ["'projectId' parameter is required."]},
+                status=400,
+            )
+        links = self.get_queryset()
+        newLinks = request.data["links"]
+
+        projectLinks = links.filter(project=projectId).all()
+        projectLinks.delete()
+
+        newLinksResponseList = []
+
+        for newLink in newLinks:
+            newLinkSerialized = self.get_serializer(
+                data={
+                    "project": projectId,
+                    "link": newLink["link"],
+                    "name": newLink["name"],
+                    "is_public": newLink["is_public"],
+                    "users": newLink["users"],
+                }
+            )
+            if newLinkSerialized.is_valid():
+                newLinkSerialized.save()
+                newLinksResponseList.append(newLink)
+            else:
+                print(newLinkSerialized.errors)
+
+        return Response({"project": projectId, "links": newLinksResponseList})
+
+
+class ProjectDiskViewSet(viewsets.ModelViewSet):
+    queryset = ProjectDisk.objects.all()
+    serializer_class = ProjectDiskSerializer
+    permission_classes = [AllowAny]
+
+    @action(detail=False, methods=["post"])
+    def projectDisks(self, request):
+        projectId = request.data["projectId"]
+        if not projectId:
+            return Response(
+                {"projectId": ["'projectId' parameter is required."]},
+                status=400,
+            )
+        disks = self.get_queryset()
+        projectDisks = disks.filter(project=projectId).all()
+        serializer = self.get_serializer(projectDisks, many=True)
+        return Response({"project": projectId, "disks": serializer.data})
+
+    @action(detail=False, methods=["post"])
+    def updateDisks(self, request):
+        projectId = request.data["projectId"]
+        if not projectId:
+            return Response(
+                {"projectId": ["'projectId' parameter is required."]},
+                status=400,
+            )
+        disks = self.get_queryset()
+        newDisks = request.data["disks"]
+
+        projectDisks = disks.filter(project=projectId).all()
+        projectDisks.delete()
+
+        newDisksResponseList = []
+
+        for newDisk in newDisks:
+            newDiskSerialized = self.get_serializer(
+                data={
+                    "project": projectId,
+                    "link": newDisk["link"],
+                    "name": newDisk["name"],
+                    "is_public": newDisk["is_public"],
+                    "users": newDisk["users"],
+                }
+            )
+            if newDiskSerialized.is_valid():
+                newDiskSerialized.save()
+                newDisksResponseList.append(newDisk)
+            else:
+                print(newDiskSerialized.errors)
+
+        return Response({"project": projectId, "disks": newDisksResponseList})
