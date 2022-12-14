@@ -41,16 +41,16 @@ def run():
 
 
 def dropTables():
-    # DeleteTableData("projects_projectlink_users")
+    DeleteTableData("projects_projectlink_users")
     DeleteTableData("projects_projectlink")
-    # DeleteTableData("projects_projectdisk_users")
+    DeleteTableData("projects_projectdisk_users")
     DeleteTableData("projects_projectdisk")
     DeleteTableData("projects_projectpostcomment")
     DeleteTableData("projects_projectpost")
     DeleteTableData("research_groups_researchgroupguide")
-    # DeleteTableData("research_groups_researchgrouplink_users")
+    DeleteTableData("research_groups_researchgrouplink_users")
     DeleteTableData("research_groups_researchgrouplink")
-    # DeleteTableData("research_groups_researchgroupdisk_users")
+    DeleteTableData("research_groups_researchgroupdisk_users")
     DeleteTableData("research_groups_researchgroupdisk")
     DeleteTableData("research_groups_researchgrouppostcomment")
     DeleteTableData("research_groups_researchgrouppost")
