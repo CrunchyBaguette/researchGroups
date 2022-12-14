@@ -1,12 +1,15 @@
 from typing import Any
+
+from django.db.models import QuerySet
+from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.decorators import action
 from rest_framework.serializers import BaseSerializer
 
 from backend.projects.models import Project
+from backend.research_groups.models import ResearchGroup
 from backend.users.views import PermissionPolicyMixin
 from backend.tutorials.models import Tutorial, Rating
 from backend.tutorials.serializers import TutorialSerializer, TutorialEditSerializer
@@ -14,7 +17,7 @@ from backend.tutorials.permissions import IsTutorialEditor, IsTutorialOwner
 
 
 class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
-    queryset = Tutorial.objects.all().order_by("created")
+    queryset = Tutorial.objects.filter(is_public=True).order_by("created")
     permission_classes = [AllowAny]
     permission_classes_per_method = {
         "create": [IsAuthenticated],
@@ -56,3 +59,17 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
             return TutorialEditSerializer
 
         return TutorialSerializer
+
+    def get_queryset(self) -> QuerySet:
+        if self.action == "list":
+            if self.request.user.is_authenticated:
+                return Tutorial.objects.filter(is_public=True).order_by("created")
+            else:
+                if projectId := self.request.GET.get("projectId", None):
+                    project: Project = Project.objects.get(id=projectId)
+                    return project.guides.filter(is_public=True)
+                elif researchGroupId := self.request.GET.get("researchGroupId", None):
+                    research_group: researchGroupId = ResearchGroup.objects.get(id=researchGroupId)
+                    return research_group.guides.filter(is_public=True)
+
+        return Tutorial.objects.filter(is_public=True).order_by("created")

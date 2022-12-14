@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.serializers import raise_errors_on_nested_writes
 from django.contrib.auth.models import User
 from backend.users.serializers import UserSerializer
 from backend.tutorials.models import Tutorial, Rating
@@ -15,15 +16,22 @@ class TutorialSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ["created", "edited", "editable"]
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["type"] = instance.get_type_display()
+        return representation
+
 
 class TutorialEditSerializer(serializers.ModelSerializer):
     def update(self, instance: Tutorial, validated_data):
+        raise_errors_on_nested_writes("update", self, validated_data)
         editors = validated_data.get("editors", [])
         if not editors:
             editors = instance.editors.all()
 
         if instance.owner not in editors:
             editors.append(instance.owner.id)
+
         instance.title = validated_data.get("title", instance.title)
         instance.text = validated_data.get("text", instance.text)
         instance.is_draft = validated_data.get("is_draft", instance.is_draft)
@@ -31,6 +39,7 @@ class TutorialEditSerializer(serializers.ModelSerializer):
         ids = [o.id for o in editors]
         editors_to_remove = instance.editors.exclude(id__in=ids)
         instance.save()
+
         for editor in editors:
             instance.editors.add(editor)
         for editor in editors_to_remove:
