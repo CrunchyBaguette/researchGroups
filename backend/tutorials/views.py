@@ -27,7 +27,7 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     }
 
     def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        serializer: TutorialEditSerializer = self.get_serializer(data=request.data)
+        serializer: TutorialEditSerializer = self.get_serializer(data=request.data)  # type: ignore
         serializer.is_valid(raise_exception=True)
         serializer.validated_data["owner"] = request.user
         if request.user.id not in serializer.validated_data["editors"]:
@@ -46,7 +46,7 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        serializer: TutorialSerializer = self.get_serializer(queryset, many=True)
+        serializer: TutorialSerializer = self.get_serializer(queryset, many=True)  # type: ignore
         if request.user.is_authenticated:
             is_editor_of = Tutorial.objects.filter(editors=request.user)
             for tut in serializer.data:
@@ -64,12 +64,12 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         if self.action == "list":
             if self.request.user.is_authenticated:
                 return Tutorial.objects.filter(is_public=True).order_by("created")
-            else:
-                if projectId := self.request.GET.get("projectId", None):
-                    project: Project = Project.objects.get(id=projectId)
-                    return project.guides.filter(is_public=True)
-                elif researchGroupId := self.request.GET.get("researchGroupId", None):
-                    research_group: researchGroupId = ResearchGroup.objects.get(id=researchGroupId)
-                    return research_group.guides.filter(is_public=True)
+
+            if projectId := self.request.GET.get("projectId", None):
+                project: Project = Project.objects.get(id=projectId)
+                return project.guides.filter(is_public=True)
+            if researchGroupId := self.request.GET.get("researchGroupId", None):
+                research_group: ResearchGroup = ResearchGroup.objects.get(id=researchGroupId)
+                return research_group.guides.filter(is_public=True)
 
         return Tutorial.objects.filter(is_public=True).order_by("created")

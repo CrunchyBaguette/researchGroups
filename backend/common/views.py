@@ -26,9 +26,6 @@ logger = getLogger(__name__)
 
 
 class PermissionPolicyMixin(APIView):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def check_permissions(self, request):
         try:
             # This line is heavily inspired from `APIView.dispatch`.
