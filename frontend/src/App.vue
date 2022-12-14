@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <div class="columns" style="height: 100%">
-      <div class="column">
-        <div>
-          <NavBar :loginOrRegister="this.isLoginOrRegister()" />
-        </div>
+    <div>
+      <NavBar :loginOrRegister="this.isLoginOrRegister()" />
+    </div>
+    <div style="height: 100%">
+      <div class="columns" style="height: 100%; margin-top: 0">
         <div class="columns" style="height: 100%">
           <div
             id="sidebar"
@@ -87,7 +87,8 @@ body {
 
 #app {
   height: 100%;
-  overflow: hidden;
+  display: flex;
+  flex-flow: column;
 }
 
 #sidebar {

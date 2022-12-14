@@ -25,9 +25,9 @@ const actions = {
     },
     getResearchGroup({ commit }, params) {
         return new Promise((resolve, reject) => {
-            researchGroupService.fetchGroup(params).then((data) => {
-                commit("setGroup", data);
-                resolve();
+            researchGroupService.fetchGroup(params).then((response) => {
+                commit("setGroup", response);
+                resolve(response);
             }).catch((err) => {
                 reject(err);
             });
@@ -35,9 +35,9 @@ const actions = {
     },
     updateResearchGroup({ dispatch }, params) {
         return new Promise((resolve, reject) => {
-            researchGroupService.patchGroup(params).then(() => {
+            researchGroupService.patchGroup(params).then((response) => {
                 dispatch("getResearchGroups");
-                resolve();
+                resolve(response);
             }).catch((err) => {
                 reject(err);
             });
@@ -45,9 +45,9 @@ const actions = {
     },
     getResearchGroups({ commit }) {
         return new Promise((resolve, reject) => {
-            researchGroupService.fetchGroups().then((data) => {
-                commit("setResearchGroups", data);
-                resolve();
+            researchGroupService.fetchGroups().then((response) => {
+                commit("setResearchGroups", response);
+                resolve(response);
             }).catch((err) => reject(err));
         });
     },
