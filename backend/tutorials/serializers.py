@@ -41,9 +41,9 @@ class TutorialEditSerializer(serializers.ModelSerializer):
             if instance.owner not in editors:
                 editors.append(instance.owner)
         elif editor_emails:
+            if instance.owner.email not in editor_emails:
+                editor_emails.append(instance.owner.email)
             users = User.objects.filter(email__in=editor_emails)
-            if instance.owner not in users:
-                users.append(instance.owner)
             editors = users
         elif instance.owner not in editors:
             editors.append(instance.owner)
