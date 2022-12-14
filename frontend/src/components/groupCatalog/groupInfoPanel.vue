@@ -53,6 +53,7 @@ export default {
     return {
       markdownOptions: {
         markdownIt: {
+          html: true,
           linkify: true,
         },
         linkAttributes: {

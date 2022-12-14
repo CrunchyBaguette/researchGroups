@@ -102,7 +102,7 @@
                   style="flex: 1 0 auto; text-align: right"
                   @click="removeMemberFromList(email)"
                 >
-                  <mdicon name="close" />
+                  <b-icon icon="close" />
                 </div>
               </div>
             </div>
@@ -170,7 +170,7 @@ export default {
         })
           .then(() => {
             this.$buefy.toast.open({
-              message: "Pomyślnie dodano koło naukowe",
+              message: "Pomyślnie dodano projekt",
               type: "is-success",
             });
 
