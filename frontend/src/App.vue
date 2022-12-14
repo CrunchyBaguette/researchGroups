@@ -5,18 +5,16 @@
     </div>
     <div style="height: 100%">
       <div class="columns" style="height: 100%; margin-top: 0">
-        <div class="columns" style="height: 100%">
-          <div
-            id="sidebar"
-            class="column is-2 third-color"
-            v-if="!this.isLoginOrRegister()"
-          >
-            <SideBar />
-          </div>
-          <div class="column fifth-color">
-            <div id="content">
-              <router-view />
-            </div>
+        <div
+          id="sidebar"
+          class="column is-2 third-color"
+          v-if="!this.isLoginOrRegister()"
+        >
+          <SideBar />
+        </div>
+        <div class="column fifth-color">
+          <div id="content">
+            <router-view />
           </div>
         </div>
       </div>
