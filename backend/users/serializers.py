@@ -4,9 +4,13 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
     class Meta:
         model = get_user_model()
         exclude = ["password", "groups", "last_login", "user_permissions"]
+
+    def get_full_name(self, obj):
+        return obj.first_name + " " + obj.last_name
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):

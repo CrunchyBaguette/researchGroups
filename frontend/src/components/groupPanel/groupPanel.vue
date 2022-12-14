@@ -156,8 +156,7 @@
         <b-button
           id="btn"
           size="is-medium"
-          tag="router-link"
-          to="/group-tutorials"
+          v-on:click="showTutorials"
           :disabled="isButtonDisabled"
           >Materiały dydaktyczne</b-button
         >
@@ -429,6 +428,69 @@
             </div>
           </div>
         </div>
+        <div class="outer" v-if="selectedTabTitle === 'Materiały dydaktyczne'">
+          <div class="div-title">
+            <h2 class="centerDivHeader">{{ selectedTabTitle }}</h2>
+          </div>
+          <div class="inner">
+            <tutorialTile
+              author="Krzysztof Bogaczyk"
+              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              added="2022-12-14"
+              edited="2022-12-14T03:53:05.147815+01:00"
+              category="Category"
+            ></tutorialTile>
+            <tutorialTile
+              author="Krzysztof Bogaczyk"
+              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              added="added"
+              edited="edited"
+              category="Category"
+            ></tutorialTile>
+            <tutorialTile
+              author="Krzysztof Bogaczyk"
+              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              added="added"
+              edited="edited"
+              category="Category"
+            ></tutorialTile>
+            <tutorialTile
+              author="Krzysztof Bogaczyk"
+              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              added="added"
+              edited="edited"
+              category="Category"
+            ></tutorialTile>
+            <tutorialTile
+              author="Krzysztof Bogaczyk"
+              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              added="2022-12-14"
+              edited="2022-12-14T03:53:05.147815+01:00"
+              category="Category"
+            ></tutorialTile>
+            <tutorialTile
+              author="Krzysztof Bogaczyk"
+              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              added="added"
+              edited="edited"
+              category="Category"
+            ></tutorialTile>
+            <tutorialTile
+              author="Krzysztof Bogaczyk"
+              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              added="added"
+              edited="edited"
+              category="Category"
+            ></tutorialTile>
+            <tutorialTile
+              author="Krzysztof Bogaczyk"
+              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              added="added"
+              edited="edited"
+              category="Category"
+            ></tutorialTile>
+          </div>
+        </div>
       </div>
       <div class="box column is-3" id="divLinks">
         <b-menu :activable="false" :accordion="false" id="menu">
@@ -523,6 +585,7 @@
 <script>
 import popupEmail from "@/components/popup/PopupEmail.vue";
 import editLinkModal from "@/components/groupPanel/editLink.vue";
+import tutorialTile from "@/components/tutorialCatalog/tutorialTile.vue";
 import { mapActions, mapState, mapGetters } from "vuex";
 
 export default {
@@ -530,6 +593,7 @@ export default {
   components: {
     popupEmail,
     editLinkModal,
+    tutorialTile,
   },
   data() {
     return {
@@ -1034,6 +1098,9 @@ export default {
     showContact() {
       this.selectedTabTitle = "Kontakt";
     },
+    showTutorials() {
+      this.selectedTabTitle = "Materiały dydaktyczne";
+    },
 
     changeGroupName() {
       this.editGroupName = !this.editGroupName;
@@ -1184,7 +1251,7 @@ export default {
 .title {
   /* padding-bottom: 8px; 
   text-decoration: none; */
-  padding-left: 50px;
+  /* padding-left: 50px; */
   text-align: center;
   /* color: #333;
   font-size: 2.15rem;

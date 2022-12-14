@@ -3,8 +3,7 @@
     <div class="container">
       <div class="author-category-container">
         <p class="author">
-          {{ author }} <span id="spanGroup">(koło: </span> {{ group
-          }}<span id="spanGroup">)</span>
+          {{ author }}
         </p>
         <p class="category">{{ category }}</p>
       </div>
@@ -19,30 +18,23 @@
       <div class="title-container">
         <p class="title">{{ title }}</p>
       </div>
-      <div class="content-container">
-        <p class="content">
-          {{ content }}
-        </p>
-      </div>
     </div>
   </div>
 </template>
-  
+
 <script>
 export default {
   name: "announcement",
   props: {
     author: { type: String },
-    group: { type: String },
+    title: { type: String },
     added: { type: String },
     edited: { type: String },
-    title: { type: String },
     category: { type: String },
-    content: { type: String },
   },
 };
 </script>
-  
+
 <style>
 * {
   box-sizing: border-box;
@@ -98,10 +90,5 @@ export default {
 
 #da {
   color: grey;
-}
-
-#spanGroup {
-  font-size: 20px;
-  font-weight: normal;
 }
 </style>
