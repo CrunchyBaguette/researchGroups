@@ -1,22 +1,16 @@
 <template>
   <div id="app">
-    <div class="columns" style="height: 100%">
-      <div class="column">
-        <div>
-          <NavBar :loginOrRegister="this.isLoginOrRegister()" />
+    <div>
+      <NavBar :loginOrRegister="this.isLoginOrRegister()" />
+    </div>
+    <div style="height: 100%">
+      <div class="columns" style="height: 100%; margin-top: 0">
+        <div id="sidebar" class="column is-2" v-if="!this.isLoginOrRegister()">
+          <SideBar />
         </div>
-        <div class="columns" style="height: 100%">
-          <div
-            id="sidebar"
-            class="column is-2"
-            v-if="!this.isLoginOrRegister()"
-          >
-            <SideBar />
-          </div>
-          <div class="column" style="background-color: #fad6a5">
-            <div id="content">
-              <router-view />
-            </div>
+        <div class="column" style="background-color: #fad6a5">
+          <div id="content">
+            <router-view />
           </div>
         </div>
       </div>
@@ -31,9 +25,11 @@ mdiLink.id = "MaterialDesign";
 mdiLink.rel = "stylesheet";
 mdiLink.type = "text/css";
 mdiLink.media = "all";
+
 var mdiRequest = new Request(
   "https://cdn.materialdesignicons.com/5.8.55/css/materialdesignicons.min.css"
 );
+
 fetch(mdiRequest)
   .then(function (value) {
     if (value.status == 404) {
@@ -46,6 +42,7 @@ fetch(mdiRequest)
     mdiLink.href =
       "https://cdnjs.cloudflare.com/ajax/libs/materialDesign-Webfont/5.8.55/css/materialdesignicons.min.css";
   });
+
 head.appendChild(mdiLink);
 
 import NavBar from "./components/layout/NavBar.vue";
@@ -70,6 +67,10 @@ export default {
 </script>
 
 <style>
+html {
+  overflow: hidden;
+}
+
 html,
 body {
   height: 100%;
@@ -82,7 +83,8 @@ body {
 
 #app {
   height: 100%;
-  overflow: hidden;
+  display: flex;
+  flex-flow: column;
 }
 
 #sidebar {

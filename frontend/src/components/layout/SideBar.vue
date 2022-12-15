@@ -73,7 +73,6 @@ export default {
 
 <style>
 .menu {
-  padding-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
   height: 100%;
