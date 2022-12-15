@@ -1,11 +1,13 @@
 import axios from "axios";
 import store from "@/store"
+import Cookies from "js-cookie"
 
 const api = axios.create({
     baseURL: "http://localhost:8000/api", //tu najlepiej żeby to dało się zmienić w jednym miejscu najlepiej żeby można to było ustawić w czasie buildu
     timeout: 5000,
     headers: {
         "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
     },
 });
 

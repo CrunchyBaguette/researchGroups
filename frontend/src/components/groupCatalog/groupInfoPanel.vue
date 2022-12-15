@@ -27,6 +27,7 @@
     </div>
     <div style="width: 100%; text-align: center; margin-top: 40px">
       <b-button
+        rounded
         size="is-medium"
         style="text-align: center"
         tag="router-link"

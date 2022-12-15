@@ -38,6 +38,16 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+    # def retrieve(self, request: Request, pk: Any=None, *args: Any, **kwargs: Any) -> Response:
+    #     if self.request.user.is_authenticated:
+    #         queryset = (Tutorial.objects.filter(is_public=True, pk=pk) | Tutorial.objects.filter(editors=self.request.user, pk=pk)).order_by("created")
+    #     else:
+    #         queryset = Tutorial.objects.filter(is_public=True, pk=pk).order_by("created")
+
+    #     serializer: TutorialSerializer = self.get_serializer(queryset)
+    #     print(serializer.data)
+    #     return Response(serializer.data)
+
     def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         queryset = self.filter_queryset(self.get_queryset())
 
@@ -61,9 +71,9 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         return TutorialSerializer
 
     def get_queryset(self) -> QuerySet:
-        if self.action == "list":
+        if self.action == "list" or self.action == "retrieve":
             if self.request.user.is_authenticated:
-                return Tutorial.objects.filter(is_public=True).order_by("created")
+                return (Tutorial.objects.filter(is_public=True) | Tutorial.objects.filter(editors=self.request.user)).order_by("created")
 
             if projectId := self.request.GET.get("projectId", None):
                 project: Project = Project.objects.get(id=projectId)

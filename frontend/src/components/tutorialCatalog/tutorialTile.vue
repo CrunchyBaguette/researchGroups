@@ -5,7 +5,7 @@
         <p class="author">
           {{ author }}
         </p>
-        <p class="category">{{ category }}</p>
+        <p class="category">{{ type }}</p>
       </div>
       <div class="date-container">
         <p class="added" id="da">
@@ -16,7 +16,10 @@
         </p>
       </div>
       <div class="title-container">
-        <p class="title">{{ title }}</p>
+        <p class="title">
+          <b-icon style="margin-right: 10px" icon="wrench" v-if="draft" />
+          {{ title }}
+        </p>
       </div>
     </div>
   </div>
@@ -30,7 +33,8 @@ export default {
     title: { type: String },
     added: { type: String },
     edited: { type: String },
-    category: { type: String },
+    type: { type: String },
+    draft: { type: Boolean },
   },
 };
 </script>

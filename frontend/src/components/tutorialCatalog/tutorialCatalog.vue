@@ -5,11 +5,10 @@
         <p class="title" id="tit">Katalog Poradników</p>
         <b-button
           id="btnTitle"
-          tag="router-link"
-          :to="isAuthenticated ? { name: 'addTutorial' } : { name: 'login' }"
           rounded
           size="is-medium"
           type="is-success"
+          @click="openCreateTutorial"
           >Dodaj nowy poradnik</b-button
         >
       </div>
@@ -19,39 +18,42 @@
         <div class="columns" id="box-content">
           <div class="column">
             <tutorialTile
-              v-for="tutorial in this.splitToThreeColumns(tutorials)[0]"
+              v-for="tutorial in this.splitToThreeColumns(draftTutorials)[0]"
               :key="tutorial.title"
               :author="tutorial.owner.full_name"
               :title="tutorial.title"
               :added="tutorial.created"
               :edited="tutorial.edited"
-              :category="tutorial.type"
+              :type="tutorial.type"
+              :draft="tutorial.is_draft"
               style="margin-top: 10px; cursor: pointer"
               @click.native="goToTutorial(tutorial.id)"
             />
           </div>
           <div class="column">
             <tutorialTile
-              v-for="tutorial in this.splitToThreeColumns(tutorials)[1]"
+              v-for="tutorial in this.splitToThreeColumns(draftTutorials)[1]"
               :key="tutorial.title"
               :author="tutorial.owner.full_name"
               :title="tutorial.title"
               :added="tutorial.created"
               :edited="tutorial.edited"
-              :category="tutorial.type"
+              :type="tutorial.type"
+              :draft="tutorial.is_draft"
               style="margin-top: 10px; cursor: pointer"
               @click.native="goToTutorial(tutorial.id)"
             />
           </div>
           <div class="column">
             <tutorialTile
-              v-for="tutorial in this.splitToThreeColumns(tutorials)[2]"
+              v-for="tutorial in this.splitToThreeColumns(draftTutorials)[2]"
               :key="tutorial.title"
               :author="tutorial.owner.full_name"
               :title="tutorial.title"
               :added="tutorial.created"
               :edited="tutorial.edited"
-              :category="tutorial.type"
+              :type="tutorial.type"
+              :draft="tutorial.is_draft"
               style="margin-top: 10px; cursor: pointer"
               @click.native="goToTutorial(tutorial.id)"
             />
@@ -59,6 +61,52 @@
         </div>
       </div>
     </div>
+    <b-modal has-modal-card :active.sync="this.addingTutorial" trap-focus>
+      <template>
+        <div class="modal-card">
+          <section class="modal-card-body">
+            <b-field
+              :message="!nameGiven ? 'Proszę podać nazwę poradnika' : ''"
+              :type="!nameGiven ? 'is-danger' : ''"
+              label="Stwórz poradnik"
+            >
+              <b-input
+                @focus="nameGiven = true"
+                v-model="tutorialName"
+              ></b-input>
+            </b-field>
+            <b-field
+              :message="!typeGiven ? 'Proszę podać nazwę poradnika' : ''"
+              :type="!typeGiven ? 'is-danger' : ''"
+              label="Typ poradnika"
+            >
+              <b-select
+                @focus="typeGiven = true"
+                v-model="tutorialType"
+                expanded
+              >
+                <option value="Default">Default</option>
+              </b-select>
+            </b-field>
+          </section>
+          <footer class="modal-card-foot">
+            <b-button type="is-success" @click="createTutorial"
+              >Stwórz poradnik</b-button
+            >
+            <b-button
+              @click="
+                () => (
+                  (addingTutorial = false),
+                  (tutorialName = ``),
+                  (tutorialType = ``)
+                )
+              "
+              >Anuluj</b-button
+            >
+          </footer>
+        </div>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -74,12 +122,17 @@ export default {
 
   data() {
     return {
+      addingTutorial: false,
+      tutorialName: "",
+      nameGiven: true,
+      tutorialType: "",
+      typeGiven: true,
       loaded: false,
     };
   },
 
   methods: {
-    ...mapActions("tutorial", ["getTutorials"]),
+    ...mapActions("tutorial", ["getTutorials", "addTutorial"]),
     splitToThreeColumns(tutorials) {
       let leftColumn = [];
       let middleColumn = [];
@@ -98,6 +151,58 @@ export default {
       return [leftColumn, middleColumn, rightColumn];
     },
 
+    openCreateTutorial() {
+      if (this.isAuthenticated) {
+        this.addingTutorial = true;
+      } else {
+        this.$router.replace(this.$route.query.redirect || "/login");
+      }
+    },
+
+    createTutorial() {
+      if (this.tutorialName == "") this.nameGiven = false;
+      if (this.tutorialType == "") this.typeGiven = false;
+
+      if (this.nameGiven && this.typeGiven) {
+        this.addTutorial({
+          title: this.tutorialName,
+          type: this.tutorialType,
+          editors: [],
+          is_public: false,
+          is_draft: true,
+        })
+          .then((response) => {
+            this.$buefy.toast.open({
+              message: "Pomyślnie dodano poradnik",
+              type: "is-success",
+            });
+
+            this.$router.replace(
+              this.$route.query.redirect || `/tutorial/${response.id}`
+            );
+          })
+          .catch((err) => {
+            this.$buefy.toast.open({
+              message: err.response.data[Object.keys(err.response.data)[0]],
+              type: "is-danger",
+            });
+          });
+
+        this.tutorialName = "";
+        this.tutorialType = "";
+      }
+    },
+
+    // publicTutorials(tutorials) {
+    //   return tutorials.filter((tut) => {
+    //     return tut.is_public;
+    //   });
+    // },
+
+    // yourDraftTutorials(tutorials) {
+
+    // },
+
     goToTutorial(tutorialId) {
       this.$router.push(`/tutorial/${tutorialId}`);
     },
@@ -107,7 +212,17 @@ export default {
     ...mapState({
       tutorials: (state) => state.tutorial.tutorials,
     }),
-    ...mapGetters("auth", ["isAuthenticated"]),
+    ...mapGetters("auth", ["authUser", "isAuthenticated"]),
+    publicTutorials() {
+      return this.tutorials.filter((tut) => {
+        return tut.is_public;
+      });
+    },
+    draftTutorials() {
+      return this.tutorials.filter((tut) => {
+        return tut.is_draft && tut.editors.includes(this.authUser);
+      });
+    },
   },
 
   mounted() {
