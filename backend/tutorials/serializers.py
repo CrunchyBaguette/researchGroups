@@ -22,15 +22,31 @@ class TutorialSerializer(serializers.ModelSerializer):
         return representation
 
 
+class EditorInfo(QuerySerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["username", "email"]
+
+
 class TutorialEditSerializer(serializers.ModelSerializer):
+
+    editor_emails = serializers.ListField(allow_null=True, default=[], child=serializers.EmailField(), write_only=True)
+
     def update(self, instance: Tutorial, validated_data):
         raise_errors_on_nested_writes("update", self, validated_data)
         editors = validated_data.get("editors", [])
-        if not editors:
+        editor_emails = validated_data.get("editor_emails", [])
+        if not editors and not editor_emails:
             editors = instance.editors.all()
-
-        if instance.owner not in editors:
-            editors.append(instance.owner.id)
+            if instance.owner not in editors:
+                editors.append(instance.owner)
+        elif editor_emails:
+            if instance.owner.email not in editor_emails:
+                editor_emails.append(instance.owner.email)
+            users = User.objects.filter(email__in=editor_emails)
+            editors = users
+        elif instance.owner not in editors:
+            editors.append(instance.owner)
 
         instance.title = validated_data.get("title", instance.title)
         instance.text = validated_data.get("text", instance.text)
@@ -49,9 +65,9 @@ class TutorialEditSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tutorial
-        fields = ["id", "title", "text", "is_draft", "owner", "editors", "is_public"]
+        fields = ["id", "title", "text", "is_draft", "owner", "editors", "is_public", "editor_emails"]
         read_only_fields = ["owner", "id"]
-        extra_kwargs = {"editors": {"allow_empty": True}}
+        extra_kwargs = {"editors": {"allow_empty": True, "allow_null": True}}
 
 
 class RatingTutorialSerializer(QuerySerializerMixin, serializers.ModelSerializer):
@@ -62,13 +78,3 @@ class RatingTutorialSerializer(QuerySerializerMixin, serializers.ModelSerializer
     class Meta:
         model = Rating
         fields = "__all__"
-
-
-class AddEditorsSerializer(serializers.Serializer):
-    id = serializers.IntegerField(required=False)
-    username = serializers.CharField(required=False)
-    email = serializers.SlugRelatedField(slug_field="email", queryset=User.objects.all())
-
-    class Meta:
-        fields = "__all__"
-        write_only_fields = ["id", "username", "email"]
