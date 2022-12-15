@@ -30,7 +30,20 @@ class EditorInfo(QuerySerializerMixin, serializers.ModelSerializer):
 
 class TutorialEditSerializer(serializers.ModelSerializer):
 
-    editor_emails = serializers.ListField(allow_null=True, default=[], child=serializers.EmailField(), write_only=True)
+    editor_emails = serializers.ListField(allow_null=False, default=[], child=serializers.EmailField(), write_only=True)
+
+    def create(self, validated_data):
+        data = validated_data
+        editor_emails = data.get("editor_emails", [])
+        if editor_emails:
+            editors = User.objects.filter(email__in=editor_emails).all()
+            serializer = UserSerializer(editors, many=True)
+            data["editors"] = serializer.data
+            
+        del data["editor_emails"]
+
+        print(data)
+        return super().create(data)
 
     def update(self, instance: Tutorial, validated_data):
         raise_errors_on_nested_writes("update", self, validated_data)

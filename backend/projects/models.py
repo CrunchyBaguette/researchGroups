@@ -26,7 +26,7 @@ class Project(models.Model):
 
 class GuideProject(models.Model):
     is_public = models.BooleanField(default=False)
-    guide = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
+    guide = models.ForeignKey(Tutorial, on_delete=models.CASCADE, related_name="project_guide")
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True)
 

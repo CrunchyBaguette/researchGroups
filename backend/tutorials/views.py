@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import BaseSerializer
 
 from backend.projects.models import Project
-from backend.research_groups.models import ResearchGroup
+from backend.research_groups.models import ResearchGroup, ResearchGroupGuide
 from backend.users.views import PermissionPolicyMixin
 from backend.tutorials.models import Tutorial, Rating
 from backend.tutorials.serializers import TutorialSerializer, TutorialEditSerializer
@@ -38,6 +38,17 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+    def retrieve(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        print(self.get_object())
+        serializer: TutorialSerializer = self.get_serializer(self.get_object())  # type: ignore
+        tut = serializer.data
+        if request.user.is_authenticated:
+            for editor in tut["editors"]:
+                if editor["id"] == request.user.id:
+                    tut["editable"] = True
+                    break
+        return Response(tut)
+
     def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         queryset = self.filter_queryset(self.get_queryset())
 
@@ -61,15 +72,16 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         return TutorialSerializer
 
     def get_queryset(self) -> QuerySet:
-        if self.action == "list":
-            if self.request.user.is_authenticated:
-                return Tutorial.objects.filter(is_public=True).order_by("created")
-
+        if self.action == "list" or self.action == "retrieve" or self.action == "partial_update":
             if projectId := self.request.GET.get("projectId", None):
-                project: Project = Project.objects.get(id=projectId)
-                return project.guides.filter(is_public=True)
+                if self.request.user.is_authenticated:
+                    return Tutorial.objects.filter(project_guide__project=projectId, project_guide__project__members=self.request.user.id)
+                return Tutorial.objects.filter(project_guide__is_public=True, project_guide__project=projectId)
             if researchGroupId := self.request.GET.get("researchGroupId", None):
-                research_group: ResearchGroup = ResearchGroup.objects.get(id=researchGroupId)
-                return research_group.guides.filter(is_public=True)
+                if self.request.user.is_authenticated:
+                    return Tutorial.objects.filter(research_group_guide__research_group=researchGroupId, research_group_guide__research_group__members=self.request.user.id)
+                return Tutorial.objects.filter(research_group_guide__is_public=True, research_group_guide__research_group=researchGroupId)
+            if self.request.user.is_authenticated:
+                return Tutorial.objects.all().order_by("created")
 
         return Tutorial.objects.filter(is_public=True).order_by("created")
