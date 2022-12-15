@@ -13,12 +13,22 @@
         >
       </div>
     </div>
+    <div style="margin-bottom: 5px" v-if="this.isAuthenticated">
+      <b-field>
+        <b-select v-model="selectedFilter">
+          <option value="pub">Publiczne poradniki</option>
+          <option value="edit">Edytowalne poradniki</option>
+          <option value="my">Moje poradniki</option>
+          <option value="draft">Moje wersje robocze</option>
+        </b-select>
+      </b-field>
+    </div>
     <div class="box" style="flex: 1 0 auto; overflow: auto">
       <div>
         <div class="columns" id="box-content">
           <div class="column">
             <tutorialTile
-              v-for="tutorial in this.splitToThreeColumns(draftTutorials)[0]"
+              v-for="tutorial in this.splitToThreeColumns(filteredTutorials)[0]"
               :key="tutorial.title"
               :author="tutorial.owner.full_name"
               :title="tutorial.title"
@@ -32,7 +42,7 @@
           </div>
           <div class="column">
             <tutorialTile
-              v-for="tutorial in this.splitToThreeColumns(draftTutorials)[1]"
+              v-for="tutorial in this.splitToThreeColumns(filteredTutorials)[1]"
               :key="tutorial.title"
               :author="tutorial.owner.full_name"
               :title="tutorial.title"
@@ -46,7 +56,7 @@
           </div>
           <div class="column">
             <tutorialTile
-              v-for="tutorial in this.splitToThreeColumns(draftTutorials)[2]"
+              v-for="tutorial in this.splitToThreeColumns(filteredTutorials)[2]"
               :key="tutorial.title"
               :author="tutorial.owner.full_name"
               :title="tutorial.title"
@@ -122,6 +132,7 @@ export default {
 
   data() {
     return {
+      selectedFilter: "pub",
       addingTutorial: false,
       tutorialName: "",
       nameGiven: true,
@@ -152,6 +163,9 @@ export default {
     },
 
     openCreateTutorial() {
+      console.log(this.tutorials);
+      console.log(this.publicTutorials);
+      console.log(this.draftTutorials);
       if (this.isAuthenticated) {
         this.addingTutorial = true;
       } else {
@@ -167,6 +181,7 @@ export default {
         this.addTutorial({
           title: this.tutorialName,
           type: this.tutorialType,
+          editors_emails: [],
           editors: [],
           is_public: false,
           is_draft: true,
@@ -193,16 +208,6 @@ export default {
       }
     },
 
-    // publicTutorials(tutorials) {
-    //   return tutorials.filter((tut) => {
-    //     return tut.is_public;
-    //   });
-    // },
-
-    // yourDraftTutorials(tutorials) {
-
-    // },
-
     goToTutorial(tutorialId) {
       this.$router.push(`/tutorial/${tutorialId}`);
     },
@@ -218,10 +223,34 @@ export default {
         return tut.is_public;
       });
     },
+    myTutorials() {
+      return this.tutorials.filter((tut) => {
+        return tut.owner.email == this.authUser.email;
+      });
+    },
     draftTutorials() {
       return this.tutorials.filter((tut) => {
-        return tut.is_draft && tut.editors.includes(this.authUser);
+        return tut.is_draft && tut.editable;
       });
+    },
+    filteredTutorials() {
+      if (this.selectedFilter == "pub") {
+        return this.tutorials.filter((tut) => {
+          return tut.is_public;
+        });
+      } else if (this.selectedFilter == "edit") {
+        return this.tutorials.filter((tut) => {
+          return tut.editable;
+        });
+      } else if (this.selectedFilter == "my") {
+        return this.tutorials.filter((tut) => {
+          return tut.owner.email == this.authUser.email;
+        });
+      } else {
+        return this.tutorials.filter((tut) => {
+          return tut.owner.email == this.authUser.email && tut.is_draft;
+        });
+      }
     },
   },
 

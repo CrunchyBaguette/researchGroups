@@ -8,10 +8,10 @@ export default {
         return api.get("tutorial/").then((response) => response.data)
     },
     fetchResearchGroupTutorials(researchGroupId) {
-        return api.get(`tutorial/?researchGroupId=${researchGroupId}/`).then((response) => response.data)
+        return api.get(`tutorial/?researchGroupId=${researchGroupId}`).then((response) => response.data)
     },
     fetchProjectTutorials(projectId) {
-        return api.get(`tutorial/?projectId=${projectId}/`).then((response) => response.data)
+        return api.get(`tutorial/?projectId=${projectId}`).then((response) => response.data)
     },
     postTutorial(params) {
         return api.post("tutorial/", params).then((response) => response.data)

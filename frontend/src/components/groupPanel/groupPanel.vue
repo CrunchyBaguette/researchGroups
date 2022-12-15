@@ -434,60 +434,14 @@
           </div>
           <div class="inner">
             <tutorialTile
-              author="Krzysztof Bogaczyk"
-              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-              added="2022-12-14"
-              edited="2022-12-14T03:53:05.147815+01:00"
-              category="Category"
-            ></tutorialTile>
-            <tutorialTile
-              author="Krzysztof Bogaczyk"
-              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-              added="added"
-              edited="edited"
-              category="Category"
-            ></tutorialTile>
-            <tutorialTile
-              author="Krzysztof Bogaczyk"
-              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-              added="added"
-              edited="edited"
-              category="Category"
-            ></tutorialTile>
-            <tutorialTile
-              author="Krzysztof Bogaczyk"
-              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-              added="added"
-              edited="edited"
-              category="Category"
-            ></tutorialTile>
-            <tutorialTile
-              author="Krzysztof Bogaczyk"
-              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-              added="2022-12-14"
-              edited="2022-12-14T03:53:05.147815+01:00"
-              category="Category"
-            ></tutorialTile>
-            <tutorialTile
-              author="Krzysztof Bogaczyk"
-              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-              added="added"
-              edited="edited"
-              category="Category"
-            ></tutorialTile>
-            <tutorialTile
-              author="Krzysztof Bogaczyk"
-              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-              added="added"
-              edited="edited"
-              category="Category"
-            ></tutorialTile>
-            <tutorialTile
-              author="Krzysztof Bogaczyk"
-              title="Tutorialaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-              added="added"
-              edited="edited"
-              category="Category"
+              v-for="tutorial in this.tutorials"
+              :key="tutorial.title"
+              :author="tutorial.owner.full_name"
+              :title="tutorial.title"
+              :added="tutorial.created"
+              :edited="tutorial.edited"
+              :type="tutorial.type"
+              :draft="tutorial.is_draft"
             ></tutorialTile>
           </div>
         </div>
@@ -637,6 +591,8 @@ export default {
       links: [],
       disks: [],
 
+      tutorials: [],
+
       popupEmail: false,
 
       isBeingEdited: false,
@@ -684,6 +640,11 @@ export default {
         }).then(() => (this.disks = this.researchGroupDisks));
       })
       .then(() => {
+        this.getResearchGroupTutorials(this.researchGroup.id).then(() => {
+          this.tutorials = this.researchGroupTutorials;
+        });
+      })
+      .then(() => {
         this.loading = false;
       });
   },
@@ -709,6 +670,7 @@ export default {
       "deleteResearchGroupDisk",
       "updateResearchGroupDisk",
     ]),
+    ...mapActions("tutorial", ["getResearchGroupTutorials"]),
 
     canAccessLinks(links) {
       let canAccessLinks = [];
@@ -1232,6 +1194,9 @@ export default {
     ...mapState({
       researchGroupDisks: (state) => state.researchGroupDisk.researchGroupDisks,
     }),
+    ...mapState({
+      researchGroupTutorials: (state) => state.tutorial.researchGroupTutorials,
+    }),
     ...mapGetters("auth", ["isAuthenticated", "authUser"]),
   },
 };
@@ -1266,7 +1231,6 @@ export default {
 
 .p-category {
   padding: 7px;
-  padding-left: 50px;
   text-align: center;
   font-size: 16px;
   color: grey;

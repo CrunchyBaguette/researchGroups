@@ -30,12 +30,17 @@
             rounded
             size="is-medium"
             type="is-danger"
-            v-if="this.editing"
+            v-if="this.editing && this.tutorial.owner.id == this.authUser.id"
             @click="deleteTutorialConfirmation"
             >Usuń poradnik</b-button
           >
-          <b-button id="btnTitle" rounded size="is-medium" v-if="this.editing"
-            >Lista edytorów</b-button
+          <b-button
+            id="btnTitle"
+            rounded
+            size="is-medium"
+            v-if="this.editing && this.tutorial.owner.id == this.authUser.id"
+            @click="() => (tutorialSettings = !tutorialSettings)"
+            >Ustawienia</b-button
           >
           <b-button
             id="btnTitle"
@@ -51,7 +56,7 @@
             rounded
             size="is-medium"
             type="is-success"
-            v-if="!this.editing"
+            v-if="!this.editing && this.canEdit"
             @click="startEditTutorial()"
             >Edytuj poradnik</b-button
           >
@@ -126,6 +131,90 @@
         </div>
       </template>
     </b-modal>
+    <b-modal has-modal-card :active.sync="this.tutorialSettings" trap-focus>
+      <template>
+        <div class="modal-card">
+          <section class="modal-card-body">
+            <b-field label="Wersja robocza">
+              <b-switch
+                v-model="is_draft"
+                :true-value="true"
+                :false-value="false"
+              >
+                {{ is_draft ? "Tak" : "Nie" }}
+              </b-switch>
+            </b-field>
+            <b-field label="Lista edytorów">
+              <div
+                style="
+                  width: 100%;
+                  height: 400px;
+                  background-color: rgb(240, 240, 240);
+                  margin-top: 5px;
+                  margin-bottom: 10px;
+                  overflow: auto;
+                "
+              >
+                <div
+                  class="box"
+                  style="
+                    border-radius: 25px;
+                    width: 95%;
+                    height: 40px;
+                    margin: 10px auto;
+                    padding: 5px 10px;
+                    display: flex;
+                  "
+                  v-for="editor in editors"
+                  :key="editor"
+                >
+                  <p style="flex: 0 1 auto">
+                    {{ editor }}
+                  </p>
+                  <div style="flex: 1 0 auto; text-align: right">
+                    <b-icon
+                      icon="close"
+                      @click.native="removeEditorFromList(editor)"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="box"
+                  style="
+                    border-radius: 25px;
+                    width: 95%;
+                    height: 40px;
+                    margin: 10px auto;
+                    padding: 5px 10px;
+                    display: flex;
+                  "
+                >
+                  <div style="flex: 0 1 75%">
+                    <b-input v-model="addEmail" style="bottom: 5px"></b-input>
+                  </div>
+                  <div style="flex: 1 0 auto; text-align: right">
+                    <b-icon icon="plus" @click.native="addEditorToList()" />
+                  </div>
+                </div>
+              </div>
+            </b-field>
+          </section>
+          <footer class="modal-card-foot">
+            <b-button type="is-success" @click="saveTutorial">Zapis</b-button>
+            <b-button
+              @click="
+                () => (
+                  (is_draft = tutorial.is_draft),
+                  (editors = extractEmails(tutorial.editors)),
+                  (tutorialSettings = false)
+                )
+              "
+              >Anuluj</b-button
+            >
+          </footer>
+        </div>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -137,13 +226,17 @@ export default {
   data() {
     return {
       loading: true,
+      canEdit: false,
       editing: false,
       title: "",
       editingTitle: false,
       category: "",
+      is_draft: false,
       text: "",
       editingText: false,
       editors: [],
+      addEmail: "",
+      tutorialSettings: false,
       markdownOptions: {
         markdownIt: {
           html: true,
@@ -175,7 +268,33 @@ export default {
       this.title = this.tutorial.title;
       this.category = this.tutorial.type;
       this.text = this.tutorial.text;
-      this.editors = this.tutorial.editors;
+      this.editors = this.extractEmails(this.tutorial.editors);
+    },
+
+    addEditorToList() {
+      if (
+        !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+          this.addEmail
+        )
+      ) {
+        this.$buefy.toast.open({
+          message: "Podano niepoprawny E-mail",
+          type: "is-danger",
+        });
+      } else if (this.editors.includes(this.addEmail)) {
+        this.$buefy.toast.open({
+          message: "Podany E-mail już znajduje się na liście",
+          type: "is-danger",
+        });
+      } else {
+        this.editors.push(this.addEmail);
+      }
+      this.addEmail = "";
+    },
+
+    removeEditorFromList(editor) {
+      let index = this.editors.indexOf(editor);
+      this.editors.splice(index, 1);
     },
 
     saveTutorial() {
@@ -185,15 +304,19 @@ export default {
           title: this.title,
           type: this.category,
           text: this.text,
+          editor_emails: this.editors,
+          is_public: !this.is_draft,
+          is_draft: this.is_draft,
         },
       })
         .then((response) => {
           this.title = response.name;
           this.category = response.type;
           this.text = response.text;
-          this.editors = response.editors;
+          this.is_draft = response.is_draft;
           this.editingTitle = false;
           this.editingText = false;
+          this.tutorialSettings = false;
           this.$buefy.toast.open({
             message: "Pomyślnie zapisano poradnik",
             type: "is-success",
@@ -205,6 +328,14 @@ export default {
             type: "is-danger",
           });
         });
+    },
+
+    extractEmails(editors) {
+      let editor_emails = [];
+      for (let i = 0; i < editors.length; i++) {
+        editor_emails.push(editors[i]["email"]);
+      }
+      return editor_emails;
     },
 
     deleteTutorialConfirmation() {
@@ -241,13 +372,16 @@ export default {
       this.title = response.title;
       this.category = response.type;
       this.text = response.text;
-      this.editors = response.editors;
+      this.editors = this.extractEmails(response.editors);
+      this.canEdit = response.editable;
+      this.is_draft = response.is_draft;
       this.loading = false;
     });
   },
 
   computed: {
     ...mapGetters("tutorial", ["tutorial"]),
+    ...mapGetters("auth", ["authUser"]),
   },
 };
 </script>
