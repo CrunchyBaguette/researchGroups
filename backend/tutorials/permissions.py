@@ -17,7 +17,7 @@ class IsTutorialEditor(BasePermission):
     """Grants permission to a tutorial editor"""
 
     def has_object_permission(self, request: Request, view: APIView, obj: Tutorial) -> bool:
-        is_editor = obj.editors.contains(request.user)
+        is_editor = obj.editors.contains(request.user)  # type: ignore
         return is_editor
 
 
