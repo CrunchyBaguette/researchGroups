@@ -30,7 +30,6 @@ var mdiRequest = new Request(
   "https://cdn.materialdesignicons.com/5.8.55/css/materialdesignicons.min.css"
 );
 
-
 fetch(mdiRequest)
   .then(function (value) {
     if (value.status == 404) {
@@ -64,11 +63,14 @@ export default {
       );
     },
   },
-
 };
 </script>
 
 <style>
+html {
+  overflow: hidden;
+}
+
 html,
 body {
   height: 100%;

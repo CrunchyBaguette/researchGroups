@@ -24,6 +24,9 @@ class EmailBuilder:
     def __init__(self, sender: str, subtype: Literal["alternative", "mixed"] = "mixed") -> None:
         self.sender = sender
         self.message = MIMEMultipart(subtype)
+        self.message.set_charset("utf8")
+        # self.message.encode("utf8")
+        # print(self.message)
         self.message["From"] = sender
         self.receivers: list[str] = []
 
@@ -65,7 +68,6 @@ class EmailBuilder:
                 message = p.get_payload()
             elif p.get_content_type() == "text/html":
                 html = p.get_payload()
-
         email = EmailMultiAlternatives(subject=subject, from_email=sender, to=receivers, body=message)
         if html is not None:
             email.attach_alternative(html, "text/html")

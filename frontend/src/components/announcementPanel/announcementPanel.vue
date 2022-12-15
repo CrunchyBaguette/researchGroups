@@ -2,28 +2,49 @@
   <div id="content" v-if="!this.loading">
     <div id="titleDiv" v-if="!isBeingEdited">
       <p class="title" id="tit">Panel Ogłoszenia</p>
-      <b-button
-        v-if="isOwner()"
-        id="btnTitle"
-        rounded
-        size="is-medium"
-        type="is-success"
-        @click="changeToEditMode"
-        >Edytuj ogłoszenie</b-button
-      >
+      <div>
+        <b-button
+          v-if="!isOwner()"
+          id="btnTitle"
+          rounded
+          size="is-medium"
+          type="is-success"
+          @click="() => (sendingEmail = true)"
+          >Wyślij wiadomość</b-button
+        >
+        <b-button
+          v-if="isOwner()"
+          id="btnTitle"
+          rounded
+          size="is-medium"
+          type="is-success"
+          @click="changeToEditMode"
+          >Edytuj ogłoszenie</b-button
+        >
+      </div>
     </div>
     <div id="titleDiv" v-else>
       <p class="title" id="tit">Edycja Ogłoszenia</p>
-      <b-button
-        id="btnTitle"
-        rounded
-        size="is-medium"
-        type="is-success"
-        @click="changeToPanelMode"
-        :disabled="isButtonDisabled"
-        ><b-icon icon="arrow-left" />&nbsp;&nbsp;Wróć do panelu
-        ogłoszenia</b-button
-      >
+      <div>
+        <b-button
+          v-if="isOwner()"
+          id="btnTitle"
+          rounded
+          size="is-medium"
+          type="is-danger"
+          @click="deleteAnnouncementConfirmation"
+          >Usuń ogłoszenie</b-button
+        ><b-button
+          id="btnTitle"
+          rounded
+          size="is-medium"
+          type="is-success"
+          @click="changeToPanelMode"
+          :disabled="isButtonDisabled"
+          ><b-icon icon="arrow-left" />&nbsp;&nbsp;Wróć do panelu
+          ogłoszenia</b-button
+        >
+      </div>
     </div>
 
     <announcement
@@ -57,7 +78,11 @@
                       v-model="selectedGroup[0]"
                       placeholder="Wybierz koło"
                     >
-                      <option :value="group" v-for="group in userAdminGroups" v-bind:key="group.id">
+                      <option
+                        :value="group"
+                        v-for="group in userAdminGroups"
+                        v-bind:key="group.id"
+                      >
                         {{ group.name }}
                       </option>
                     </b-select>
@@ -69,9 +94,7 @@
                       @click="saveAnnouncementGroup"
                       >Zapisz</b-button
                     >
-                    <b-button @click="cancelAnnouncementGroup"
-                      >Anuluj</b-button
-                    >
+                    <b-button @click="cancelAnnouncementGroup">Anuluj</b-button>
                   </div>
                 </div>
                 <div id="btnsDiv">
@@ -195,12 +218,16 @@
                 <b-icon icon="lead-pencil" />
               </b-button>
             </div>
-            <p
-              class="content"
+            <div
+              class="box content"
               v-if="!editAnnouncementContent || !isBeingEdited"
             >
-              {{ announcementContent }}
-            </p>
+              <markdown-it-vue
+                class="md-body"
+                :content="announcementContent"
+                :options="markdownOptions"
+              />
+            </div>
             <div v-else>
               <b-field
                 :message="announcementContentGiven"
@@ -229,6 +256,35 @@
         </div>
       </div>
     </div>
+    <b-modal has-modal-card :active.sync="this.sendingEmail" trap-focus>
+      <template>
+        <div class="modal-card">
+          <section class="modal-card-body">
+            <b-field
+              :message="!messageGiven ? 'Proszę podać treść wiadomości' : ''"
+              :type="!messageGiven ? 'is-danger' : ''"
+              label="Treść wiadomości"
+            >
+              <b-input
+                @focus="messageGiven = true"
+                v-model="emailMessage"
+                style="width: 100%"
+                type="textarea"
+              />
+            </b-field>
+          </section>
+          <footer class="modal-card-foot">
+            <b-button type="is-success" @click="sendEmail"
+              >Wyślij wiadomość</b-button
+            >
+            <b-button
+              @click="() => ((sendingEmail = false), (emailMessage = ``))"
+              >Anuluj</b-button
+            >
+          </footer>
+        </div>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -277,6 +333,23 @@ export default {
 
       isBeingEdited: false,
       isButtonDisabled: false,
+
+      sendingEmail: false,
+      emailMessage: "",
+      messageGiven: true,
+
+      markdownOptions: {
+        markdownIt: {
+          html: true,
+          linkify: true,
+        },
+        linkAttributes: {
+          attrs: {
+            target: "_self",
+            rel: "noopener",
+          },
+        },
+      },
     };
   },
   mounted() {
@@ -300,22 +373,26 @@ export default {
         this.loading = false;
       });
     if (this.isAuthenticated) {
-      this.getUserAdminResearchGroups(this.authUser.id) 
-        .then(
-          () => {
-            this.userAdminGroups = this.userAdminResearchGroups;
-            this.selectedGroup = this.userAdminGroups.filter(element => element.id == this.announcementGroupId);
-            //console.log(this.selectedGroup[0].name);
-          }
-        )
+      this.getUserAdminResearchGroups(this.authUser.id)
+        .then(() => {
+          this.userAdminGroups = this.userAdminResearchGroups;
+          this.selectedGroup = this.userAdminGroups.filter(
+            (element) => element.id == this.announcementGroupId
+          );
+          //console.log(this.selectedGroup[0].name);
+        })
         .then(() => {
           this.loading = false;
         });
     }
-    
   },
   methods: {
-    ...mapActions("announcement", ["getAnnouncement", "updateAnnouncement"]),
+    ...mapActions("announcement", [
+      "getAnnouncement",
+      "updateAnnouncement",
+      "removeAnnouncement",
+      "sendEmailMessage",
+    ]),
     ...mapActions("user", ["getUserAdminResearchGroups"]),
 
     isOwner() {
@@ -356,6 +433,66 @@ export default {
           type: "is-danger",
         });
       });
+    },
+
+    deleteAnnouncementConfirmation() {
+      this.$buefy.dialog.confirm({
+        title: "Usuwanie ogłoszenia",
+        message: "<b>Czy na pewno chcesz usunąć ogłosznie?",
+        confirmText: "Usuń ogłoszenie",
+        type: "is-danger",
+        hasIcon: true,
+        onConfirm: () => this.deleteAnnouncement(),
+      });
+    },
+
+    deleteAnnouncement() {
+      this.removeAnnouncement(this.$route.params.id)
+        .then(() => {
+          this.$router.push("/");
+          this.$buefy.toast.open({
+            message: "Ogłoszenie zostało usunięte",
+            type: "is-success",
+          });
+        })
+        .catch((err) => {
+          this.$buefy.toast.open({
+            message: err.response.data[Object.keys(err.response.data)[0]],
+            type: "is-danger",
+          });
+        });
+    },
+
+    sendEmail() {
+      if (this.emailMessage == "") this.messageGiven = false;
+
+      if (this.messageGiven) {
+        this.loadingEmail = true;
+        this.sendEmailMessage({
+          annId: this.$route.params.id,
+          annTitle: this.announcement.title,
+          author: this.announcement.author_email,
+          sender: this.authUser,
+          text: this.emailMessage,
+        })
+          .then(() => {
+            this.loadingEmail = false;
+            this.emailMessage = "";
+            this.sendingEmail = false;
+            this.$buefy.toast.open({
+              message: "Pomyślnie wysłano wiadomość",
+              type: "is-success",
+            });
+          })
+          .catch(() => {
+            this.loadingEmail = false;
+            this.$buefy.toast.open({
+              message:
+                "Błąd przy wysyłaniu wiadomości\nSpróbuj ponownie później",
+              type: "is-danger",
+            });
+          });
+      }
     },
 
     changeToPanelMode() {
@@ -597,6 +734,5 @@ export default {
   display: flex;
   flex-direction: row;
 }
-
 </style>
 

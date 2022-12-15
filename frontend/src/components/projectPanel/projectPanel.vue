@@ -1110,7 +1110,6 @@ export default {
 .title {
   /* padding-bottom: 8px; 
   text-decoration: none; */
-  padding-left: 50px;
   text-align: center;
   /* color: #333;
   font-size: 2.15rem;

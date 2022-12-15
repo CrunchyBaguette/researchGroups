@@ -18,6 +18,15 @@ def get_registration_email(user: User, link: str) -> EmailMultiAlternatives:
         .build_django_mail()
     )
 
+def get_announcement_email(userTo: str, userFrom: User, message: str, announcementName: str, link: str) -> EmailMultiAlternatives:
+    return (
+        EmailBuilder(settings.EMAIL_HOST_USER)
+        .add_text(get_email_body_for_announcement(userFrom, message, announcementName, link))
+        .add_receiver(userTo)
+        .add_subject(f"A message regarding your announcement")
+        .build_django_mail()
+    )
+
 
 def generate_registration_link(token: AccessToken, request: Request) -> str:
     current_site = get_current_site(request).domain
@@ -36,6 +45,18 @@ def get_email_body_for_reset(user: User, link: str) -> str:
     
     Link will be active for 30 minutes"""
 
+def get_email_body_for_announcement(userFrom: User, message: str, announcementName: str, link: str) -> str:
+    # print(message)
+    # print(link)
+    # print(announcementName)
+    return f"From: {userFrom['first_name']} {userFrom['last_name']} ({userFrom['email']})\n\nAnnouncement:\n{announcementName}\n{link}\n\n{message}"
+    # return f"""Hi {userFrom["first_name"]} {userFrom["last_name"]} \nUse this link to reset your password: {message}
+    
+    # Link will be active for 30 minutes"""
+
+def generate_announcement_link(announcementId: int) -> str:
+    print(announcementId)
+    return f"https://localhost:8080/#/announcement/"
 
 def generate_reset_pass_link(token: AccessToken, request: Request) -> str:
     current_site = get_current_site(request).domain
