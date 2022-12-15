@@ -76,8 +76,6 @@ const actions = {
             tutorialService.patchTutorial(params).then((response) => {
                 dispatch("getTutorial", params.tutorialId);
                 dispatch("getTutorials");
-                dispatch("getResearchGroupTutorials");
-                dispatch("getProjectTutorials");
                 resolve(response);
             }).catch((err) => {
                 reject(err);
@@ -88,8 +86,6 @@ const actions = {
         return new Promise((resolve, reject) => {
             tutorialService.deleteTutorial(tutorialId).then(() => {
                 dispatch("getTutorials");
-                dispatch("getResearchGroupTutorials");
-                dispatch("getProjectTutorials");
                 resolve();
             }).catch((err) => {
                 reject(err);

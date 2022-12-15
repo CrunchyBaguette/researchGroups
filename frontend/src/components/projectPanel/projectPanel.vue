@@ -153,13 +153,6 @@
           :disabled="isButtonDisabled"
           >Kontakt</b-button
         >
-        <b-button
-          id="btn"
-          size="is-medium"
-          v-on:click="showTutorials"
-          :disabled="isButtonDisabled"
-          >Materiały dydaktyczne</b-button
-        >
       </div>
       <div class="box column is-6" id="centerDiv">
         <div class="outer" v-if="selectedTabTitle === 'Członkowie'">
@@ -386,23 +379,6 @@
             </div>
           </div>
         </div>
-        <div class="outer" v-if="selectedTabTitle === 'Materiały dydaktyczne'">
-          <div class="div-title">
-            <h2 class="centerDivHeader">{{ selectedTabTitle }}</h2>
-          </div>
-          <div class="inner">
-            <tutorialTile
-              v-for="tutorial in this.tutorials"
-              :key="tutorial.title"
-              :author="tutorial.owner.full_name"
-              :title="tutorial.title"
-              :added="tutorial.created"
-              :edited="tutorial.edited"
-              :type="tutorial.type"
-              :draft="tutorial.is_draft"
-            ></tutorialTile>
-          </div>
-        </div>
       </div>
 
       <div class="box column is-3" id="divLinks">
@@ -498,7 +474,6 @@
 <script>
 import editLinkModal from "@/components/projectPanel/editLink.vue";
 import popupEmail from "@/components/popup/PopupEmail.vue";
-import tutorialTile from "@/components/tutorialCatalog/tutorialTile.vue";
 import { mapActions, mapState, mapGetters } from "vuex";
 
 export default {
@@ -506,7 +481,6 @@ export default {
   components: {
     editLinkModal,
     popupEmail,
-    tutorialTile,
   },
   data() {
     return {
@@ -546,8 +520,6 @@ export default {
 
       links: [],
       disks: [],
-
-      tutorials: [],
 
       isBeingEdited: false,
       isButtonDisabled: false,
@@ -593,11 +565,6 @@ export default {
         }).then(() => (this.disks = this.projectDisks));
       })
       .then(() => {
-        this.getProjectTutorials(this.project.id).then(() => {
-          this.tutorials = this.projectTutorials;
-        });
-      })
-      .then(() => {
         this.loading = false;
       });
   },
@@ -619,7 +586,6 @@ export default {
       "deleteProjectDisk",
       "updateProjectDisk",
     ]),
-    ...mapActions("tutorial", ["getProjectTutorials"]),
 
     canAccessLinks(links) {
       let canAccessLinks = [];
@@ -1002,9 +968,6 @@ export default {
     showContact() {
       this.selectedTabTitle = "Kontakt";
     },
-    showTutorials() {
-      this.selectedTabTitle = "Materiały dydaktyczne";
-    },
 
     changeProjectName() {
       this.editProjectName = !this.editProjectName;
@@ -1120,9 +1083,6 @@ export default {
     }),
     ...mapState({
       projectDisks: (state) => state.projectDisk.projectDisks,
-    }),
-    ...mapState({
-      projectTutorials: (state) => state.tutorial.projectTutorials,
     }),
     ...mapGetters("auth", ["isAuthenticated", "authUser"]),
   },

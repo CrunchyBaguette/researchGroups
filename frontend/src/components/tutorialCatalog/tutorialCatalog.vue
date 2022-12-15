@@ -163,9 +163,6 @@ export default {
     },
 
     openCreateTutorial() {
-      console.log(this.tutorials);
-      console.log(this.publicTutorials);
-      console.log(this.draftTutorials);
       if (this.isAuthenticated) {
         this.addingTutorial = true;
       } else {
