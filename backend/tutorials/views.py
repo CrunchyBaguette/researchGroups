@@ -1,17 +1,13 @@
 from typing import Any
 
 from django.db.models import QuerySet
-from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import BaseSerializer
-
-from backend.projects.models import Project
-from backend.research_groups.models import ResearchGroup, ResearchGroupGuide
 from backend.users.views import PermissionPolicyMixin
-from backend.tutorials.models import Tutorial, Rating
+from backend.tutorials.models import Tutorial
 from backend.tutorials.serializers import TutorialSerializer, TutorialEditSerializer
 from backend.tutorials.permissions import IsTutorialEditor, IsTutorialOwner
 
@@ -72,15 +68,24 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         return TutorialSerializer
 
     def get_queryset(self) -> QuerySet:
-        if self.action == "list" or self.action == "retrieve" or self.action == "partial_update":
+        if self.action in ("list", "retrieve", "partial_update"):
             if projectId := self.request.GET.get("projectId", None):
                 if self.request.user.is_authenticated:
-                    return Tutorial.objects.filter(project_guide__project=projectId, project_guide__project__members=self.request.user.id)
-                return Tutorial.objects.filter(project_guide__is_public=True, project_guide__project=projectId)
+                    return Tutorial.objects.filter(
+                        project_guide__project=projectId, project_guide__project__members=self.request.user.id
+                    )  # type: ignore
+                return Tutorial.objects.filter(
+                    project_guide__is_public=True, project_guide__project=projectId
+                )  # type: ignore
             if researchGroupId := self.request.GET.get("researchGroupId", None):
                 if self.request.user.is_authenticated:
-                    return Tutorial.objects.filter(research_group_guide__research_group=researchGroupId, research_group_guide__research_group__members=self.request.user.id)
-                return Tutorial.objects.filter(research_group_guide__is_public=True, research_group_guide__research_group=researchGroupId)
+                    return Tutorial.objects.filter(
+                        research_group_guide__research_group=researchGroupId,
+                        research_group_guide__research_group__members=self.request.user.id,
+                    )  # type: ignore
+                return Tutorial.objects.filter(
+                    research_group_guide__is_public=True, research_group_guide__research_group=researchGroupId
+                )  # type: ignore
             if self.request.user.is_authenticated:
                 return Tutorial.objects.all().order_by("created")
 

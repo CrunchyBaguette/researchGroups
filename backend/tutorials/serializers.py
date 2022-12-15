@@ -39,7 +39,7 @@ class TutorialEditSerializer(serializers.ModelSerializer):
             editors = User.objects.filter(email__in=editor_emails).all()
             serializer = UserSerializer(editors, many=True)
             data["editors"] = serializer.data
-            
+
         del data["editor_emails"]
 
         print(data)
