@@ -1,5 +1,5 @@
 from collections import Counter
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
@@ -21,7 +21,7 @@ from backend.projects.models import (
 )
 
 from backend.common.views import PermissionPolicyMixin
-
+from backend.common.utils import get_project_email, generate_project_link
 
 class ProjectUserViewSet(viewsets.ModelViewSet):
     queryset = ProjectUser.objects.all().order_by("created")
@@ -150,6 +150,19 @@ class ProjectViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
             }
         )
 
+    @action(detail=False, methods=["post"])  
+    def email(self, request, *args, **kwargs):
+        link = generate_project_link(request.data["projectId"])
+        email = get_project_email(
+            request.data["owner"],
+            request.data["sender"],
+            request.data["subject"],
+            request.data["text"],
+            request.data["project_name"],
+            link
+        )
+        email.send()
+        return Response(status.HTTP_201_CREATED)
 
 class ProjectPostViewSet(viewsets.ModelViewSet):
     queryset = ProjectPost.objects.all()

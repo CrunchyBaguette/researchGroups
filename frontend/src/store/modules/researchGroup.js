@@ -61,6 +61,14 @@ const actions = {
             }).catch((err) => reject(err));
         });
     },
+    sendResearchGroupEmailMessage({ dispatch }, params) {
+        return new Promise((resolve, reject) => {
+            researchGroupService.sendEmail(params).then((response) => {
+                dispatch("getResearchGroups");
+                resolve(response);
+            }).catch((err) => reject(err));
+        });
+    }
 };
 
 const mutations = {

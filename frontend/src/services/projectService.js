@@ -18,5 +18,8 @@ export default {
     },
     fetchGroupProjects(params) {
         return api.get("project/grouped/", { params }).then((response) => response.data);
+    },
+    sendEmail(params) {
+        return api.post("project/email/", params).then((response) => response.data);
     }
 };

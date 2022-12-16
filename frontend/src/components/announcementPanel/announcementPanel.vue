@@ -379,7 +379,6 @@ export default {
           this.selectedGroup = this.userAdminGroups.filter(
             (element) => element.id == this.announcementGroupId
           );
-          //console.log(this.selectedGroup[0].name);
         })
         .then(() => {
           this.loading = false;
@@ -467,7 +466,6 @@ export default {
       if (this.emailMessage == "") this.messageGiven = false;
 
       if (this.messageGiven) {
-        this.loadingEmail = true;
         this.sendEmailMessage({
           annId: this.$route.params.id,
           annTitle: this.announcement.title,
@@ -476,7 +474,6 @@ export default {
           text: this.emailMessage,
         })
           .then(() => {
-            this.loadingEmail = false;
             this.emailMessage = "";
             this.sendingEmail = false;
             this.$buefy.toast.open({
@@ -485,7 +482,6 @@ export default {
             });
           })
           .catch(() => {
-            this.loadingEmail = false;
             this.$buefy.toast.open({
               message:
                 "Błąd przy wysyłaniu wiadomości\nSpróbuj ponownie później",

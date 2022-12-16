@@ -1,9 +1,7 @@
-from rest_framework import viewsets
-from rest_framework import status
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from django.contrib.auth.models import User
 from backend.announcements.models import Announcement
 from backend.announcements.serializers import AnnouncementSerializer
 from backend.common.views import PermissionPolicyMixin
@@ -24,7 +22,6 @@ class AnnouncementViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     }
 
     def update(self, request, *args, **kwargs):
-        print(request.data["ann_type"])
         match request.data["ann_type"]:
             case "Poszukiwanie sponsora":
                 request.data["ann_type"] = "sponsor"
@@ -37,6 +34,6 @@ class AnnouncementViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     @action(detail=False, methods=["post"])  
     def email(self, request, *args, **kwargs):
         link = generate_announcement_link(request.data["annId"])
-        email = get_announcement_email(request.data["author"], request.data["sender"], request.data["text"], request.data["annTitle"].encode("utf-8"), link)
+        email = get_announcement_email(request.data["author"], request.data["sender"], request.data["text"], request.data["annTitle"], link)
         email.send()
         return Response(status=status.HTTP_201_CREATED)

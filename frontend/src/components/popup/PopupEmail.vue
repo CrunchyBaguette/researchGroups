@@ -3,11 +3,6 @@
     <div slot="body">
       <!-- <form @submit.prevent="submitForm"> -->
       <form @submit.prevent="onSubmit">
-        <b-field label="Email">
-          <b-input type="email" v-model="email" maxlength="30" required>
-          </b-input>
-        </b-field>
-
         <b-field label="Tytuł">
           <b-input v-model="emailTitle" maxlength="60" required> </b-input>
         </b-field>
@@ -27,38 +22,83 @@
 
 <script>
 import popup from "@/components/popup/Popup.vue";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "PopupEmail",
+  props: {
+    objectType: { type: String },
+    object: { type: Object },
+  },
   components: {
     popup,
   },
   data() {
     return {
-      email: "",
       emailTitle: "",
       message: "",
     };
   },
   methods: {
+    ...mapActions("researchGroup", ["sendResearchGroupEmailMessage"]),
+    ...mapActions("project", ["sendProjectEmailMessage"]),
     onSubmit() {
-      this.$v.$touch();
-      if (!this.$v.$invalid) {
-        const user = {
-          email: this.email,
-          emailTitle: this.emailTitle,
-          message: this.message,
-        };
-        console.log(user);
-
-        //DONE
-        this.email = "";
-        this.emailTitle = "";
-        this.message = "";
-        this.$v.$reset();
-        this.$emit("close");
+      if (this.objectType == "researchGroup") {
+        this.sendResearchGroupEmailMessage({
+          researchGroupId: this.$route.params.id,
+          creator: this.object.group_owner,
+          sender: this.authUser,
+          subject: this.emailTitle,
+          text: this.message,
+          research_group_name: this.object.name,
+        })
+          .then(() => {
+            this.emailTitle = "";
+            this.message = "";
+            this.$buefy.toast.open({
+              message: "Pomyślnie wysłano wiadomość",
+              type: "is-success",
+            });
+            this.$emit("close");
+          })
+          .catch(() => {
+            this.$buefy.toast.open({
+              message:
+                "Błąd przy wysyłaniu wiadomości\nSpróbuj ponownie później",
+              type: "is-danger",
+            });
+          });
+      } else {
+        this.sendProjectEmailMessage({
+          projectId: this.$route.params.id,
+          owner: this.object.project_owner,
+          sender: this.authUser,
+          subject: this.emailTitle,
+          text: this.message,
+          project_name: this.object.name,
+        })
+          .then(() => {
+            this.emailTitle = "";
+            this.message = "";
+            this.$buefy.toast.open({
+              message: "Pomyślnie wysłano wiadomość",
+              type: "is-success",
+            });
+            this.$emit("close");
+          })
+          .catch(() => {
+            this.$buefy.toast.open({
+              message:
+                "Błąd przy wysyłaniu wiadomości\nSpróbuj ponownie później",
+              type: "is-danger",
+            });
+          });
       }
     },
+  },
+
+  computed: {
+    ...mapGetters("auth", ["authUser"]),
   },
 };
 </script>

@@ -3,37 +3,37 @@
     <div id="titleDiv">
       <p class="title" id="tit">Ogłoszenia</p>
       <b-button
-          v-if="isAdminOrOwner()"
-          id="btnTitle"
-          tag="router-link"
-          :to="{ name: 'addAnnouncement' }"
-          rounded
-          size="is-medium"
-          type="is-success"
-          >Dodaj nowe ogłoszenie</b-button
-        >
+        v-if="isAdminOrOwner()"
+        id="btnTitle"
+        tag="router-link"
+        :to="{ name: 'addAnnouncement' }"
+        rounded
+        size="is-medium"
+        type="is-success"
+        >Dodaj nowe ogłoszenie</b-button
+      >
     </div>
     <div id="announcementsContainer">
       <div class="box" id="box">
-          <div
-            v-for="announcement in paginatedAnnouncements"
-            :key="announcement.title"
-          >
-            <announcement
-              id="ann"
-              :author="announcement.author_full_name"
-              :group="announcement.research_group_name"
-              :category="announcement.ann_type"
-              :added="announcement.added"
-              :edited="announcement.edited"
-              :title="announcement.title"
-              :content="announcement.text"
-              @click.native="moveToAnnouncement(announcement.id)"
-            />
-          </div>
+        <div
+          v-for="announcement in paginatedAnnouncements"
+          :key="announcement.title"
+        >
+          <announcement
+            id="ann"
+            :author="announcement.author_full_name"
+            :group="announcement.research_group_name"
+            :category="announcement.ann_type"
+            :added="announcement.added"
+            :edited="announcement.edited"
+            :title="announcement.title"
+            :content="announcement.text"
+            @click.native="moveToAnnouncement(announcement.id)"
+          />
+        </div>
       </div>
 
-      <br>
+      <br />
 
       <div class="columns" style="width: 100%">
         <div class="column is-two-thirds"></div>
@@ -52,7 +52,7 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from "vuex";
-import announcement from "./announcement.vue"
+import announcement from "./announcement.vue";
 
 export default {
   name: "announcementsCatalog",
@@ -73,12 +73,7 @@ export default {
     ...mapActions("user", ["getUserAdminResearchGroups"]),
 
     isAdminOrOwner() {
-      //console.log('Koła: ' + this.userAdminGroups.toString());
-      //console.log(announcement.research_group_name);
-      if (
-        this.isAuthenticated &&
-        this.userAdminGroups.length >= 1
-      ) {
+      if (this.isAuthenticated && this.userAdminGroups.length >= 1) {
         return true;
       } else {
         return false;
@@ -90,8 +85,8 @@ export default {
       this.pageOfItems = pageOfItems;
     },
     moveToAnnouncement(announcementId) {
-      this.$router.push(`/announcement/${announcementId}`)
-    }
+      this.$router.push(`/announcement/${announcementId}`);
+    },
   },
 
   computed: {
@@ -117,14 +112,12 @@ export default {
     this.getAnnouncements().then(() => (this.loading = false));
     if (this.isAuthenticated) {
       this.getUserAdminResearchGroups(this.authUser.id)
-      .then(
-        () => {
+        .then(() => {
           this.userAdminGroups = this.userAdminResearchGroups;
-        }
-      )
-      .then(() => {
-        this.loading = false;
-      });
+        })
+        .then(() => {
+          this.loading = false;
+        });
     }
   },
 };
@@ -167,7 +160,7 @@ export default {
 
 #btnTitle {
   margin-top: 10px;
-  margin-right: 20px
+  margin-right: 20px;
 }
 
 #ann {
@@ -184,6 +177,5 @@ export default {
   background-color: #7a7a7a;
   box-shadow: 0 0 10px #7a7a7a;
 }
-
 </style>
 

@@ -74,6 +74,14 @@ const actions = {
             }).catch((err) => reject(err));
         });
     },
+    sendProjectEmailMessage({ dispatch }, params) {
+        return new Promise((resolve, reject) => {
+            projectService.sendEmail(params).then((response) => {
+                dispatch("getProjects");
+                resolve(response);
+            }).catch((err) => reject(err));
+        });
+    }
 };
 
 const mutations = {
