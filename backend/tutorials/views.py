@@ -1,6 +1,6 @@
 from typing import Any
 
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
@@ -13,7 +13,7 @@ from backend.tutorials.permissions import IsTutorialEditor, IsTutorialOwner
 
 
 class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
-    queryset = Tutorial.objects.filter(is_public=True).order_by("created")
+    queryset = Tutorial.objects.filter(is_public=True, is_draft=False).order_by("edited")
     permission_classes = [AllowAny]
     permission_classes_per_method = {
         "create": [IsAuthenticated],
@@ -35,15 +35,14 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def retrieve(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        print(self.get_object())
         serializer: TutorialSerializer = self.get_serializer(self.get_object())  # type: ignore
-        tut = serializer.data
+        tutorial = serializer.data
         if request.user.is_authenticated:
-            for editor in tut["editors"]:
+            for editor in tutorial["editors"]:
                 if editor["id"] == request.user.id:
-                    tut["editable"] = True
+                    tutorial["editable"] = True
                     break
-        return Response(tut)
+        return Response(tutorial)
 
     def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         queryset = self.filter_queryset(self.get_queryset())
@@ -71,22 +70,60 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         if self.action in ("list", "retrieve", "partial_update"):
             if projectId := self.request.GET.get("projectId", None):
                 if self.request.user.is_authenticated:
-                    return Tutorial.objects.filter(
-                        project_guide__project=projectId, project_guide__project__members=self.request.user.id
-                    )  # type: ignore
+                    return (
+                        Tutorial.objects.filter(
+                            Q(project_guide__project=projectId)
+                            & Q(project_guide__project__members=self.request.user.id)
+                        )
+                        .exclude(Q(is_draft=True) & ~Q(editors=self.request.user.id))
+                        .order_by("edited")
+                    )
+
                 return Tutorial.objects.filter(
-                    project_guide__is_public=True, project_guide__project=projectId
-                )  # type: ignore
+                    Q(project_guide__is_public=True) & Q(project_guide__project=projectId) & Q(is_draft=False)
+                ).order_by("edited")
+
             if researchGroupId := self.request.GET.get("researchGroupId", None):
                 if self.request.user.is_authenticated:
-                    return Tutorial.objects.filter(
-                        research_group_guide__research_group=researchGroupId,
-                        research_group_guide__research_group__members=self.request.user.id,
-                    )  # type: ignore
-                return Tutorial.objects.filter(
-                    research_group_guide__is_public=True, research_group_guide__research_group=researchGroupId
-                )  # type: ignore
-            if self.request.user.is_authenticated:
-                return Tutorial.objects.all().order_by("created")
+                    return (
+                        Tutorial.objects.filter(
+                            Q(research_group_guide__research_group=researchGroupId)
+                            & Q(research_group_guide__research_group__members=self.request.user.id)
+                        )
+                        .exclude(Q(is_draft=True) & ~Q(editors=self.request.user.id))
+                        .order_by("edited")
+                    )
 
-        return Tutorial.objects.filter(is_public=True).order_by("created")
+                return Tutorial.objects.filter(
+                    Q(research_group_guide__is_public=True)
+                    & Q(research_group_guide__research_group=researchGroupId)
+                    & Q(is_draft=False)
+                ).order_by("edited")
+
+            if self.request.user.is_authenticated:
+                q = (
+                    Tutorial.objects.filter(
+                        Q(is_public=True)  # Jest publiczny
+                        | Q(research_group_guide__research_group__members=self.request.user.id)  # Należy do kółka
+                        | Q(project_guide__project__members=self.request.user.id)  # Jest w projekcie
+                    )
+                    .exclude(  # jest w kółku, ale nie jest edytorem a jest to draft
+                        Q(research_group_guide__research_group__members=self.request.user.id)
+                        & ~Q(editors=self.request.user.id)
+                        & Q(is_draft=True)
+                    )
+                    .exclude(  # jest w projekcie, ale nie jest edytorem draftu
+                        Q(project_guide__project__members=self.request.user.id)
+                        & ~Q(editors=self.request.user.id)
+                        & Q(is_draft=True)
+                    )
+                    .exclude(  # Ani nie jest w projekcie, ani w kółku a jest to draft
+                        ~Q(research_group_guide__research_group__members=self.request.user.id)
+                        & ~Q(project_guide__project__members=self.request.user.id)
+                        & Q(is_draft=True)
+                        & ~Q(editors=self.request.user.id)
+                    )
+                )
+                return q.order_by("edited")
+
+        return Tutorial.objects.filter(is_public=True, is_draft=False).order_by("created")
