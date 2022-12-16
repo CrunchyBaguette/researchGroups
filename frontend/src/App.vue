@@ -54,6 +54,24 @@ export default {
     NavBar,
     SideBar,
   },
+
+  data() {
+    return {
+      markdownOptions: {
+        markdownIt: {
+          html: true,
+          linkify: true,
+        },
+        linkAttributes: {
+          attrs: {
+            target: "_self",
+            rel: "noopener",
+          },
+        },
+      },
+    };
+  },
+
   methods: {
     isLoginOrRegister() {
       return (
