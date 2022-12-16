@@ -168,7 +168,12 @@
                   v-for="editor in editors"
                   :key="editor"
                 >
-                  <p style="flex: 0 1 auto">
+                  <b-icon
+                    style="padding-top: 5px; margin-right: 5px"
+                    v-if="tutorial.owner.email == editor"
+                    icon="star"
+                  />
+                  <p style="flex: 0 1 auto; padding-top: 3px">
                     {{ editor }}
                   </p>
                   <div style="flex: 1 0 auto; text-align: right">
@@ -298,6 +303,14 @@ export default {
     },
 
     saveTutorial() {
+      if (!this.editors.includes(this.tutorial.owner.email)) {
+        this.editors = this.extractEmails(this.tutorial.editors);
+        this.$buefy.toast.open({
+          message: "Nie można usunąć twórcy poradnika",
+          type: "is-danger",
+        });
+        return;
+      }
       this.updateTutorial({
         tutorialId: this.$route.params.id,
         tutorial: {
@@ -313,7 +326,6 @@ export default {
           this.title = response.name;
           this.category = response.type;
           this.text = response.text;
-          this.editors = this.extractEmails(this.tutorial.editors);
           this.is_draft = response.is_draft;
           this.editingTitle = false;
           this.editingText = false;
@@ -383,6 +395,12 @@ export default {
   computed: {
     ...mapGetters("tutorial", ["tutorial"]),
     ...mapGetters("auth", ["authUser"]),
+  },
+
+  watch: {
+    tutorial() {
+      this.editors = this.extractEmails(this.tutorial.editors);
+    },
   },
 };
 </script>
