@@ -166,7 +166,7 @@ export default {
           description: this.projectDescription,
           category: this.projectCategory,
           members: this.projectMembers,
-          project_owner: this.authUser.username,
+          project_owner: this.authUser.email,
         })
           .then(() => {
             this.$buefy.toast.open({

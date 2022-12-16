@@ -167,7 +167,7 @@ export default {
           about_us: this.groupAboutUs,
           category: this.groupCategory,
           members: this.groupMembers,
-          group_owner: this.authUser.username,
+          group_owner: this.authUser.email,
         })
           .then((response) => {
             this.$buefy.toast.open({
