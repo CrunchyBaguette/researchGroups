@@ -137,7 +137,7 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         return TutorialSerializer
 
     def get_queryset(self) -> QuerySet:
-        if self.action in ("list", "retrieve", "partial_update"):
+        if self.action in ("list", "retrieve", "partial_update", "destroy"):
             if projectId := self.request.GET.get("projectId", None):
                 if self.request.user.is_authenticated:
                     return (
@@ -172,11 +172,7 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
 
             if self.request.user.is_authenticated:
                 q = (
-                    Tutorial.objects.filter(
-                        Q(is_public=True)  # Jest publiczny
-                        | Q(research_group_guide__research_group__members=self.request.user.id)  # Należy do kółka
-                        | Q(project_guide__project__members=self.request.user.id)  # Jest w projekcie
-                    )
+                    Tutorial.objects.all()
                     .exclude(  # jest w kółku, ale nie jest edytorem a jest to draft
                         Q(research_group_guide__research_group__members=self.request.user.id)
                         & ~Q(editors=self.request.user.id)

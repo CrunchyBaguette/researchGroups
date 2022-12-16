@@ -313,6 +313,7 @@ export default {
           this.title = response.name;
           this.category = response.type;
           this.text = response.text;
+          this.editors = this.extractEmails(this.tutorial.editors);
           this.is_draft = response.is_draft;
           this.editingTitle = false;
           this.editingText = false;

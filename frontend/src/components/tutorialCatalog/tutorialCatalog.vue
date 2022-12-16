@@ -86,7 +86,7 @@
               ></b-input>
             </b-field>
             <b-field
-              :message="!typeGiven ? 'Proszę podać nazwę poradnika' : ''"
+              :message="!typeGiven ? 'Proszę podać typ poradnika' : ''"
               :type="!typeGiven ? 'is-danger' : ''"
               label="Typ poradnika"
             >
