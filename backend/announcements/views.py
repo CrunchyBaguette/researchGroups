@@ -31,9 +31,11 @@ class AnnouncementViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
                 request.data["ann_type"] = "projekt"
         return super().update(request, *args, **kwargs)
 
-    @action(detail=False, methods=["post"])  
+    @action(detail=False, methods=["post"])
     def email(self, request, *args, **kwargs):
         link = generate_announcement_link(request.data["annId"])
-        email = get_announcement_email(request.data["author"], request.data["sender"], request.data["text"], request.data["annTitle"], link)
+        email = get_announcement_email(
+            request.data["author"], request.data["sender"], request.data["text"], request.data["annTitle"], link
+        )
         email.send()
         return Response(status=status.HTTP_201_CREATED)

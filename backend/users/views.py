@@ -105,8 +105,7 @@ class SendEmailView(generics.GenericAPIView):
         emails_sent = 0
 
         for r in data["receivers"]:
-            email = EmailBuilder(data["sender"]).add_subject(data["subject"]).add_text(data["body"])
-            email.add_receiver(r)
-            emails_sent += email.build_django_mail().send()
+            email = EmailBuilder(sender=data["sender"], subject=data["subject"], message=data["body"], recipient=r)
+            emails_sent += email.send()
 
         return Response({"message": f"Sent {emails_sent} emails successfully"}, status=status.HTTP_200_OK)

@@ -1,13 +1,10 @@
 from __future__ import annotations
 
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from typing import Literal, Sequence
+from typing import Sequence
 from dataclasses import dataclass
 from collections.abc import Mapping
 from django.core.mail import EmailMultiAlternatives, EmailMessage
 from django.core.mail.backends.base import BaseEmailBackend
-from django.utils.html import strip_tags
 
 
 def send_messages_conn(messages: list[EmailMessage], connection: BaseEmailBackend):
@@ -22,17 +19,18 @@ def send_messages_conn(messages: list[EmailMessage], connection: BaseEmailBacken
 
 
 class EmailBuilder:
-    def __init__(self, sender: str, recipient: str, subject: str, message: str, subtype: Literal["alternative", "mixed"] = "alternative") -> None:
-        self.message = EmailMultiAlternatives(
-            subject=subject,
-            body=message,
-            to=[recipient],
-            from_email=sender
-        )
+    def __init__(
+        self,
+        sender: str,
+        recipient: str,
+        subject: str,
+        message: str,
+    ) -> None:
+        self.message = EmailMultiAlternatives(subject=subject, body=message, to=[recipient], from_email=sender)
         self.message.mixed_subtype = "related"
 
-    def send(self) -> None:
-        self.message.send()
+    def send(self) -> int:
+        return self.message.send()
 
 
 @dataclass

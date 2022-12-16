@@ -135,7 +135,7 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         request.data["category"] = self.categoryCodes.get(request.data["category"])
         return super().update(request, *args, **kwargs)
 
-    @action(detail=False, methods=["post"])  
+    @action(detail=False, methods=["post"])
     def email(self, request, *args, **kwargs):
         link = generate_research_group_link(request.data["researchGroupId"])
         email = get_research_group_email(
@@ -144,7 +144,7 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
             request.data["subject"],
             request.data["text"],
             request.data["research_group_name"],
-            link
+            link,
         )
         email.send()
         return Response(status=status.HTTP_201_CREATED)
