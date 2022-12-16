@@ -40,7 +40,7 @@ def get_reset_pass_email(user: User, link: str) -> EmailBuilder:
     )
 
 
-def get_announcement_email(userTo: str, userFrom: User, message: str, announcementName: str, link: str) -> EmailBuilder:
+def get_announcement_email(userTo: str, userFrom: str, message: str, announcementName: str, link: str) -> EmailBuilder:
     return EmailBuilder(
         sender=settings.EMAIL_HOST_USER,
         recipient=userTo,
@@ -50,7 +50,7 @@ def get_announcement_email(userTo: str, userFrom: User, message: str, announceme
 
 
 def get_research_group_email(
-    userTo: str, userFrom: User, subject: str, message: str, research_group_name: str, link: str
+    userTo: str, userFrom: str, subject: str, message: str, research_group_name: str, link: str
 ) -> EmailBuilder:
     return EmailBuilder(
         sender=settings.EMAIL_HOST_USER,
@@ -61,7 +61,7 @@ def get_research_group_email(
 
 
 def get_project_email(
-    userTo: str, userFrom: User, subject: str, message: str, project_name: str, link: str
+    userTo: str, userFrom: str, subject: str, message: str, project_name: str, link: str
 ) -> EmailBuilder:
     return EmailBuilder(
         sender=settings.EMAIL_HOST_USER,
@@ -89,19 +89,16 @@ def get_email_body_for_reset(user: User, link: str) -> str:
     Link będzie aktywny 30 minut."""
 
 
-def get_email_body_for_announcement(userFrom: User, message: str, announcementName: str, link: str) -> str:
-    return f"Od: {userFrom.first_name} {userFrom.last_name} \
-    ({userFrom.email})\n\nOgłoszenie:\n{announcementName}\n{link}\n\n{message}"
+def get_email_body_for_announcement(userFrom: str, message: str, announcementName: str, link: str) -> str:
+    return f"Od: {userFrom}\n\nOgłoszenie:\n{announcementName}\n{link}\n\n{message}"
 
 
-def get_email_body_for_research_group(userFrom: User, message: str, research_group_name: str, link: str) -> str:
-    return f"Od: {userFrom.first_name} {userFrom.last_name}\
-        ({userFrom.email})\n\nKoło naukowe:\n{research_group_name}\n{link}\n\n{message}"
+def get_email_body_for_research_group(userFrom: str, message: str, research_group_name: str, link: str) -> str:
+    return f"Od: {userFrom}\n\nKoło naukowe:\n{research_group_name}\n{link}\n\n{message}"
 
 
-def get_email_body_for_project(userFrom: User, message: str, project_name: str, link: str) -> str:
-    return f"Od: {userFrom.first_name} {userFrom.last_name}\
-        ({userFrom.email})\n\nProjekt:\n{project_name}\n{link}\n\n{message}"
+def get_email_body_for_project(userFrom: str, message: str, project_name: str, link: str) -> str:
+    return f"Od: {userFrom}\n\nProjekt:\n{project_name}\n{link}\n\n{message}"
 
 
 def generate_announcement_link(announcementId: int) -> str:

@@ -261,6 +261,18 @@
         <div class="modal-card">
           <section class="modal-card-body">
             <b-field
+              v-if="!this.isAuthenticated"
+              :message="errorEmail"
+              :type="errorEmail ? 'is-danger' : ''"
+              label="E-mail:"
+            >
+              <b-input
+                @focus="errorEmail = ''"
+                v-model="email"
+                style="width: 100%"
+              />
+            </b-field>
+            <b-field
               :message="!messageGiven ? 'Proszę podać treść wiadomości' : ''"
               :type="!messageGiven ? 'is-danger' : ''"
               label="Treść wiadomości"
@@ -335,6 +347,8 @@ export default {
       isButtonDisabled: false,
 
       sendingEmail: false,
+      email: "",
+      errorEmail: "",
       emailMessage: "",
       messageGiven: true,
 
@@ -354,7 +368,6 @@ export default {
   },
   mounted() {
     document.title = "Panel ogłoszenia";
-
     this.getAnnouncement(this.$route.params.id)
       .then(
         () => (
@@ -403,6 +416,17 @@ export default {
       } else {
         return false;
       }
+    },
+
+    verifyEmail(email) {
+      if (
+        !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+          email
+        )
+      ) {
+        return false;
+      }
+      return true;
     },
 
     updateAnnouncementInfo() {
@@ -463,17 +487,23 @@ export default {
     },
 
     sendEmail() {
+      if (!this.isAuthenticated) {
+        if (!this.verifyEmail(this.email))
+          this.errorEmail = "Proszę podać poprawny adres e-mail";
+        if (this.email == "") this.errorEmail = "Proszę podać adres e-mail";
+      }
       if (this.emailMessage == "") this.messageGiven = false;
 
-      if (this.messageGiven) {
+      if (this.messageGiven && !this.errorEmail) {
         this.sendEmailMessage({
           annId: this.$route.params.id,
           annTitle: this.announcement.title,
           author: this.announcement.author_email,
-          sender: this.authUser,
+          sender: this.isAuthenticated ? this.authUser.email : this.email,
           text: this.emailMessage,
         })
           .then(() => {
+            this.email = "";
             this.emailMessage = "";
             this.sendingEmail = false;
             this.$buefy.toast.open({
@@ -593,7 +623,6 @@ export default {
     ...mapState({
       userAdminResearchGroups: (state) => state.user.userAdminResearchGroups,
     }),
-    //...mapGetters("auth", ["isAuthenticated"]),
     ...mapGetters("auth", ["authUser", "isAuthenticated"]),
   },
 };
