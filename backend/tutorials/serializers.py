@@ -3,6 +3,8 @@ from rest_framework.serializers import raise_errors_on_nested_writes
 from django.contrib.auth.models import User
 from backend.users.serializers import UserSerializer
 from backend.tutorials.models import Tutorial, Rating
+from backend.research_groups.models import ResearchGroupGuide
+from backend.projects.models import GuideProject
 from backend.utilsx.serializers import QuerySerializerMixin
 
 
@@ -20,12 +22,6 @@ class TutorialSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation["type"] = instance.get_type_display()
         return representation
-
-
-class EditorInfo(QuerySerializerMixin, serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["username", "email"]
 
 
 class TutorialEditSerializer(serializers.ModelSerializer):
@@ -91,3 +87,17 @@ class RatingTutorialSerializer(QuerySerializerMixin, serializers.ModelSerializer
     class Meta:
         model = Rating
         fields = "__all__"
+
+
+class TutorialLinkProject(serializers.ModelSerializer):
+    class Meta:
+        model = GuideProject
+        fields = "__all__"
+        extra_kwargs = {"is_public": {"required": False}, "added": {"required": False, "read_only": True}}
+
+
+class TutorialLinkResearchGroup(serializers.ModelSerializer):
+    class Meta:
+        model = ResearchGroupGuide
+        fields = "__all__"
+        extra_kwargs = {"is_public": {"required": False}}

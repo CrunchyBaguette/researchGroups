@@ -1,15 +1,24 @@
 from typing import Any
 
 from django.db.models import QuerySet, Q
+from django.contrib.auth.models import User
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import BaseSerializer
+from rest_framework.decorators import action, permission_classes
 from backend.users.views import PermissionPolicyMixin
 from backend.tutorials.models import Tutorial
-from backend.tutorials.serializers import TutorialSerializer, TutorialEditSerializer
+from backend.tutorials.serializers import (
+    TutorialSerializer,
+    TutorialEditSerializer,
+    TutorialLinkProject,
+    TutorialLinkResearchGroup,
+)
 from backend.tutorials.permissions import IsTutorialEditor, IsTutorialOwner
+from backend.research_groups.models import ResearchGroupGuide, ResearchGroup
+from backend.projects.models import GuideProject, Project
 
 
 class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
@@ -59,6 +68,70 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
                 if is_editor_of.filter(id=tut["id"]).exists():
                     tut["editable"] = True
         return Response(serializer.data)
+
+    @action(
+        detail=True,
+        methods=["PUT"],
+        permission_classes=[IsAuthenticated, IsTutorialEditor],
+        serializer_class=TutorialLinkProject,
+    )
+    def link_tutorial_project(self, request: Request, pk=None) -> Response:
+        serializer: TutorialLinkProject = self.get_serializer(data=request.data)
+        if serializer.validated_data["guide"] != pk:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        if Project.members.contains(request.user):
+            link = serializer.save()
+            data = TutorialLinkProject(link)
+            return Response(data=data.data, status=status.HTTP_201_CREATED)
+        else:
+            Response(data={"error": "User is not a member of a project"}, status=status.HTTP_403_FORBIDDEN)
+
+    @link_tutorial_project.mapping.delete
+    def delete_link_tutorial_project(self, request: Request, pk=None) -> Response:
+        serializer: TutorialLinkProject = self.get_serializer(data=request.data)
+        if serializer.validated_data["guide"] != pk:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        if Project.members.contains(request.user):
+            project = serializer.validated_data["project"]
+            tutorial = serializer.validated_data["guide"]
+            instance: GuideProject = GuideProject.objects.get(tutorial=tutorial, project=project)
+            instance.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            Response(data={"error": "User is not a member of a project"}, status=status.HTTP_403_FORBIDDEN)
+
+    @action(
+        detail=True,
+        methods=["PUT"],
+        permission_classes=[IsAuthenticated, IsTutorialEditor],
+        serializer_class=TutorialLinkResearchGroup,
+    )
+    def link_tutorial_researchgroup(self, request: Request, pk=None) -> Response:
+        serializer: TutorialLinkResearchGroup = self.get_serializer(data=request.data)
+        if serializer.validated_data["guide"] != pk:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        if ResearchGroup.members.contains(request.user):
+            link = serializer.save()
+            data = TutorialLinkResearchGroup(link)
+            return Response(data=data.data, status=status.HTTP_201_CREATED)
+        else:
+            Response(data={"error": "User is not a member of a research group"}, status=status.HTTP_403_FORBIDDEN)
+
+    @link_tutorial_researchgroup.mapping.delete
+    def delete_link_researchgroup(self, request: Request, pk=None) -> Response:
+        serializer: TutorialLinkResearchGroup = self.get_serializer(data=request.data)
+        if serializer.validated_data["research_group"] != pk:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        if ResearchGroup.members.contains(request.user):
+            research_group = serializer.validated_data["research_group"]
+            tutorial = serializer.validated_data["guide"]
+            instance: ResearchGroupGuide = ResearchGroupGuide.objects.get(
+                tutorial=tutorial, research_group=research_group
+            )
+            instance.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            Response(data={"error": "User is not a member of a research group"}, status=status.HTTP_403_FORBIDDEN)
 
     def get_serializer_class(self) -> type[BaseSerializer]:
         if self.action in ["create", "update", "partial_update"]:
