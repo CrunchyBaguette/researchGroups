@@ -42,7 +42,7 @@ class ResearchGroupUser(models.Model):
 class ResearchGroupGuide(models.Model):
     is_public = models.BooleanField(default=False)
     research_group = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
-    guide = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
+    guide = models.ForeignKey(Tutorial, on_delete=models.CASCADE, related_name="research_group_guide")
 
 
 class ResearchGroupPost(models.Model):
@@ -62,8 +62,8 @@ class ResearchGroupPostComment(models.Model):
 
 
 class ResearchGroupDisk(Link):
-    project = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
+    research_group = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
 
 
 class ResearchGroupLink(Link):
-    project = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
+    research_group = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)

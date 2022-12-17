@@ -1,3 +1,4 @@
+import router from "@/router";
 import { api } from "@/services/api";
 import authService from "@/services/authService";
 import jwt_decode from "jwt-decode"
@@ -48,7 +49,10 @@ const actions = {
     },
     beginTokenRefreshCountdown({ dispatch, commit }) {
         const ID = setInterval(() => {
-            dispatch("refreshAccessToken");
+            dispatch("refreshAccessToken").catch(() => {
+                dispatch("logOut");
+                router.push("/login");
+            });
         }, 3600000); // godzina
         commit("setTokenRefreshCountdownID", ID);
     },

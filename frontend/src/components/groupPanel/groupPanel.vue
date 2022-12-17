@@ -37,7 +37,7 @@
               @click="changeGroupName"
               v-if="!editGroupName && isBeingEdited"
             >
-              <mdicon name="lead-pencil" />
+              <b-icon icon="lead-pencil" />
             </b-button>
           </div>
         </div>
@@ -71,22 +71,35 @@
               @click="changeGroupCategory"
               v-if="!editGroupCategory && isBeingEdited"
             >
-              <mdicon name="lead-pencil" />
+              <b-icon icon="lead-pencil" />
             </b-button>
           </div>
         </div>
         <br />
       </div>
       <div class="column is-3" id="col" v-if="isBeingEdited">
-        <b-button
-          id="title"
-          rounded
-          size="is-medium"
-          type="is-success"
-          @click="changeToPanelMode"
-          :disabled="isButtonDisabled"
-          ><mdicon name="arrow-left" /> Wróć do panelu koła</b-button
-        >
+        <div style="display: flex; flex-direction: column">
+          <b-button
+            id="title"
+            rounded
+            size="is-medium"
+            type="is-success"
+            @click="changeToPanelMode"
+            :disabled="isButtonDisabled"
+            ><b-icon icon="arrow-left" />&nbsp;&nbsp;Wróć do panelu
+            koła</b-button
+          >
+          <b-button
+            id="title"
+            rounded
+            style="margin-top: 10px"
+            size="is-medium"
+            type="is-danger"
+            v-if="this.researchGroup.group_owner == this.authUser.email"
+            @click="deleteGroupConfirmation"
+            >Usuń koło naukowe</b-button
+          >
+        </div>
       </div>
       <div class="column is-3" id="col" v-else>
         <b-button
@@ -140,14 +153,6 @@
           :disabled="isButtonDisabled"
           >Kontakt</b-button
         >
-        <b-button
-          id="btn"
-          size="is-medium"
-          tag="router-link"
-          to="/group-tutorials"
-          :disabled="isButtonDisabled"
-          >Materiały dydaktyczne</b-button
-        >
       </div>
       <div class="box column is-6" id="centerDiv">
         <div class="outer" v-if="selectedTabTitle === 'Czym się zajmujemy'">
@@ -160,7 +165,7 @@
                 @click="changeWhatWeDo"
                 v-if="!editWhatWeDo && isBeingEdited"
               >
-                <mdicon name="lead-pencil" />
+                <b-icon icon="lead-pencil" />
               </b-button>
             </div>
           </div>
@@ -203,7 +208,7 @@
                 @click="changeMembers"
                 v-if="!editMembers && isBeingEdited"
               >
-                <mdicon name="lead-pencil" />
+                <b-icon icon="lead-pencil" />
               </b-button>
             </div>
           </div>
@@ -280,7 +285,7 @@
                 "
                 v-if="editMembers"
               >
-                <div style="flex: 0 1 auto">
+                <div style="flex: 0 1 50%">
                   <b-input v-model="addEmail" style="bottom: 5px"></b-input>
                 </div>
                 <div style="flex: 1 0 auto; text-align: right">
@@ -331,7 +336,7 @@
                 @click="changeAboutUs"
                 v-if="!editAboutUs && isBeingEdited"
               >
-                <mdicon name="lead-pencil" />
+                <b-icon icon="lead-pencil" />
               </b-button>
             </div>
           </div>
@@ -343,10 +348,7 @@
             />
           </div>
           <div v-else>
-            <b-field
-              :message="aboutUsGiven"
-              :type="aboutUsGiven ? 'is-danger' : ''"
-            >
+            <b-field :type="this.aboutUs ? '' : 'is-danger'">
               <b-input
                 @focus="aboutUsGiven = ''"
                 v-model="aboutUs"
@@ -376,7 +378,7 @@
                 @click="changeContact"
                 v-if="!editContact && isBeingEdited"
               >
-                <mdicon name="lead-pencil" />
+                <b-icon icon="lead-pencil" />
               </b-button>
             </div>
           </div>
@@ -395,7 +397,12 @@
                 WYŚLIJ WIADOMOŚĆ
               </button>
 
-              <popupEmail v-if="popupEmail" @close="popupEmail = false" />
+              <popupEmail
+                objectType="researchGroup"
+                :object="this.researchGroup"
+                v-if="popupEmail"
+                @close="popupEmail = false"
+              />
             </div>
           </div>
           <div v-else>
@@ -423,56 +430,118 @@
       <div class="box column is-3" id="divLinks">
         <b-menu :activable="false" :accordion="false" id="menu">
           <b-menu-list>
-            <b-menu-item label="Linki">
+            <b-menu-item label="Linki" v-if="!isBeingEdited">
               <b-menu-item
-                label="Github"
+                v-for="link in this.canAccessLinks(links)"
+                :key="link.name"
+                :label="link.name"
+                :icon="link.is_public ? '' : 'lock'"
                 target="_blank"
-                href="https://github.com"
-              ></b-menu-item>
-              <b-menu-item
-                label="Facebook"
-                target="_blank"
-                href="https://facebook.com"
-              ></b-menu-item>
-              <b-menu-item
-                label="Discord"
-                target="_blank"
-                href="https://discord.com"
+                :href="link.link"
               ></b-menu-item>
             </b-menu-item>
-            <b-menu-item label="Dyski">
+            <b-menu-item label="Linki" v-else>
               <b-menu-item
-                label="Dysk 1"
-                target="_blank"
-                href="https://drive.google.com/drive/folders/1QMHnaSuOPcfOX16190I9D8q_Fa5pzeOF?usp=sharing"
+                v-for="link in links"
+                :key="link.name"
+                :label="link.name"
+                :icon="link.is_public ? '' : 'lock'"
+                @click="
+                  openLinkModal(
+                    `Edytuj link`,
+                    `link`,
+                    link.id,
+                    link.name,
+                    link.link,
+                    link.is_public,
+                    link.users
+                  )
+                "
               ></b-menu-item>
               <b-menu-item
-                label="Dysk 2"
+                label="+"
+                @click="openLinkModal(`Dodaj link`, `link`)"
+              ></b-menu-item>
+            </b-menu-item>
+            <b-menu-item label="Dyski" v-if="!isBeingEdited">
+              <b-menu-item
+                v-for="disk in this.canAccessLinks(disks)"
+                :key="disk.name"
+                :label="disk.name"
+                :icon="disk.is_public ? '' : 'lock'"
                 target="_blank"
-                href="https://drive.google.com/drive/folders/1vGf8f0nVkJcAZQ6S7mZ74vFhpJK0Gbeo?usp=sharing"
+                :href="disk.link"
+              ></b-menu-item>
+            </b-menu-item>
+            <b-menu-item label="Dyski" v-else>
+              <b-menu-item
+                v-for="disk in this.canAccessLinks(disks)"
+                :key="disk.name"
+                :label="disk.name"
+                :icon="disk.is_public ? '' : 'lock'"
+                @click="
+                  openLinkModal(
+                    `Edytuj dysk`,
+                    `disk`,
+                    disk.id,
+                    disk.name,
+                    disk.link,
+                    disk.is_public,
+                    disk.users
+                  )
+                "
+              ></b-menu-item>
+              <b-menu-item
+                label="+"
+                @click="openLinkModal(`Dodaj dysk`, `disk`)"
               ></b-menu-item>
             </b-menu-item>
           </b-menu-list>
         </b-menu>
       </div>
     </div>
+    <b-modal has-modal-card :active.sync="this.editLink" trap-focus>
+      <editLinkModal
+        :message="this.modalMessage"
+        :linkId="this.linkId"
+        :linkTitle="this.linkTitle"
+        :linkUrl="this.linkUrl"
+        :linkPublic="this.linkPublic"
+        :linkUsers="this.linkUsers"
+        :linkType="this.linkType"
+        v-on:save="updateLink"
+        v-on:cancel="closeEditLinkModal"
+        v-on:delete="deleteLink"
+      />
+    </b-modal>
   </div>
 </template>
 
 <script>
 import popupEmail from "@/components/popup/PopupEmail.vue";
+import editLinkModal from "@/components/groupPanel/editLink.vue";
 import { mapActions, mapState, mapGetters } from "vuex";
 
 export default {
   name: "groupPanel",
   components: {
     popupEmail,
+    editLinkModal,
   },
   data() {
     return {
       loading: true,
       addEmail: "",
       addRole: "Member",
+
+      modalMessage: "",
+      linkId: null,
+      linkTitle: "",
+      linkUrl: "",
+      linkPublic: false,
+      linkUsers: [],
+      linkType: "",
+      editLink: false,
 
       selectedTabTitle: "O Nas",
 
@@ -498,26 +567,17 @@ export default {
       contact: "",
       editContact: false,
 
+      links: [],
+      disks: [],
+
       popupEmail: false,
 
       isBeingEdited: false,
       isButtonDisabled: false,
-
-      markdownOptions: {
-        markdownIt: {
-          linkify: true,
-        },
-        linkAttributes: {
-          attrs: {
-            target: "_self",
-            rel: "noopener",
-          },
-        },
-      },
     };
   },
   mounted() {
-    document.title = "Edycja koła";
+    document.title = "Panel koła";
     this.getResearchGroup(this.$route.params.id)
       .then(
         () => (
@@ -534,15 +594,283 @@ export default {
         );
       })
       .then(() => {
+        this.getResearchGroupLinks({
+          researchGroupId: this.researchGroup.id,
+        }).then(() => (this.links = this.researchGroupLinks));
+      })
+      .then(() => {
+        this.getResearchGroupDisks({
+          researchGroupId: this.researchGroup.id,
+        }).then(() => (this.disks = this.researchGroupDisks));
+      })
+      .then(() => {
         this.loading = false;
       });
   },
   methods: {
-    ...mapActions("researchGroup", ["getResearchGroup", "updateResearchGroup"]),
+    ...mapActions("researchGroup", [
+      "getResearchGroup",
+      "updateResearchGroup",
+      "removeResearchGroup",
+    ]),
     ...mapActions("researchGroupMember", [
       "getResearchGroupMembers",
       "updateResearchGroupMembers",
     ]),
+    ...mapActions("researchGroupLink", [
+      "getResearchGroupLinks",
+      "addResearchGroupLink",
+      "deleteResearchGroupLink",
+      "updateResearchGroupLink",
+    ]),
+    ...mapActions("researchGroupDisk", [
+      "getResearchGroupDisks",
+      "addResearchGroupDisk",
+      "deleteResearchGroupDisk",
+      "updateResearchGroupDisk",
+    ]),
+
+    canAccessLinks(links) {
+      let canAccessLinks = [];
+      for (let i = 0; i < links.length; i++) {
+        if (links[i].is_public) {
+          canAccessLinks.push(links[i]);
+        } else if (
+          this.isMember() ||
+          (this.isAuthenticated && links[i].users.includes(this.authUser.email))
+        ) {
+          canAccessLinks.push(links[i]);
+        }
+      }
+      return canAccessLinks;
+    },
+
+    openLinkModal(
+      modalMessage,
+      linkType,
+      linkId = null,
+      linkTitle = null,
+      linkUrl = null,
+      linkPublic = true,
+      linkUsers = []
+    ) {
+      this.modalMessage = modalMessage;
+      this.linkId = linkId;
+      this.linkTitle = linkTitle;
+      this.linkUrl = linkUrl;
+      this.linkPublic = linkPublic;
+      this.linkUsers = linkUsers;
+      this.linkType = linkType;
+      this.editLink = true;
+    },
+
+    openAddLinkModal() {
+      this.editLink = true;
+    },
+
+    updateLinkInList(list, newTitle, newUrl, newPublic, newUsers) {
+      for (let i = 0; i < list.length; i++) {
+        if (this.links[i].id == this.linkId) {
+          list[i].name = newTitle;
+          list[i].link = newUrl;
+          list[i].is_public = newPublic;
+          list[i].users = newUsers;
+          break;
+        }
+      }
+    },
+
+    addLinkToList(
+      list,
+      newId,
+      newTitle,
+      newUrl,
+      newPublic,
+      newUsers,
+      newResearch_group
+    ) {
+      list.push({
+        id: newId,
+        name: newTitle,
+        link: newUrl,
+        is_public: newPublic,
+        users: newUsers,
+        research_group: newResearch_group,
+      });
+    },
+
+    updateLink(event) {
+      if (event["linkType"] == "link") {
+        if (this.linkId != null) {
+          this.updateResearchGroupLink({
+            linkId: this.linkId,
+            researchGroupId: this.$route.params.id,
+            link: {
+              name: event["newTitle"],
+              link: event["newUrl"],
+              is_public: event["newPublic"],
+              users: event["newUsers"],
+            },
+          })
+            .then(() => {
+              this.updateLinkInList(
+                this.links,
+                event["newTitle"],
+                event["newUrl"],
+                event["newPublic"],
+                event["newUsers"]
+              );
+              this.closeEditLinkModal();
+            })
+            .catch((err) => {
+              this.$buefy.toast.open({
+                message: err.response.data[Object.keys(err.response.data)[0]],
+                type: "is-danger",
+              });
+            });
+        } else {
+          this.addResearchGroupLink({
+            researchGroupId: this.$route.params.id,
+            link: {
+              name: event["newTitle"],
+              link: event["newUrl"],
+              is_public: event["newPublic"],
+              users: event["newUsers"],
+              research_group: this.$route.params.id,
+            },
+          })
+            .then((response) => {
+              this.addLinkToList(
+                this.links,
+                response["id"],
+                response["name"],
+                response["link"],
+                response["is_public"],
+                response["users"],
+                response["research_group"]
+              );
+              this.closeEditLinkModal();
+            })
+            .catch((err) => {
+              this.$buefy.toast.open({
+                message: err.response.data[Object.keys(err.response.data)[0]],
+                type: "is-danger",
+              });
+            });
+        }
+      } else {
+        if (this.linkId != null) {
+          this.updateResearchGroupDisk({
+            diskId: this.linkId,
+            researchGroupId: this.$route.params.id,
+            disk: {
+              name: event["newTitle"],
+              link: event["newUrl"],
+              is_public: event["newPublic"],
+              users: event["newUsers"],
+            },
+          })
+            .then(() => {
+              this.updateLinkInList(
+                this.disks,
+                event["newTitle"],
+                event["newUrl"],
+                event["newPublic"],
+                event["newUsers"]
+              );
+              this.closeEditLinkModal();
+            })
+            .catch((err) => {
+              this.$buefy.toast.open({
+                message: err.response.data[Object.keys(err.response.data)[0]],
+                type: "is-danger",
+              });
+            });
+        } else {
+          this.addResearchGroupDisk({
+            researchGroupId: this.$route.params.id,
+            disk: {
+              name: event["newTitle"],
+              link: event["newUrl"],
+              is_public: event["newPublic"],
+              users: event["newUsers"],
+              research_group: this.$route.params.id,
+            },
+          })
+            .then((response) => {
+              this.addLinkToList(
+                this.disks,
+                response["id"],
+                response["name"],
+                response["link"],
+                response["is_public"],
+                response["users"],
+                response["research_group"]
+              );
+              this.closeEditLinkModal();
+            })
+            .catch((err) => {
+              this.$buefy.toast.open({
+                message: err.response.data[Object.keys(err.response.data)[0]],
+                type: "is-danger",
+              });
+            });
+        }
+      }
+    },
+
+    deleteLink(event) {
+      if (event["linkType"] == "link") {
+        this.deleteResearchGroupLink({
+          researchGroupId: this.$route.params.id,
+          linkId: this.linkId,
+        })
+          .then(() => {
+            for (let i = 0; i < this.links.length; i++) {
+              if (this.links[i].id == this.linkId) {
+                this.links.splice(i, 1);
+                break;
+              }
+            }
+            this.closeEditLinkModal();
+          })
+          .catch((err) => {
+            this.$buefy.toast.open({
+              message: err.response.data[Object.keys(err.response.data)[0]],
+              type: "is-danger",
+            });
+          });
+      } else {
+        this.deleteResearchGroupDisk({
+          researchGroupId: this.$route.params.id,
+          diskId: this.linkId,
+        })
+          .then(() => {
+            for (let i = 0; i < this.disks.length; i++) {
+              if (this.disks[i].id == this.linkId) {
+                this.disks.splice(i, 1);
+                break;
+              }
+            }
+            this.closeEditLinkModal();
+          })
+          .catch((err) => {
+            this.$buefy.toast.open({
+              message: err.response.data[Object.keys(err.response.data)[0]],
+              type: "is-danger",
+            });
+          });
+      }
+    },
+
+    closeEditLinkModal() {
+      this.linkId = null;
+      this.linkTitle = "";
+      this.linkUrl = "";
+      this.linkUsers = [];
+      this.linkType = "";
+      this.editLink = false;
+    },
 
     isMember() {
       if (this.isAuthenticated) {
@@ -571,8 +899,12 @@ export default {
     },
 
     removeMemberFromList(email) {
-      let index = this.members.indexOf(email);
-      this.members.splice(index, 1);
+      for (let i = 0; i < this.members.length; i++) {
+        if (this.members[i].person == email) {
+          this.members.splice(i, 1);
+          break;
+        }
+      }
     },
 
     updateGroupInfo() {
@@ -585,18 +917,25 @@ export default {
           what_we_do: this.whatWeDo,
           contact: this.contact,
         },
-      }).catch((err) => {
-        this.groupName = this.researchGroup.name;
-        this.groupCategory = this.researchGroup.category;
-        this.aboutUs = this.researchGroup.about_us;
-        this.whatWeDo = this.researchGroup.what_we_do;
-        this.contact = this.researchGroup.contact;
-        this.$buefy.toast.open({
-          message: err.response.data[Object.keys(err.response.data)[0]],
-          type: "is-danger",
+      })
+        .then((response) => {
+          this.groupName = response.name;
+          this.groupCategory = response.category;
+          this.aboutUs = response.about_us;
+          this.whatWeDo = response.what_we_do;
+          this.contact = response.contact;
+        })
+        .catch((err) => {
+          this.groupName = this.researchGroup.name;
+          this.groupCategory = this.researchGroup.category;
+          this.aboutUs = this.researchGroup.about_us;
+          this.whatWeDo = this.researchGroup.what_we_do;
+          this.contact = this.researchGroup.contact;
+          this.$buefy.toast.open({
+            message: err.response.data[Object.keys(err.response.data)[0]],
+            type: "is-danger",
+          });
         });
-      });
-
       this.updateResearchGroupMembers({
         researchGroupId: this.$route.params.id,
         members: this.members,
@@ -615,10 +954,35 @@ export default {
             type: "is-danger",
           });
         });
+    },
 
-      // this.getResearchGroupMembers(this.$route.params.id).then((response) => {
-      //   this.members = response.members;
-      // });
+    deleteGroupConfirmation() {
+      this.$buefy.dialog.confirm({
+        title: "Usuwanie koła naukowego",
+        message:
+          "<b>Czy na pewno chcesz usunąć koło naukowe?</b></br>Wraz z kołem naukowym usunięte zostaną wpisy forum, linki oraz dyski",
+        confirmText: "Usuń koło naukowe",
+        type: "is-danger",
+        hasIcon: true,
+        onConfirm: () => this.deleteGroup(),
+      });
+    },
+
+    deleteGroup() {
+      this.removeResearchGroup(this.$route.params.id)
+        .then(() => {
+          this.$router.push("/group-catalog");
+          this.$buefy.toast.open({
+            message: "Koło naukowe zostało usunięte",
+            type: "is-success",
+          });
+        })
+        .catch((err) => {
+          this.$buefy.toast.open({
+            message: err.response.data[Object.keys(err.response.data)[0]],
+            type: "is-danger",
+          });
+        });
     },
 
     addMemberToList() {
@@ -717,9 +1081,7 @@ export default {
       this.isButtonDisabled = !this.isButtonDisabled;
     },
     saveAboutUs() {
-      if (this.aboutUs === "") {
-        this.aboutUsGiven = "Wypełnij sekcję o nas";
-      } else {
+      if (this.aboutUs != "") {
         this.updateGroupInfo();
         this.changeAboutUs();
       }
@@ -781,6 +1143,12 @@ export default {
       researchGroupMembers: (state) =>
         state.researchGroupMember.researchGroupMembers,
     }),
+    ...mapState({
+      researchGroupLinks: (state) => state.researchGroupLink.researchGroupLinks,
+    }),
+    ...mapState({
+      researchGroupDisks: (state) => state.researchGroupDisk.researchGroupDisks,
+    }),
     ...mapGetters("auth", ["isAuthenticated", "authUser"]),
   },
 };
@@ -800,7 +1168,6 @@ export default {
 .title {
   /* padding-bottom: 8px; 
   text-decoration: none; */
-  /* padding-left: 50px; */
   text-align: center;
   /* color: #333;
   font-size: 2.15rem;
@@ -815,7 +1182,6 @@ export default {
 
 .p-category {
   padding: 7px;
-  /* padding-left: 50px; */
   text-align: center;
   font-size: 16px;
   color: grey;

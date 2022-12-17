@@ -7,6 +7,7 @@
     >
       <p
         style="
+          z-index: 1;
           font-size: 30px;
           position: sticky;
           top: 0;
@@ -47,22 +48,6 @@ export default {
 
   props: {
     project: { type: Object },
-  },
-
-  data() {
-    return {
-      markdownOptions: {
-        markdownIt: {
-          linkify: true,
-        },
-        linkAttributes: {
-          attrs: {
-            target: "_self",
-            rel: "noopener",
-          },
-        },
-      },
-    };
   },
 };
 </script>

@@ -10,10 +10,16 @@ export default {
     patchProject(update) {
         return api.patch(`project/${update.id}/`, update.payload).then((response) => response.data);
     },
+    deleteProject(projectId) {
+        return api.delete(`project/${projectId}/`).then((response) => response.data);
+    },
     fetchProjects() {
         return api.get("project/").then((response) => response.data);
     },
     fetchGroupProjects(params) {
         return api.get("project/grouped/", { params }).then((response) => response.data);
+    },
+    sendEmail(params) {
+        return api.post("project/email/", params).then((response) => response.data);
     }
 };

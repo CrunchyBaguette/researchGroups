@@ -5,12 +5,14 @@ from backend.projects.models import (
     Project,
     ProjectPost,
     ProjectUser,
+    ProjectLink,
+    ProjectDisk,
 )
 
 
 class ProjectSerializer(QuerySerializerMixin, serializers.ModelSerializer):
     members = serializers.SlugRelatedField(many=True, slug_field="email", queryset=User.objects.all())
-    project_owner = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
+    project_owner = serializers.SlugRelatedField(slug_field="email", queryset=User.objects.all())
 
     RELATED_FIELDS = ["project_owner"]
     PREFETCH_FIELDS = ["members"]
@@ -44,4 +46,24 @@ class ProjectUserSerializer(QuerySerializerMixin, serializers.ModelSerializer):
 class ProjectPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectPost
+        fields = "__all__"
+
+
+class ProjectLinkSerializer(QuerySerializerMixin, serializers.ModelSerializer):
+    users = serializers.SlugRelatedField(many=True, slug_field="email", queryset=User.objects.all())
+
+    PREFETCH_FIELDS = ["users"]
+
+    class Meta:
+        model = ProjectLink
+        fields = "__all__"
+
+
+class ProjectDiskSerializer(QuerySerializerMixin, serializers.ModelSerializer):
+    users = serializers.SlugRelatedField(many=True, slug_field="email", queryset=User.objects.all())
+
+    PREFETCH_FIELDS = ["users"]
+
+    class Meta:
+        model = ProjectDisk
         fields = "__all__"

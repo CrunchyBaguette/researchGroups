@@ -1,12 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import announcements from "@/components/announcements/announcements"
+import announcementsCatalog from "@/components/announcementCatalog/announcementCatalog"
+import addAnnouncement from "@/components/announcementCatalog/addAnnouncement"
+import announcementPanel from "@/components/announcementPanel/announcementPanel"
 import groupCatalog from "@/components/groupCatalog/groupCatalog"
 import addGroup from "@/components/groupCatalog/addGroup"
 import projectCatalog from "@/components/projectCatalog/projectCatalog"
 import addProject from "@/components/projectCatalog/addProject"
 import projectPanel from "@/components/projectPanel/projectPanel"
+import tutorialPanel from "@/components/tutorialPanel/tutorialPanel"
+import addTutorial from "@/components/tutorialCatalog/addTutorial"
 import tutorialCatalog from "@/components/tutorialCatalog/tutorialCatalog"
 import loginPage from "@/components/user/loginPage"
 import registerPage from "@/components/user/registerPage"
@@ -23,7 +27,17 @@ const router = new Router({
         {
             path: "/",
             name: "announcements",
-            component: announcements,
+            component: announcementsCatalog,
+        },
+        {
+            path: "/announcement/:id",
+            name: "announcement",
+            component: announcementPanel,
+        },
+        {
+            path: "/add-announcement",
+            name: "addAnnouncement",
+            component: addAnnouncement,
         },
         {
             path: "/group-catalog",
@@ -54,6 +68,16 @@ const router = new Router({
             path: "/project/:id",
             name: "project",
             component: projectPanel,
+        },
+        {
+            path: "/tutorial/:id",
+            name: "tutorial",
+            component: tutorialPanel,
+        },
+        {
+            path: "/add-tutorial",
+            name: "addTutorial",
+            component: addTutorial,
         },
         {
             path: "/tutorial-catalog",
