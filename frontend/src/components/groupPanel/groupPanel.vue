@@ -95,7 +95,7 @@
             style="margin-top: 10px"
             size="is-medium"
             type="is-danger"
-            v-if="this.researchGroup.group_owner == this.authUser.username"
+            v-if="this.researchGroup.group_owner == this.authUser.email"
             @click="deleteGroupConfirmation"
             >Usuń koło naukowe</b-button
           >
@@ -397,7 +397,12 @@
                 WYŚLIJ WIADOMOŚĆ
               </button>
 
-              <popupEmail v-if="popupEmail" @close="popupEmail = false" />
+              <popupEmail
+                objectType="researchGroup"
+                :object="this.researchGroup"
+                v-if="popupEmail"
+                @close="popupEmail = false"
+              />
             </div>
           </div>
           <div v-else>
@@ -1163,7 +1168,6 @@ export default {
 .title {
   /* padding-bottom: 8px; 
   text-decoration: none; */
-  /* padding-left: 50px; */
   text-align: center;
   /* color: #333;
   font-size: 2.15rem;

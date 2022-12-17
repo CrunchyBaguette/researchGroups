@@ -12,7 +12,7 @@ from backend.research_groups.models import (
 
 class ResearchGroupSerializer(QuerySerializerMixin, serializers.ModelSerializer):
     members = serializers.SlugRelatedField(many=True, slug_field="email", queryset=User.objects.all())
-    group_owner = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
+    group_owner = serializers.SlugRelatedField(slug_field="email", queryset=User.objects.all())
 
     RELATED_FIELDS = ["group_owner"]
     PREFETCH_FIELDS = ["members"]

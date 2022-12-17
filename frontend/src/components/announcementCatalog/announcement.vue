@@ -16,12 +16,16 @@
           Edytowane: {{ new Date(edited) | dateFormat("DD.MM.YYYY HH:mm") }}
         </p>
       </div>
-      <div class="title-container">
+      <div style="margin-bottom: 5px">
         <p class="title">{{ title }}</p>
       </div>
-      <div class="content-container">
+      <div class="box content-container" v-if="$route.name == 'announcement'">
         <p class="content">
-          {{ content }}
+          <markdown-it-vue
+            class="md-body"
+            :content="content"
+            :options="markdownOptions"
+          />
         </p>
       </div>
     </div>
@@ -40,10 +44,27 @@ export default {
     category: { type: String },
     content: { type: String },
   },
+
+  data() {
+    return {
+      markdownOptions: {
+        markdownIt: {
+          html: true,
+          linkify: true,
+        },
+        linkAttributes: {
+          attrs: {
+            target: "_self",
+            rel: "noopener",
+          },
+        },
+      },
+    };
+  },
 };
 </script>
   
-<style>
+  <style>
 * {
   box-sizing: border-box;
   margin: 0;

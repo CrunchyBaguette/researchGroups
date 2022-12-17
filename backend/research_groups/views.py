@@ -1,6 +1,6 @@
 from collections import Counter
 from django.contrib.auth.models import User
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
@@ -21,6 +21,7 @@ from backend.research_groups.models import (
 )
 
 from backend.common.views import PermissionPolicyMixin
+from backend.common.utils import get_research_group_email, generate_research_group_link
 
 
 class ResearchGroupUserViewSet(viewsets.ModelViewSet):
@@ -133,6 +134,20 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         request.data["category"] = self.categoryCodes.get(request.data["category"])
         return super().update(request, *args, **kwargs)
+
+    @action(detail=False, methods=["post"])
+    def email(self, request, *args, **kwargs):
+        link = generate_research_group_link(request.data["researchGroupId"])
+        email = get_research_group_email(
+            request.data["creator"],
+            request.data["sender"],
+            request.data["subject"],
+            request.data["text"],
+            request.data["research_group_name"],
+            link,
+        )
+        email.send()
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class ResearchGroupPostViewSet(viewsets.ModelViewSet):

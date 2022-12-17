@@ -43,6 +43,16 @@ const actions = {
             });
         });
     },
+    removeAnnouncement({ dispatch }, announcementId) {
+        return new Promise((resolve, reject) => {
+            announcementService.deleteAnnouncement(announcementId).then(() => {
+                dispatch("getAnnouncements");
+                resolve();
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    },
     getAnnouncements({ commit }) {
         return new Promise((resolve, reject) => {
             announcementService.fetchAnnouncements().then((data) => {
@@ -51,6 +61,14 @@ const actions = {
             }).catch((err) => reject(err));
         });
     },
+    sendEmailMessage({ dispatch }, params) {
+        return new Promise((resolve, reject) => {
+            announcementService.sendEmail(params).then((response) => {
+                dispatch("getAnnouncements");
+                resolve(response);
+            }).catch((err) => reject(err));
+        });
+    }
 };
 
 const mutations = {
