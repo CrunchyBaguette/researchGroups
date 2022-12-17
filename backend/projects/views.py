@@ -2,24 +2,30 @@ from collections import Counter
 
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework import viewsets, status
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-
-from backend.common.views import PermissionPolicyMixin
-from backend.projects.models import (
-    Project,
-    ProjectPost,
-    ProjectUser,
-)
+from django.contrib.auth.models import User
 from backend.projects.serializers import (
     ProjectSerializer,
     ProjectUserSerializer,
     ProjectPostSerializer,
+    ProjectLinkSerializer,
+    ProjectDiskSerializer,
     ProjectPostSerializerWithUser,
 )
+from backend.projects.models import (
+    Project,
+    ProjectPost,
+    ProjectUser,
+    ProjectLink,
+    ProjectDisk,
+)
+
+from backend.common.views import PermissionPolicyMixin
+from backend.common.utils import get_project_email, generate_project_link
 
 
 class ProjectUserViewSet(viewsets.ModelViewSet):
@@ -96,7 +102,11 @@ class ProjectViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         ]
     }
 
-    categoryCodes = {"Default": "def"}
+    categoryCodes = {
+        "Matematyka": "math",
+        "Medycyna": "med",
+        "Chemia": "chem",
+    }
 
     def create(self, request, *args, **kwargs):
         # Obecnie, w przypadku gdy nie ma użytkownika z podanym mailem, tworzony jest
@@ -145,6 +155,20 @@ class ProjectViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
             }
         )
 
+    @action(detail=False, methods=["post"])
+    def email(self, request, *args, **kwargs):
+        link = generate_project_link(request.data["projectId"])
+        email = get_project_email(
+            request.data["owner"],
+            request.data["sender"],
+            request.data["subject"],
+            request.data["text"],
+            request.data["project_name"],
+            link,
+        )
+        email.send()
+        return Response(status.HTTP_201_CREATED)
+
 
 class ProjectPostViewSet(viewsets.ModelViewSet):
     queryset = ProjectPost.objects.all()
@@ -176,3 +200,109 @@ class ProjectPostViewSet(viewsets.ModelViewSet):
         post = get_object_or_404(self.queryset, pk=pk)
         serializer = serializer_class(post)
         return Response(serializer.data)
+
+
+class ProjectLinkViewSet(viewsets.ModelViewSet):
+    queryset = ProjectLink.objects.all()
+    serializer_class = ProjectLinkSerializer
+    permission_classes = [AllowAny]
+
+    @action(detail=False, methods=["post"])
+    def projectLinks(self, request):
+        projectId = request.data["projectId"]
+        if not projectId:
+            return Response(
+                {"projectId": ["'projectId' parameter is required."]},
+                status=400,
+            )
+        links = self.get_queryset()
+        projectLinks = links.filter(project=projectId).all()
+        serializer = self.get_serializer(projectLinks, many=True)
+        return Response({"project": projectId, "links": serializer.data})
+
+    @action(detail=False, methods=["post"])
+    def updateLinks(self, request):
+        projectId = request.data["projectId"]
+        if not projectId:
+            return Response(
+                {"projectId": ["'projectId' parameter is required."]},
+                status=400,
+            )
+        links = self.get_queryset()
+        newLinks = request.data["links"]
+
+        projectLinks = links.filter(project=projectId).all()
+        projectLinks.delete()
+
+        newLinksResponseList = []
+
+        for newLink in newLinks:
+            newLinkSerialized = self.get_serializer(
+                data={
+                    "project": projectId,
+                    "link": newLink["link"],
+                    "name": newLink["name"],
+                    "is_public": newLink["is_public"],
+                    "users": newLink["users"],
+                }
+            )
+            if newLinkSerialized.is_valid():
+                newLinkSerialized.save()
+                newLinksResponseList.append(newLink)
+            else:
+                print(newLinkSerialized.errors)
+
+        return Response({"project": projectId, "links": newLinksResponseList})
+
+
+class ProjectDiskViewSet(viewsets.ModelViewSet):
+    queryset = ProjectDisk.objects.all()
+    serializer_class = ProjectDiskSerializer
+    permission_classes = [AllowAny]
+
+    @action(detail=False, methods=["post"])
+    def projectDisks(self, request):
+        projectId = request.data["projectId"]
+        if not projectId:
+            return Response(
+                {"projectId": ["'projectId' parameter is required."]},
+                status=400,
+            )
+        disks = self.get_queryset()
+        projectDisks = disks.filter(project=projectId).all()
+        serializer = self.get_serializer(projectDisks, many=True)
+        return Response({"project": projectId, "disks": serializer.data})
+
+    @action(detail=False, methods=["post"])
+    def updateDisks(self, request):
+        projectId = request.data["projectId"]
+        if not projectId:
+            return Response(
+                {"projectId": ["'projectId' parameter is required."]},
+                status=400,
+            )
+        disks = self.get_queryset()
+        newDisks = request.data["disks"]
+
+        projectDisks = disks.filter(project=projectId).all()
+        projectDisks.delete()
+
+        newDisksResponseList = []
+
+        for newDisk in newDisks:
+            newDiskSerialized = self.get_serializer(
+                data={
+                    "project": projectId,
+                    "link": newDisk["link"],
+                    "name": newDisk["name"],
+                    "is_public": newDisk["is_public"],
+                    "users": newDisk["users"],
+                }
+            )
+            if newDiskSerialized.is_valid():
+                newDiskSerialized.save()
+                newDisksResponseList.append(newDisk)
+            else:
+                print(newDiskSerialized.errors)
+
+        return Response({"project": projectId, "disks": newDisksResponseList})

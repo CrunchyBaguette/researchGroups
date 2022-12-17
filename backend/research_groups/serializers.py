@@ -7,12 +7,14 @@ from backend.research_groups.models import (
     ResearchGroup,
     ResearchGroupPost,
     ResearchGroupUser,
+    ResearchGroupLink,
+    ResearchGroupDisk,
 )
 
 
 class ResearchGroupSerializer(QuerySerializerMixin, serializers.ModelSerializer):
     members = serializers.SlugRelatedField(many=True, slug_field="email", queryset=User.objects.all())
-    group_owner = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
+    group_owner = serializers.SlugRelatedField(slug_field="email", queryset=User.objects.all())
 
     RELATED_FIELDS = ["group_owner"]
     PREFETCH_FIELDS = ["members"]
@@ -54,4 +56,24 @@ class ResearchGroupPostSerializerWithUser(serializers.ModelSerializer):
 
     class Meta:
         model = ResearchGroupPost
+        fields = "__all__"
+
+
+class ResearchGroupLinkSerializer(QuerySerializerMixin, serializers.ModelSerializer):
+    users = serializers.SlugRelatedField(many=True, slug_field="email", queryset=User.objects.all())
+
+    PREFETCH_FIELDS = ["users"]
+
+    class Meta:
+        model = ResearchGroupLink
+        fields = "__all__"
+
+
+class ResearchGroupDiskSerializer(QuerySerializerMixin, serializers.ModelSerializer):
+    users = serializers.SlugRelatedField(many=True, slug_field="email", queryset=User.objects.all())
+
+    PREFETCH_FIELDS = ["users"]
+
+    class Meta:
+        model = ResearchGroupDisk
         fields = "__all__"

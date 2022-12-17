@@ -1,13 +1,12 @@
 <template>
   <div class="container">
-    <markdown-it-vue class="md-body" :content="content" :options="options"/>
+    <markdown-it-vue class="md-body" :content="content" :options="options" />
   </div>
 </template>
 
 <script>
 import MarkdownItVue from "markdown-it-vue";
 import "markdown-it-vue/dist/markdown-it-vue.css";
-
 
 export default {
   components: {
@@ -183,14 +182,14 @@ st@>op1({"stroke":"Red"})@>cond({"stroke":"Red","stroke-width":6,"arrow-end":"cl
 `,
       options: {
         markdownIt: {
-          linkify: true
+          linkify: true,
         },
         linkAttributes: {
           attrs: {
-            target: '_self',
-            rel: 'noopener'
-          }
-        }
+            target: "_self",
+            rel: "noopener",
+          },
+        },
       },
     };
   },
@@ -200,12 +199,5 @@ st@>op1({"stroke":"Red"})@>cond({"stroke":"Red","stroke-width":6,"arrow-end":"cl
 <style scoped>
 .container {
   width: 100%;
-}
-
-.md-body {
-  height: fit-content;
-  margin-left: 20px;
-  max-height: none;
-  overflow-y: auto;
 }
 </style>
