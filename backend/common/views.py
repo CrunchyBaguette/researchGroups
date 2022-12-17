@@ -5,7 +5,6 @@ import jwt
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import EmailMultiAlternatives
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.request import Request
 from rest_framework.views import APIView
@@ -109,7 +108,7 @@ class ResetPasswordRequestView(generics.GenericAPIView):
             token.lifetime = timedelta(minutes=30)
 
             link = generate_reset_pass_link(token, request)
-            mail: EmailMultiAlternatives = get_reset_pass_email(user, link)
+            mail = get_reset_pass_email(user, link)
             if mail.send() == 1:
                 logger.info("Email to user %s with register link sent", user.username)
                 return Response({"message": "Successfully send email with reset link"})

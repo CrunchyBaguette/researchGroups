@@ -6,6 +6,7 @@ class AnnouncementSerializer(serializers.ModelSerializer):
     # author = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
 
     author_username = serializers.SerializerMethodField()
+    author_email = serializers.SerializerMethodField()
     author_full_name = serializers.SerializerMethodField()
     research_group_name = serializers.SerializerMethodField()
 
@@ -15,6 +16,9 @@ class AnnouncementSerializer(serializers.ModelSerializer):
 
     def get_author_username(self, obj):
         return obj.author.username
+
+    def get_author_email(self, obj):
+        return obj.author.email
 
     def get_author_full_name(self, obj):
         return obj.author.first_name + " " + obj.author.last_name

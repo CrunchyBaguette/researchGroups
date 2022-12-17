@@ -16,4 +16,7 @@ export default {
     fetchGroups() {
         return api.get("research-group/").then((response) => response.data);
     },
+    sendEmail(params) {
+        return api.post("research-group/email/", params).then((response) => response.data);
+    }
 };

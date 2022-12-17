@@ -12,7 +12,7 @@ from backend.projects.models import (
 
 class ProjectSerializer(QuerySerializerMixin, serializers.ModelSerializer):
     members = serializers.SlugRelatedField(many=True, slug_field="email", queryset=User.objects.all())
-    project_owner = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
+    project_owner = serializers.SlugRelatedField(slug_field="email", queryset=User.objects.all())
 
     RELATED_FIELDS = ["project_owner"]
     PREFETCH_FIELDS = ["members"]

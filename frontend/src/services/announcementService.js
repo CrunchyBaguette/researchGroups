@@ -10,7 +10,13 @@ export default {
     patchAnnouncement(update) {
         return api.patch(`announcement/${update.id}/`, update.payload).then((response) => response.data);
     },
+    deleteAnnouncement(announcementId) {
+        return api.delete(`announcement/${announcementId}/`).then((response) => response.data);
+    },
     fetchAnnouncements() {
         return api.get("announcement/").then((response) => response.data);
+    },
+    sendEmail(params) {
+        return api.post("announcement/email/", params).then((response) => response.data);
     }
 };
