@@ -12,7 +12,13 @@
       </b-field>
 
       <b-field label="Email">
-        <b-input type="email" v-model="email" maxlength="30" required>
+        <b-input
+          :disabled="this.joining"
+          type="email"
+          v-model="email"
+          maxlength="30"
+          required
+        >
         </b-input>
       </b-field>
 
@@ -80,13 +86,20 @@ export default {
       repeatedPassword: "",
       errors: [],
       isLoading: false,
+      joining: false,
+      researchGroupId: "",
+      projectId: "",
     };
   },
   mounted() {
     document.title = "Zarejestruj się";
+    if (this.$route.query.email) {
+      this.email = this.$route.query.email;
+      this.joining = true;
+    }
   },
   methods: {
-    ...mapActions("register", ["registerUser"]),
+    ...mapActions("register", ["registerUser", "registerUserFromInvite"]),
     submitForm() {
       this.errors = [];
 
@@ -108,11 +121,14 @@ export default {
       if (!this.errors.length) {
         this.isLoading = true;
         this.registerUser({
-          first_name: this.name,
-          last_name: this.surname,
-          email: this.email,
-          username: this.login,
-          password: this.password,
+          joining: this.joining,
+          user: {
+            first_name: this.name,
+            last_name: this.surname,
+            email: this.email,
+            username: this.login,
+            password: this.password,
+          },
         })
           .then(() => {
             this.name = "";
@@ -122,6 +138,8 @@ export default {
             this.password = "";
             this.repeatedPassword = "";
             this.isLoading = false;
+            this.researchGroupId = "";
+            this.projectId = "";
             this.$buefy.toast.open({
               message: "Wysłano email z linkiem aktywacyjnym",
               type: "is-success",

@@ -1,3 +1,4 @@
+import random, string
 from collections import Counter
 from django.contrib.auth.models import User
 from rest_framework import viewsets, status
@@ -19,6 +20,11 @@ from backend.research_groups.models import (
     ResearchGroupLink,
     ResearchGroupDisk,
 )
+from backend.common.utils import (
+    generate_join_link,
+    get_join_research_group_email,
+)
+from backend.users.serializers import UserSerializer
 
 from backend.common.views import PermissionPolicyMixin
 from backend.common.utils import get_research_group_email, generate_research_group_link
@@ -45,8 +51,10 @@ class ResearchGroupUserViewSet(viewsets.ModelViewSet):
             )
         members = self.get_queryset()
         researchGroupMembers = members.filter(research_group__id=researchGroupId).all()
-        serializer = self.get_serializer(researchGroupMembers, many=True)
-        return Response({"researchGroup": researchGroupId, "members": serializer.data})
+        # researchGroupOwner = members.get(research_group__id=researchGroupId, role="cr")
+        serializerMembers = self.get_serializer(researchGroupMembers, many=True)
+        # serializerOwner = self.get_serializer(researchGroupOwner)
+        return Response({"researchGroup": researchGroupId, "members": serializerMembers.data})
 
     @action(detail=False, methods=["post"])
     def updateMembers(self, request):
@@ -67,6 +75,7 @@ class ResearchGroupUserViewSet(viewsets.ModelViewSet):
         researchGroupMembers.delete()
 
         newMembersResponseList = []
+        # newCreator = ""
 
         for newMember in newMembers:
             newMemberSerialized = ResearchGroupUserSerializer(
@@ -80,6 +89,7 @@ class ResearchGroupUserViewSet(viewsets.ModelViewSet):
                 newMemberSerialized.save()
                 newMembersResponseList.append(newMember)
             if newMember["role"] == "Creator":
+                # newCreator = newMember["person"]
                 researchGroup = ResearchGroup.objects.filter(id=researchGroupId).first()
                 newMemberObject = User.objects.filter(email=newMember["person"]).first()
                 researchGroup.group_owner = newMemberObject
@@ -108,18 +118,18 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     }
 
     def create(self, request, *args, **kwargs):
-        # Obecnie, w przypadku gdy nie ma użytkownika z podanym mailem, tworzony jest
-        # nowy ale później można tu zaimplementować rozsyłanie maili
         member_emails = request.data["members"]
         member_emails.append(self.request.user.email)
 
+        new_users = []
+
         for member_email in member_emails:
             if not User.objects.filter(email=member_email).exists():
-                User.objects.create_user(
-                    username=member_email.split("@")[0],
-                    password=member_email.split("@")[0],
-                    email=member_email,
-                )
+                randUsername = ''.join(random.choice(string.ascii_letters) for x in range(150))
+                randPass = ''.join(random.choice(string.ascii_letters) for x in range(150))
+                serializer = UserSerializer(data={"username": randUsername, "email": member_email, "password": randPass, "is_active": False})
+                serializer.is_valid(raise_exception=True)
+                new_users.append(serializer.save())
 
         response = super().create(request, *args, **kwargs)
 
@@ -128,6 +138,10 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         ).first()
         ownerMember.role = "cr"
         ownerMember.save()
+
+        for new_user in new_users:
+            link = generate_join_link(new_user.email)
+            get_join_research_group_email(new_user.email, response.data["name"], link).send()
 
         return response
 

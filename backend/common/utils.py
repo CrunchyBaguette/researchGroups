@@ -61,6 +61,17 @@ def get_research_group_email(
     )
 
 
+def get_join_research_group_email(
+    userTo: str, research_group_name: str, link: str
+) -> EmailBuilder:
+    return EmailBuilder(
+        sender=settings.EMAIL_HOST_USER,
+        recipient=userTo,
+        subject="Zaproszenie do koła naukowego",
+        message=get_email_body_for_research_group_join(research_group_name, link),
+    )
+
+
 def get_project_email(
     userTo: str, userFrom: str, subject: str, message: str, project_name: str, link: str
 ) -> EmailBuilder:
@@ -68,7 +79,18 @@ def get_project_email(
         sender=settings.EMAIL_HOST_USER,
         recipient=userTo,
         subject=subject,
-        message=get_email_body_for_research_group(userFrom, message, project_name, link),
+        message=get_email_body_for_project(userFrom, message, project_name, link),
+    )
+
+
+def get_join_project_email(
+    userTo: str, project_name: str, link: str
+) -> EmailBuilder:
+    return EmailBuilder(
+        sender=settings.EMAIL_HOST_USER,
+        recipient=userTo,
+        subject="Zaproszenie do projektu",
+        message=get_email_body_for_project_join(project_name, link),
     )
 
 
@@ -98,9 +120,18 @@ def get_email_body_for_research_group(userFrom: str, message: str, research_grou
     return f"Od: {userFrom}\n\nKoło naukowe:\n{research_group_name}\n{link}\n\n{message}"
 
 
+def get_email_body_for_research_group_join(research_group_name: str, link: str) -> str:
+    return f"Cześć.\n\nOtrzymałeś zaproszenie aby dołączyć do koła naukowego: {research_group_name}\
+        \n\nUżyj tego linku aby stworzyć konto: {link}"
+
+
 def get_email_body_for_project(userFrom: str, message: str, project_name: str, link: str) -> str:
     return f"Od: {userFrom}\n\nProjekt:\n{project_name}\n{link}\n\n{message}"
 
+
+def get_email_body_for_project_join(project_name: str, link: str) -> str:
+    return f"Cześć.\n\nOtrzymałeś zaproszenie aby dołączyć do projektu: {project_name}\
+        \n\nUżyj tego linku aby stworzyć konto: {link}"
 
 def generate_announcement_link(announcementId: int) -> str:
     return f"http://localhost:8080/#/announcement/{announcementId}"
@@ -108,6 +139,10 @@ def generate_announcement_link(announcementId: int) -> str:
 
 def generate_research_group_link(researchGroupId: int) -> str:
     return f"http://localhost:8080/#/group/{researchGroupId}"
+
+
+def generate_join_link(email: str) -> str:
+    return f"http://localhost:8080/#/register/?{urlencode({'email': email})}"
 
 
 def generate_project_link(projectId: int) -> str:

@@ -52,6 +52,7 @@ export default {
       this.sendResetEmail({ email: this.email })
         .then(() => {
           this.isLoading = false;
+          this.email = "";
           this.$buefy.toast.open({
             message: "Na podany email wysłano link resetujący hasło",
             type: "is-success",
