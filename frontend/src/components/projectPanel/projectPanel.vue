@@ -153,14 +153,6 @@
           :disabled="isButtonDisabled"
           >Kontakt</b-button
         >
-        <b-button
-          id="btn"
-          size="is-medium"
-          tag="router-link"
-          to="/project-tutorials"
-          :disabled="isButtonDisabled"
-          >Materiały dydaktyczne</b-button
-        >
       </div>
       <div class="box column is-6" id="centerDiv">
         <div class="outer" v-if="selectedTabTitle === 'Członkowie'">
@@ -393,6 +385,7 @@
           </div>
         </div>
       </div>
+
       <div class="box column is-3" id="divLinks">
         <b-menu :activable="false" :accordion="false" id="menu">
           <b-menu-list>
@@ -535,19 +528,6 @@ export default {
 
       isBeingEdited: false,
       isButtonDisabled: false,
-
-      markdownOptions: {
-        markdownIt: {
-          html: true,
-          linkify: true,
-        },
-        linkAttributes: {
-          attrs: {
-            target: "_self",
-            rel: "noopener",
-          },
-        },
-      },
     };
   },
   mounted() {
@@ -1129,7 +1109,6 @@ export default {
 
 .p-category {
   padding: 7px;
-  padding-left: 50px;
   text-align: center;
   font-size: 16px;
   color: grey;

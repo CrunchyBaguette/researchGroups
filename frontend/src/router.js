@@ -9,6 +9,8 @@ import addGroup from "@/components/groupCatalog/addGroup"
 import projectCatalog from "@/components/projectCatalog/projectCatalog"
 import addProject from "@/components/projectCatalog/addProject"
 import projectPanel from "@/components/projectPanel/projectPanel"
+import tutorialPanel from "@/components/tutorialPanel/tutorialPanel"
+import addTutorial from "@/components/tutorialCatalog/addTutorial"
 import tutorialCatalog from "@/components/tutorialCatalog/tutorialCatalog"
 import loginPage from "@/components/user/loginPage"
 import registerPage from "@/components/user/registerPage"
@@ -65,6 +67,16 @@ const router = new Router({
             path: "/project/:id",
             name: "project",
             component: projectPanel,
+        },
+        {
+            path: "/tutorial/:id",
+            name: "tutorial",
+            component: tutorialPanel,
+        },
+        {
+            path: "/add-tutorial",
+            name: "addTutorial",
+            component: addTutorial,
         },
         {
             path: "/tutorial-catalog",

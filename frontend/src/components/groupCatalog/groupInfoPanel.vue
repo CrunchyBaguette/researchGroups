@@ -7,6 +7,7 @@
     >
       <p
         style="
+          z-index: 1;
           font-size: 30px;
           position: sticky;
           top: 0;
@@ -27,6 +28,7 @@
     </div>
     <div style="width: 100%; text-align: center; margin-top: 40px">
       <b-button
+        rounded
         size="is-medium"
         style="text-align: center"
         tag="router-link"
@@ -47,23 +49,6 @@ export default {
 
   props: {
     researchGroup: { type: Object },
-  },
-
-  data() {
-    return {
-      markdownOptions: {
-        markdownIt: {
-          html: true,
-          linkify: true,
-        },
-        linkAttributes: {
-          attrs: {
-            target: "_self",
-            rel: "noopener",
-          },
-        },
-      },
-    };
   },
 };
 </script>

@@ -12,6 +12,7 @@ import projectMember from "./modules/projectMember";
 import projectPost from "./modules/projectPost";
 import projectLink from "./modules/projectLink";
 import projectDisk from "./modules/projectDisk";
+import tutorial from "./modules/tutorial";
 import announcement from "./modules/announcement";
 import auth from "./modules/auth";
 import user from "./modules/user";
@@ -31,6 +32,7 @@ export default new Vuex.Store({
         projectLink,
         projectDisk,
         projectPost,
+        tutorial,
         announcement,
         user,
         auth,

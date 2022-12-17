@@ -3,10 +3,9 @@
     <div class="container">
       <div class="author-category-container">
         <p class="author">
-          {{ author }} <span id="spanGroup">(koło: </span> {{ group
-          }}<span id="spanGroup">)</span>
+          {{ author }}
         </p>
-        <p class="category">{{ category }}</p>
+        <p class="category">{{ type }}</p>
       </div>
       <div class="date-container">
         <p class="added" id="da">
@@ -16,55 +15,31 @@
           Edytowane: {{ new Date(edited) | dateFormat("DD.MM.YYYY HH:mm") }}
         </p>
       </div>
-      <div style="margin-bottom: 5px">
-        <p class="title">{{ title }}</p>
-      </div>
-      <div class="box content-container" v-if="$route.name == 'announcement'">
-        <p class="content">
-          <markdown-it-vue
-            class="md-body"
-            :content="content"
-            :options="markdownOptions"
-          />
+      <div class="title-container">
+        <p class="title">
+          <b-icon style="margin-right: 10px" icon="wrench" v-if="draft" />
+          {{ title }}
         </p>
       </div>
     </div>
   </div>
 </template>
-  
+
 <script>
 export default {
   name: "announcement",
   props: {
     author: { type: String },
-    group: { type: String },
+    title: { type: String },
     added: { type: String },
     edited: { type: String },
-    title: { type: String },
-    category: { type: String },
-    content: { type: String },
-  },
-
-  data() {
-    return {
-      markdownOptions: {
-        markdownIt: {
-          html: true,
-          linkify: true,
-        },
-        linkAttributes: {
-          attrs: {
-            target: "_self",
-            rel: "noopener",
-          },
-        },
-      },
-    };
+    type: { type: String },
+    draft: { type: Boolean },
   },
 };
 </script>
-  
-  <style>
+
+<style>
 * {
   box-sizing: border-box;
   margin: 0;
@@ -119,10 +94,5 @@ export default {
 
 #da {
   color: grey;
-}
-
-#spanGroup {
-  font-size: 20px;
-  font-weight: normal;
 }
 </style>
