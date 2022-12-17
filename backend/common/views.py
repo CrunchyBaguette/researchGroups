@@ -46,6 +46,7 @@ class RegisterView(generics.GenericAPIView):
 
     def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         user = request.data["user"]
+        created_user: User = None
         if request.data["joining"]:
             created_user = User.objects.filter(is_active=False, email=user["email"]).first()
             if not created_user:
@@ -58,7 +59,7 @@ class RegisterView(generics.GenericAPIView):
         else:
             serializer: RegisterSerializer = self.serializer_class(data=user)
             serializer.is_valid(raise_exception=True)
-            created_user: User = serializer.save()
+            created_user = serializer.save()
 
         token = RefreshToken.for_user(created_user).access_token
         token.lifetime = timedelta(days=1)

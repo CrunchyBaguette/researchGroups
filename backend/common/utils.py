@@ -61,9 +61,7 @@ def get_research_group_email(
     )
 
 
-def get_join_research_group_email(
-    userTo: str, research_group_name: str, link: str
-) -> EmailBuilder:
+def get_join_research_group_email(userTo: str, research_group_name: str, link: str) -> EmailBuilder:
     return EmailBuilder(
         sender=settings.EMAIL_HOST_USER,
         recipient=userTo,
@@ -83,9 +81,7 @@ def get_project_email(
     )
 
 
-def get_join_project_email(
-    userTo: str, project_name: str, link: str
-) -> EmailBuilder:
+def get_join_project_email(userTo: str, project_name: str, link: str) -> EmailBuilder:
     return EmailBuilder(
         sender=settings.EMAIL_HOST_USER,
         recipient=userTo,
@@ -132,6 +128,7 @@ def get_email_body_for_project(userFrom: str, message: str, project_name: str, l
 def get_email_body_for_project_join(project_name: str, link: str) -> str:
     return f"Cześć.\n\nOtrzymałeś zaproszenie aby dołączyć do projektu: {project_name}\
         \n\nUżyj tego linku aby stworzyć konto: {link}"
+
 
 def generate_announcement_link(announcementId: int) -> str:
     return f"http://localhost:8080/#/announcement/{announcementId}"

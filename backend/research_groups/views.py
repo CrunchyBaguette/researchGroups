@@ -1,4 +1,5 @@
-import random, string
+import random
+import string
 from collections import Counter
 from django.contrib.auth.models import User
 from rest_framework import viewsets, status
@@ -125,9 +126,11 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
 
         for member_email in member_emails:
             if not User.objects.filter(email=member_email).exists():
-                randUsername = ''.join(random.choice(string.ascii_letters) for x in range(150))
-                randPass = ''.join(random.choice(string.ascii_letters) for x in range(150))
-                serializer = UserSerializer(data={"username": randUsername, "email": member_email, "password": randPass, "is_active": False})
+                randUsername = "".join(random.choice(string.ascii_letters) for x in range(150))
+                randPass = "".join(random.choice(string.ascii_letters) for x in range(150))
+                serializer = UserSerializer(
+                    data={"username": randUsername, "email": member_email, "password": randPass, "is_active": False}
+                )
                 serializer.is_valid(raise_exception=True)
                 new_users.append(serializer.save())
 
