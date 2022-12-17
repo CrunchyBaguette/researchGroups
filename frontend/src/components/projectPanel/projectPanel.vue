@@ -528,6 +528,19 @@ export default {
 
       isBeingEdited: false,
       isButtonDisabled: false,
+
+      markdownOptions: {
+        markdownIt: {
+          html: true,
+          linkify: true,
+        },
+        linkAttributes: {
+          attrs: {
+            target: "_self",
+            rel: "noopener",
+          },
+        },
+      },
     };
   },
   mounted() {

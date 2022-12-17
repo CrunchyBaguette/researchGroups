@@ -49,6 +49,23 @@ export default {
   props: {
     project: { type: Object },
   },
+
+  data() {
+    return {
+      markdownOptions: {
+        markdownIt: {
+          html: true,
+          linkify: true,
+        },
+        linkAttributes: {
+          attrs: {
+            target: "_self",
+            rel: "noopener",
+          },
+        },
+      },
+    };
+  },
 };
 </script>
 

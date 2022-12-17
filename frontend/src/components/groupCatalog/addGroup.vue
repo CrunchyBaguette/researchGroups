@@ -34,9 +34,9 @@
                 style="width: 100%"
                 placeholder="Wybierz kategorię"
               >
-                <option value="math">Math</option>
-                <option value="med">Medical</option>
-                <option value="chem">Chemistry</option>
+                <option value="math">Matematyka</option>
+                <option value="med">Medycyna</option>
+                <option value="chem">Chemia</option>
               </b-select>
             </b-field>
             <b-field

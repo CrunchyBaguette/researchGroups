@@ -242,6 +242,19 @@ export default {
       editors: [],
       addEmail: "",
       tutorialSettings: false,
+
+      markdownOptions: {
+        markdownIt: {
+          html: true,
+          linkify: true,
+        },
+        linkAttributes: {
+          attrs: {
+            target: "_self",
+            rel: "noopener",
+          },
+        },
+      },
     };
   },
 
