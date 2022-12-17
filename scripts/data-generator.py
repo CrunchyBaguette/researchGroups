@@ -181,9 +181,9 @@ def generate_tutorial(users):
         tutorials["text"].append(fake.text())
         tutorials["is_draft"].append(fake.boolean())
         tutorials["is_public"].append(fake.boolean())
-        create = fake.past_date()
+        create = fake.past_datetime()
         tutorials["created"].append(create)
-        tutorials["edited"].append(fake.date_between(create))
+        tutorials["edited"].append(create)
         tutorials["owner_id"].append(users["id"].values[i % len(users["id"])])
         types = ["Default", "Default"]
         tutorials["type"].append(types[fake.pyint(0, len(types) - 1)])
@@ -242,7 +242,7 @@ def generate_guide_project(guides, projects):
         guides_projects["is_public"].append(fake.boolean())
         guides_projects["guide_id"].append(guides["id"].values[i % len(guides["id"])])
         guides_projects["project_id"].append(projects["id"].values[i % len(projects["id"])])
-        guides_projects["added"].append(fake.past_date())
+        guides_projects["added"].append(fake.past_datetime())
     df_guides_projects = pd.DataFrame(guides_projects)
     if is_printing:
         print(df_guides_projects)
@@ -261,9 +261,9 @@ def generate_project_user(users, projects):
         else:
             roles = ["own"]
         project_users["role"].append(roles[fake.pyint(0, len(roles) - 1)])
-        created = fake.past_date()
+        created = fake.past_datetime()
         project_users["created"].append(created)
-        project_users["edited"].append(fake.date_between(created))
+        project_users["edited"].append(created)
     df_project_users = pd.DataFrame(project_users)
     if is_printing:
         print(df_project_users)
@@ -279,9 +279,9 @@ def generate_project_post(users, projects):
         project_post["text"].append(fake.text())
         project_post["author_id"].append(users["id"].values[i % len(users["id"])])
         project_post["project_id"].append(projects["id"].values[i % len(projects["id"])])
-        created = fake.past_date()
+        created = fake.past_datetime()
         project_post["added"].append(created)
-        project_post["edited"].append(fake.date_between(created))
+        project_post["edited"].append(created)
     df_project_post = pd.DataFrame(project_post)
     if is_printing:
         print(df_project_post)
@@ -296,7 +296,7 @@ def generate_project_post_comment(users, post):
         project_post["text"].append(fake.text())
         project_post["author_id"].append(users["id"].values[i % len(users["id"])])
         project_post["post_id"].append(post["id"].values[i % len(post["id"])])
-        created = fake.past_date()
+        created = fake.past_datetime()
         project_post["added"].append(created)
     df_project_post = pd.DataFrame(project_post)
     if is_printing:
@@ -314,9 +314,9 @@ def generate_research_group_users(df_users, df_research_group):
         else:
             roles = ["cr"]
         research_group_users["role"].append(roles[fake.pyint(0, len(roles) - 1)])
-        created = fake.past_date()
+        created = fake.past_datetime()
         research_group_users["created"].append(created)
-        research_group_users["edited"].append(fake.date_between(created))
+        research_group_users["edited"].append(created)
         research_group_users["person_id"].append(df_users["id"].values[i % len(df_users["id"])])
         research_group_users["research_group_id"].append(
             df_research_group["id"].values[i % len(df_research_group["id"])]
