@@ -46,11 +46,11 @@ class ResearchGroupGuide(models.Model):
 
 
 class ResearchGroupPost(models.Model):
-    title = models.CharField(max_length=120, blank=False)
+    title = models.CharField(max_length=120, blank=False, unique=True)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     text = models.TextField(blank=True)
-    added = models.DateTimeField(auto_now=True)
-    edited = models.DateTimeField(auto_now_add=True)
+    added = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True)
     research_group = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE)
 
 

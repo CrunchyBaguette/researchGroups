@@ -6,23 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('research_groups', '0009_alter_researchgroup_category'),
+        ("research_groups", "0009_alter_researchgroup_category"),
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='researchgroupdisk',
-            old_name='project',
-            new_name='research_group',
-        ),
-        migrations.RenameField(
-            model_name='researchgrouplink',
-            old_name='project',
-            new_name='research_group',
-        ),
         migrations.AlterField(
-            model_name='researchgroupuser',
-            name='created',
+            model_name="researchgroupuser",
+            name="created",
             field=models.DateTimeField(auto_now_add=True),
         ),
     ]

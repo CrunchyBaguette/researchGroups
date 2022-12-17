@@ -1,5 +1,5 @@
   <template>
-  <div id="root-container" class="box">
+  <div id="root-container" style="height: fit-content" class="box">
     <div class="container">
       <div class="author-category-container">
         <p class="author">
@@ -47,8 +47,8 @@ export default {
 }
 
 #root-container {
-  margin: 20px;
-  width: 97%;
+  /* margin: 20px; */
+  /* width: 97%; */
   background-color: rgb(196, 196, 196);
   color: black;
 }

@@ -1,5 +1,9 @@
 <template>
-  <div id="content" v-if="!this.loading">
+  <div
+    id="content"
+    style="display: flex; flex-flow: column"
+    v-if="!this.loading"
+  >
     <div id="titleDiv">
       <p class="title" id="tit">Ogłoszenia</p>
       <b-button
@@ -13,9 +17,13 @@
         >Dodaj nowe ogłoszenie</b-button
       >
     </div>
-    <div id="announcementsContainer">
-      <div class="box" id="box">
+    <div
+      id="announcementsContainer"
+      style="flex: 1 0 0; display: flex; flex-flow: column"
+    >
+      <div class="box" id="box" style="flex: 1 0 0; overflow: auto">
         <div
+          style="margin-bottom: 20px"
           v-for="announcement in paginatedAnnouncements"
           :key="announcement.title"
         >
@@ -35,7 +43,7 @@
 
       <br />
 
-      <div class="columns" style="width: 100%">
+      <div class="columns" style="width: 100%; margin-bottom: 0px">
         <div class="column is-two-thirds"></div>
         <div class="box column is-one-third">
           <b-pagination
@@ -173,9 +181,9 @@ export default {
   cursor: pointer;
 }
 
-#ann:hover {
+/* #ann:hover {
   background-color: #7a7a7a;
   box-shadow: 0 0 10px #7a7a7a;
-}
+} */
 </style>
 

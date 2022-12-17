@@ -122,7 +122,7 @@ body {
   padding: 10px;
   height: 100%;
   position: relative;
-  overflow: auto;
+  overflow: none;
   word-wrap: anywhere;
   white-space: normal;
 }

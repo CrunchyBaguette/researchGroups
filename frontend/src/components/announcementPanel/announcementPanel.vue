@@ -1,89 +1,145 @@
 <template>
-  <div id="content" v-if="!this.loading">
-    <div id="titleDiv" v-if="!isBeingEdited">
-      <p class="title" id="tit">Panel Ogłoszenia</p>
-      <div>
-        <b-button
-          v-if="!isOwner()"
-          id="btnTitle"
-          rounded
-          size="is-medium"
-          type="is-success"
-          @click="() => (sendingEmail = true)"
-          >Wyślij wiadomość</b-button
-        >
-        <b-button
-          v-if="isOwner()"
-          id="btnTitle"
-          rounded
-          size="is-medium"
-          type="is-success"
-          @click="changeToEditMode"
-          >Edytuj ogłoszenie</b-button
-        >
+  <div
+    id="content"
+    v-if="!this.loading"
+    style="display: flex; flex-flow: column"
+  >
+    <div>
+      <div id="titleDiv" v-if="!isBeingEdited">
+        <p class="title" id="tit">Panel Ogłoszenia</p>
+        <div>
+          <b-button
+            v-if="!isOwner()"
+            id="btnTitle"
+            rounded
+            size="is-medium"
+            type="is-success"
+            @click="() => (sendingEmail = true)"
+            >Wyślij wiadomość</b-button
+          >
+          <b-button
+            v-if="isOwner()"
+            id="btnTitle"
+            rounded
+            size="is-medium"
+            type="is-success"
+            @click="changeToEditMode"
+            >Edytuj ogłoszenie</b-button
+          >
+        </div>
+      </div>
+      <div id="titleDiv" v-else>
+        <p class="title" id="tit">Edycja Ogłoszenia</p>
+        <div>
+          <b-button
+            v-if="isOwner()"
+            id="btnTitle"
+            rounded
+            size="is-medium"
+            type="is-danger"
+            @click="deleteAnnouncementConfirmation"
+            >Usuń ogłoszenie</b-button
+          ><b-button
+            id="btnTitle"
+            rounded
+            size="is-medium"
+            type="is-success"
+            @click="changeToPanelMode"
+            :disabled="isButtonDisabled"
+            ><b-icon icon="arrow-left" />&nbsp;&nbsp;Wróć do panelu
+            ogłoszenia</b-button
+          >
+        </div>
       </div>
     </div>
-    <div id="titleDiv" v-else>
-      <p class="title" id="tit">Edycja Ogłoszenia</p>
-      <div>
-        <b-button
-          v-if="isOwner()"
-          id="btnTitle"
-          rounded
-          size="is-medium"
-          type="is-danger"
-          @click="deleteAnnouncementConfirmation"
-          >Usuń ogłoszenie</b-button
-        ><b-button
-          id="btnTitle"
-          rounded
-          size="is-medium"
-          type="is-success"
-          @click="changeToPanelMode"
-          :disabled="isButtonDisabled"
-          ><b-icon icon="arrow-left" />&nbsp;&nbsp;Wróć do panelu
-          ogłoszenia</b-button
-        >
+    <div style="flex: 1 1 0">
+      <div v-if="!isBeingEdited" style="height: 100%">
+        <announcement
+          id="annx"
+          :author="announcementAuthor"
+          :group="announcementGroup"
+          :category="announcementCategory"
+          :added="announcementAdded"
+          :edited="announcementEdited"
+          :title="announcementTitle"
+          :content="announcementContent"
+        />
       </div>
-    </div>
+      <div v-else>
+        <div id="root-container" class="box">
+          <div class="container">
+            <div class="author-category-container">
+              <div class="author-group-container">
+                <p class="author-in-edit-mode">{{ announcementAuthor }}</p>
 
-    <announcement
-      v-if="!isBeingEdited"
-      id="annx"
-      :author="announcementAuthor"
-      :group="announcementGroup"
-      :category="announcementCategory"
-      :added="announcementAdded"
-      :edited="announcementEdited"
-      :title="announcementTitle"
-      :content="announcementContent"
-    />
-    <div v-else>
-      <div id="root-container" class="box">
-        <div class="container">
-          <div class="author-category-container">
-            <div class="author-group-container">
-              <p class="author-in-edit-mode">{{ announcementAuthor }}</p>
+                <div class="div-title">
+                  <p
+                    class="group"
+                    v-if="!editAnnouncementGroup || !isBeingEdited"
+                  >
+                    {{ announcementGroup }}
+                  </p>
+                  <div class="div-edit" v-else>
+                    <b-field label="Twoje koła">
+                      <b-select
+                        v-model="selectedGroup[0]"
+                        placeholder="Wybierz koło"
+                      >
+                        <option
+                          :value="group"
+                          v-for="group in userAdminGroups"
+                          v-bind:key="group.id"
+                        >
+                          {{ group.name }}
+                        </option>
+                      </b-select>
+                    </b-field>
+                    <div id="btnsDiv">
+                      <b-button
+                        id="btnSave"
+                        class="button is-primary is-success"
+                        @click="saveAnnouncementGroup"
+                        >Zapisz</b-button
+                      >
+                      <b-button @click="cancelAnnouncementGroup"
+                        >Anuluj</b-button
+                      >
+                    </div>
+                  </div>
+                  <div id="btnsDiv">
+                    <b-button
+                      :disabled="isButtonDisabled"
+                      id="btnPencil"
+                      @click="changeAnnouncementGroup"
+                      v-if="!editAnnouncementGroup && isBeingEdited"
+                    >
+                      <b-icon icon="lead-pencil" />
+                    </b-button>
+                  </div>
+                </div>
+              </div>
 
               <div class="div-title">
                 <p
-                  class="group"
-                  v-if="!editAnnouncementGroup || !isBeingEdited"
+                  class="category"
+                  v-if="!editAnnouncementCategory || !isBeingEdited"
                 >
-                  {{ announcementGroup }}
+                  {{ announcementCategory }}
                 </p>
                 <div class="div-edit" v-else>
-                  <b-field label="Twoje koła">
+                  <b-field label="Typ ogłoszenia">
                     <b-select
-                      v-model="selectedGroup[0]"
-                      placeholder="Wybierz koło"
+                      v-model="announcementCategory"
+                      placeholder="Wybierz kategorię"
                     >
-                      <option
-                        :value="group"
-                        v-for="group in userAdminGroups"
-                        v-bind:key="group.id"
-                      >
-                        {{ group.name }}
+                      <option value="Poszukiwanie sponsora">
+                        Poszukiwanie sponsora
+                      </option>
+                      <option value="Poszukiwanie nowych członków">
+                        Poszukiwanie nowych członków
+                      </option>
+                      <option value="Poszukiwanie osób do projektu">
+                        Poszukiwanie osób do projektu
                       </option>
                     </b-select>
                   </b-field>
@@ -91,18 +147,73 @@
                     <b-button
                       id="btnSave"
                       class="button is-primary is-success"
-                      @click="saveAnnouncementGroup"
+                      @click="saveAnnouncementCategory"
                       >Zapisz</b-button
                     >
-                    <b-button @click="cancelAnnouncementGroup">Anuluj</b-button>
+                    <b-button @click="cancelAnnouncementCategory"
+                      >Anuluj</b-button
+                    >
                   </div>
                 </div>
                 <div id="btnsDiv">
                   <b-button
                     :disabled="isButtonDisabled"
                     id="btnPencil"
-                    @click="changeAnnouncementGroup"
-                    v-if="!editAnnouncementGroup && isBeingEdited"
+                    @click="changeAnnouncementCategory"
+                    v-if="!editAnnouncementCategory && isBeingEdited"
+                  >
+                    <b-icon icon="lead-pencil" />
+                  </b-button>
+                </div>
+              </div>
+            </div>
+            <div class="date-container">
+              <p class="date-in-edit-mode">
+                Utworzone:
+                {{
+                  new Date(announcementAdded) | dateFormat("DD.MM.YYYY HH:mm")
+                }}
+              </p>
+              <p class="date-in-edit-mode">
+                Edytowane: {{ new Date() | dateFormat("DD.MM.YYYY HH:mm") }}
+              </p>
+            </div>
+            <div class="title-container">
+              <div class="title-edit-container">
+                <p
+                  class="title"
+                  v-if="!editAnnouncementTitle || !isBeingEdited"
+                >
+                  {{ announcementTitle }}
+                </p>
+                <div class="div-edit" v-else>
+                  <b-field
+                    :message="announcementTitleGiven"
+                    :type="announcementTitleGiven ? 'is-danger' : ''"
+                    label="Tytuł ogłoszenia"
+                  >
+                    <b-input
+                      @focus="announcementTitleGiven = ''"
+                      v-model="announcementTitle"
+                      maxlength="120"
+                    ></b-input>
+                  </b-field>
+                  <div id="btnsDiv">
+                    <b-button
+                      id="btnSave"
+                      class="button is-primary is-success"
+                      @click="saveAnnouncementTitle"
+                      >Zapisz</b-button
+                    >
+                    <b-button @click="cancelAnnouncementTitle">Anuluj</b-button>
+                  </div>
+                </div>
+                <div id="btnsDiv">
+                  <b-button
+                    :disabled="isButtonDisabled"
+                    id="btnPencil"
+                    @click="changeAnnouncementTitle"
+                    v-if="!editAnnouncementTitle && isBeingEdited"
                   >
                     <b-icon icon="lead-pencil" />
                   </b-button>
@@ -110,146 +221,50 @@
               </div>
             </div>
 
-            <div class="div-title">
-              <p
-                class="category"
-                v-if="!editAnnouncementCategory || !isBeingEdited"
-              >
-                {{ announcementCategory }}
-              </p>
-              <div class="div-edit" v-else>
-                <b-field label="Typ ogłoszenia">
-                  <b-select
-                    v-model="announcementCategory"
-                    placeholder="Wybierz kategorię"
-                  >
-                    <option value="Poszukiwanie sponsora">
-                      Poszukiwanie sponsora
-                    </option>
-                    <option value="Poszukiwanie nowych członków">
-                      Poszukiwanie nowych członków
-                    </option>
-                    <option value="Poszukiwanie osób do projektu">
-                      Poszukiwanie osób do projektu
-                    </option>
-                  </b-select>
-                </b-field>
-                <div id="btnsDiv">
-                  <b-button
-                    id="btnSave"
-                    class="button is-primary is-success"
-                    @click="saveAnnouncementCategory"
-                    >Zapisz</b-button
-                  >
-                  <b-button @click="cancelAnnouncementCategory"
-                    >Anuluj</b-button
-                  >
-                </div>
-              </div>
-              <div id="btnsDiv">
+            <div class="content-container">
+              <div id="btnEditContent">
                 <b-button
                   :disabled="isButtonDisabled"
                   id="btnPencil"
-                  @click="changeAnnouncementCategory"
-                  v-if="!editAnnouncementCategory && isBeingEdited"
+                  @click="changeAnnouncementContent"
+                  v-if="!editAnnouncementContent && isBeingEdited"
                 >
                   <b-icon icon="lead-pencil" />
                 </b-button>
               </div>
-            </div>
-          </div>
-          <div class="date-container">
-            <p class="date-in-edit-mode">
-              Utworzone:
-              {{ new Date(announcementAdded) | dateFormat("DD.MM.YYYY HH:mm") }}
-            </p>
-            <p class="date-in-edit-mode">
-              Edytowane: {{ new Date() | dateFormat("DD.MM.YYYY HH:mm") }}
-            </p>
-          </div>
-          <div class="title-container">
-            <div class="title-edit-container">
-              <p class="title" v-if="!editAnnouncementTitle || !isBeingEdited">
-                {{ announcementTitle }}
-              </p>
-              <div class="div-edit" v-else>
+              <div
+                class="box content"
+                v-if="!editAnnouncementContent || !isBeingEdited"
+              >
+                <markdown-it-vue
+                  class="md-body"
+                  :content="announcementContent"
+                  :options="markdownOptions"
+                />
+              </div>
+              <div v-else>
                 <b-field
-                  :message="announcementTitleGiven"
-                  :type="announcementTitleGiven ? 'is-danger' : ''"
-                  label="Tytuł ogłoszenia"
+                  :message="announcementContentGiven"
+                  :type="announcementContentGiven ? 'is-danger' : ''"
+                  label="Treść ogłoszenia"
                 >
                   <b-input
-                    @focus="announcementTitleGiven = ''"
-                    v-model="announcementTitle"
-                    maxlength="120"
+                    @focus="announcementContentGiven = ''"
+                    v-model="announcementContent"
+                    id="editableAnnContent"
+                    type="textarea"
+                    size="is-medium"
                   ></b-input>
                 </b-field>
                 <div id="btnsDiv">
                   <b-button
                     id="btnSave"
                     class="button is-primary is-success"
-                    @click="saveAnnouncementTitle"
+                    @click="saveAnnouncementContent"
                     >Zapisz</b-button
                   >
-                  <b-button @click="cancelAnnouncementTitle">Anuluj</b-button>
+                  <b-button @click="cancelAnnouncementContent">Anuluj</b-button>
                 </div>
-              </div>
-              <div id="btnsDiv">
-                <b-button
-                  :disabled="isButtonDisabled"
-                  id="btnPencil"
-                  @click="changeAnnouncementTitle"
-                  v-if="!editAnnouncementTitle && isBeingEdited"
-                >
-                  <b-icon icon="lead-pencil" />
-                </b-button>
-              </div>
-            </div>
-          </div>
-
-          <div class="content-container">
-            <div id="btnEditContent">
-              <b-button
-                :disabled="isButtonDisabled"
-                id="btnPencil"
-                @click="changeAnnouncementContent"
-                v-if="!editAnnouncementContent && isBeingEdited"
-              >
-                <b-icon icon="lead-pencil" />
-              </b-button>
-            </div>
-            <div
-              class="box content"
-              v-if="!editAnnouncementContent || !isBeingEdited"
-            >
-              <markdown-it-vue
-                class="md-body"
-                :content="announcementContent"
-                :options="markdownOptions"
-              />
-            </div>
-            <div v-else>
-              <b-field
-                :message="announcementContentGiven"
-                :type="announcementContentGiven ? 'is-danger' : ''"
-                label="Treść ogłoszenia"
-              >
-                <b-input
-                  @focus="announcementContentGiven = ''"
-                  v-model="announcementContent"
-                  id="editableAnnContent"
-                  type="textarea"
-                  size="is-medium"
-                ></b-input>
-              </b-field>
-              <div id="btnsDiv">
-                <b-button
-                  id="btnSave"
-                  class="button is-primary is-success"
-                  @click="saveAnnouncementContent"
-                  >Zapisz</b-button
-                >
-                <b-button @click="cancelAnnouncementContent">Anuluj</b-button>
               </div>
             </div>
           </div>
@@ -665,7 +680,7 @@ export default {
 }
 
 #root-container {
-  margin: 20px;
+  /* margin: 20px; */
   width: 97%;
   background-color: rgb(196, 196, 196);
   color: black;

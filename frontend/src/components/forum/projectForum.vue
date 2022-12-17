@@ -3,10 +3,14 @@
     <div v-if="isAuthenticated && isParticipant">
       <div class="columns mr-3">
         <div class="column is-2 pr-6">
-          <p class="subtitle">Forum</p>
+          <p class="title" style="text-align: left">Forum</p>
         </div>
         <div class="column is-2 is-offset-8 pl-6">
-          <b-button class="button is-medium is-success is-rounded" v-on:click="addPost">Utwórz nowy wpis</b-button>
+          <b-button
+            class="button is-medium is-success is-rounded"
+            v-on:click="addPost"
+            >Utwórz nowy wpis</b-button
+          >
         </div>
       </div>
       <div v-if="adding">
@@ -14,7 +18,12 @@
       </div>
       <div v-if="loading">
         <div v-for="post in forumPosts" :key="post.id" class="mb-5">
-          <router-link :to="{ name: 'projectPost', params: {projectId: projectId, postId: post.id} }">
+          <router-link
+            :to="{
+              name: 'projectPost',
+              params: { projectId: projectId, postId: post.id },
+            }"
+          >
             <Post :post="post"></Post>
           </router-link>
         </div>
@@ -23,15 +32,25 @@
     <div v-if="!isAuthenticated">
       <p class="title pr-6">Nie jesteś zalogowny.</p>
       <div class="columns is-flex is-vcentered is-centered">
-        <b-button class="is-medium column is-2" type="is-success" :to="{ name: 'login' }"
-                  tag="router-link" label="Zaloguj się">
+        <b-button
+          class="is-medium is-rounded column is-2"
+          type="is-success"
+          :to="{ name: 'login' }"
+          tag="router-link"
+          label="Zaloguj się"
+        >
         </b-button>
       </div>
     </div>
     <div v-if="isAuthenticated && !isParticipant && loading">
       <p class="title pr-6">Nie członkiem tego projektu.</p>
       <div class="columns is-flex is-vcentered is-centered">
-        <b-button class="is-medium column is-2" type="is-success" v-on:click="$router.back()" label="Powrót">
+        <b-button
+          class="is-medium is-rounded column is-2"
+          type="is-success"
+          v-on:click="$router.back()"
+          label="Powrót"
+        >
         </b-button>
       </div>
     </div>
@@ -40,14 +59,14 @@
 
 <script>
 import Post from "@/components/forum/Post";
-import {mapActions, mapGetters, mapState} from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import AddProjectPost from "@/components/forum/addProjectPost";
 
 export default {
   name: "projectForum",
   props: {
-    title: {type: String},
-    content: {type: String},
+    title: { type: String },
+    content: { type: String },
   },
   components: {
     AddProjectPost,
@@ -80,11 +99,12 @@ export default {
 
   mounted() {
     document.title = "Forum koła naukowego";
-    this.getForumPosts({project: this.projectId, userId: this.authUser.id}).then((data) => {
-          this.loading = true,
-              this.isParticipant = data.isParticipant
-        }
-    );
+    this.getForumPosts({
+      project: this.projectId,
+      userId: this.authUser.id,
+    }).then((data) => {
+      (this.loading = true), (this.isParticipant = data.isParticipant);
+    });
   },
 };
 </script>

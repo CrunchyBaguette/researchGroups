@@ -1,38 +1,85 @@
 <template>
-  <div v-if="loading">
-    <div class="columns">
+  <div
+    v-if="loading"
+    style="display: flex; flex-flow: column; height: 100%; overflow-x: hidden"
+  >
+    <div class="columns" style="flex: 0 1 auto">
       <div class="column is-4">
-        <b-button class="button is-success is-rounded"
-                  v-on:click="$router.back()">Powrót
+        <b-button
+          class="button is-success is-rounded"
+          v-on:click="$router.back()"
+          >Powrót
         </b-button>
-        <p class="author-decor">{{ forumPost.author.first_name }} {{ forumPost.author.last_name }}</p>
+        <p class="author-decor">
+          <b
+            >{{ forumPost.author.first_name }}
+            {{ forumPost.author.last_name }}</b
+          >
+        </p>
+        <p class="author-decor">
+          Utworzone:
+          {{ new Date(forumPost.added) | dateFormat("DD.MM.YYYY HH:mm") }}
+        </p>
+        <p class="author-decor">
+          Edytowane:
+          {{ new Date(forumPost.edited) | dateFormat("DD.MM.YYYY HH:mm") }}
+        </p>
       </div>
       <div class="column is-2 is-offset-6">
-        <b-button v-if="forumPost.author.id === authUser.id && !isUpdate" class="button is-success is-rounded mr-2"
-                  v-on:click="showEdit">Edytuj
-        </b-button>
-        <b-button v-if="isUpdate" class="button is-success is-rounded mr-2" v-on:click="isUpdate = false">Anuluj
-        </b-button>
-        <b-button class="button is-success is-rounded" v-if="canDelete" v-on:click="confirmDeleting">Usuń</b-button>
+        <div>
+          <b-button
+            v-if="forumPost.author.id === authUser.id && !isUpdate"
+            class="button is-success is-rounded mr-2"
+            v-on:click="showEdit"
+            >Edytuj
+          </b-button>
+          <b-button
+            v-if="isUpdate"
+            class="button is-success is-rounded mr-2"
+            v-on:click="isUpdate = false"
+            >Anuluj
+          </b-button>
+          <b-button
+            class="button is-danger is-rounded"
+            v-if="canDelete"
+            v-on:click="confirmDeleting"
+            >Usuń</b-button
+          >
+        </div>
       </div>
     </div>
-    <div>
-      <p v-if="!isUpdate" class="title">{{ forumPost.title }}</p>
-      <p v-if="!isUpdate" class="postText"> {{ forumPost.text }}</p>
+    <div
+      class="box"
+      style="
+        flex: 1 1 auto;
+        background-color: rgb(196, 196, 196);
+        margin-bottom: 20px;
+      "
+    >
+      <div>
+        <p v-if="!isUpdate" class="title">{{ forumPost.title }}</p>
+        <p v-if="!isUpdate" class="box postText">{{ forumPost.text }}</p>
 
-      <div v-if="isUpdate">
-        <label for="title">Tytuł:</label>
-        <b-input id="title" v-model="title"></b-input>
-        <label for="text">Treść:</label>
-        <b-input type="textarea" id="text" v-model="text"></b-input>
-        <b-button class="button is-success is-rounded" v-on:click="updatePost">Akceptuj zmiany</b-button>
+        <div v-if="isUpdate" style="height: 100%">
+          <b-field label="Tytuł:"
+            ><b-input id="title" v-model="title"></b-input>
+          </b-field>
+          <b-field>
+            <b-input v-model="text" id="editPostText" type="textarea"></b-input>
+          </b-field>
+          <b-button
+            class="button is-success is-rounded mt-2"
+            v-on:click="updatePost"
+            >Akceptuj zmiany</b-button
+          >
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState} from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   name: "projectPost",
@@ -60,32 +107,34 @@ export default {
       this.text = this.forumPost.text;
     },
     updatePost() {
-      if (this.title && this.text && this.forumPost.author.id === this.authUser.id) {
+      if (
+        this.title &&
+        this.text &&
+        this.forumPost.author.id === this.authUser.id
+      ) {
         this.updateForumPost({
           id: this.$route.params.postId,
           title: this.title,
           text: this.text,
         })
-            .then((data) => {
-              this.$buefy.toast.open({
-                message: "Pomyślnie zedytowano posta",
-                type: "is-success",
-              });
-              this.forumPost.text = data.text;
-              this.forumPost.title = data.title;
-            })
-            .catch((err) => {
-              this.$buefy.toast.open({
-                message:
-                    "Błąd przy zedytowaniu posta (" +
-                    (err.response ? err.response.status : 500) +
-                    ")",
-                type: "is-danger",
-              });
-            }).finally(
-            this.isUpdate = false
-        );
-
+          .then((data) => {
+            this.$buefy.toast.open({
+              message: "Pomyślnie zedytowano posta",
+              type: "is-success",
+            });
+            this.forumPost.text = data.text;
+            this.forumPost.title = data.title;
+          })
+          .catch((err) => {
+            this.$buefy.toast.open({
+              message:
+                "Błąd przy zedytowaniu posta (" +
+                (err.response ? err.response.status : 500) +
+                ")",
+              type: "is-danger",
+            });
+          })
+          .finally((this.isUpdate = false));
       }
     },
     isDeleting() {
@@ -94,7 +143,11 @@ export default {
       }
       this.getProjectMembers(this.$route.params.projectId).then((data) => {
         for (let i = 0; i < data.members.length; i++) {
-          if (data.members[i]['person'] === this.authUser.email && (data.members[i]['role'] === "Owner" || data.members[i]['role'] === "Moderator")) {
+          if (
+            data.members[i]["person"] === this.authUser.email &&
+            (data.members[i]["role"] === "Owner" ||
+              data.members[i]["role"] === "Moderator")
+          ) {
             this.canDelete = true;
           }
         }
@@ -102,55 +155,65 @@ export default {
     },
     confirmDeleting() {
       this.$buefy.dialog.confirm({
-        message: 'Czy na pewno chcesz usunąc post?',
-        onConfirm: () => this.deletePost()
-      })
+        title: "Usuwanie posta",
+        message: "Czy na pewno chcesz usunąc post?",
+        type: "is-danger",
+        hasIcon: true,
+        onConfirm: () => this.deletePost(),
+      });
     },
     deletePost() {
-      if (this.forumPost.author.id === this.authUser.id) {
+      if (this.canDelete) {
         this.deleteForumPost({
           id: this.postId,
           groupId: this.groupId,
         })
-            .then(() => {
-              this.$buefy.toast.open({
-                message: "Pomyślnie usunięto post",
-                type: "is-success",
-              });
-              this.$router.push(
-                  {name: 'projectForum', params: {groupId: this.groupId}});
-            })
-            .catch((err) => {
-              this.$buefy.toast.open({
-                message:
-                    "Błąd przy usuwaniu posta (" +
-                    (err.response ? err.response.status : 500) +
-                    ")",
-                type: "is-danger",
-              });
+          .then(() => {
+            this.$buefy.toast.open({
+              message: "Pomyślnie usunięto post",
+              type: "is-success",
             });
+            this.$router.push({
+              name: "projectForum",
+              params: { groupId: this.groupId },
+            });
+          })
+          .catch((err) => {
+            this.$buefy.toast.open({
+              message:
+                "Błąd przy usuwaniu posta (" +
+                (err.response ? err.response.status : 500) +
+                ")",
+              type: "is-danger",
+            });
+          });
       }
-    }
+    },
   },
 
   computed: {
     ...mapGetters("auth", ["authUser"]),
     ...mapState({
-      forumPost: (state) => state.projectPost.forumPost
+      forumPost: (state) => state.projectPost.forumPost,
     }),
   },
 
   mounted() {
-    this.getForumPost({id: this.postId}).then(() => {
+    this.getForumPost({ id: this.postId }).then(() => {
       this.isDeleting();
       this.loading = true;
-    })
+    });
   },
 };
 </script>
 
-<style scoped>
+<style>
 .postText {
   white-space: pre-line;
+}
+
+#editPostText {
+  height: 55vh;
+  resize: none;
 }
 </style>
