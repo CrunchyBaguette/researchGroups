@@ -3,12 +3,12 @@
     <div>
       <NavBar :loginOrRegister="this.isLoginOrRegister()" />
     </div>
-    <div style="height: 100%">
+    <div style="height: 94%">
       <div class="columns" style="height: 100%; margin-top: 0">
         <div id="sidebar" class="column is-2" v-if="!this.isLoginOrRegister()">
           <SideBar />
         </div>
-        <div class="column" style="background-color: #fad6a5">
+        <div class="column" style="padding: 0; background-color: #fad6a5">
           <div id="content">
             <router-view />
           </div>
@@ -87,7 +87,8 @@ export default {
 
 <style>
 html {
-  overflow: hidden;
+  overflow: auto;
+  background-color: #fad6a5;
 }
 
 html,
@@ -123,7 +124,7 @@ body {
   padding: 10px;
   height: 100%;
   position: relative;
-  overflow: auto;
+  overflow: none;
   word-wrap: anywhere;
   white-space: normal;
 }

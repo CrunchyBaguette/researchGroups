@@ -1,6 +1,6 @@
 <template>
-  <div id="content">
-    <div style="width: 100%">
+  <div id="content" style="display: flex; flex-flow: column">
+    <div>
       <p class="title" style="float: left">Katalog projektów</p>
       <b-button
         tag="router-link"
@@ -12,31 +12,33 @@
         >Stwórz nowy projekt</b-button
       >
     </div>
-    <div id="column-container" class="columns" v-if="loaded">
-      <div id="c1" class="box column is-two-thirds">
-        <div class="columns">
-          <div class="column">
-            <projectTile
-              v-for="project in this.splitToTwoColumns(projects)[0]"
-              :key="project.name"
-              :project="project"
-              style="margin-top: 10px; cursor: pointer"
-              @click.native="chooseProject(project)"
-            />
-          </div>
-          <div class="column">
-            <projectTile
-              v-for="project in this.splitToTwoColumns(projects)[1]"
-              :key="project.name"
-              :project="project"
-              style="margin-top: 10px; cursor: pointer"
-              @click.native="chooseProject(project)"
-            />
+    <div style="overflow: auto; height: 100%">
+      <div style="height: 100%; width: 100%" class="columns" v-if="loaded">
+        <div id="c1" style="max-height: 100%" class="box column is-two-thirds">
+          <div class="columns">
+            <div class="column">
+              <projectTile
+                v-for="project in this.splitToTwoColumns(projects)[0]"
+                :key="project.name"
+                :project="project"
+                style="cursor: pointer"
+                @click.native="chooseProject(project)"
+              />
+            </div>
+            <div class="column">
+              <projectTile
+                v-for="project in this.splitToTwoColumns(projects)[1]"
+                :key="project.name"
+                :project="project"
+                style="cursor: pointer"
+                @click.native="chooseProject(project)"
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div id="c2" class="box column">
-        <projectInfoPanel :project="chosenProject" />
+        <div id="c2" style="max-height: 100%" class="box column">
+          <projectInfoPanel :project="chosenProject" />
+        </div>
       </div>
     </div>
   </div>
@@ -118,5 +120,9 @@ export default {
 #column-container {
   width: 100%;
   height: 90%;
+}
+
+.columns {
+  margin: 0 !important;
 }
 </style>

@@ -1,11 +1,13 @@
 import random
 import string
 from collections import Counter
+
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+from rest_framework.decorators import action
 from rest_framework import viewsets, status
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.decorators import action
 from rest_framework.response import Response
 from backend.research_groups.serializers import (
     ResearchGroupUserSerializer,
@@ -13,6 +15,7 @@ from backend.research_groups.serializers import (
     ResearchGroupPostSerializer,
     ResearchGroupLinkSerializer,
     ResearchGroupDiskSerializer,
+    ResearchGroupPostSerializerWithUser,
 )
 from backend.research_groups.models import (
     ResearchGroup,
@@ -100,7 +103,7 @@ class ResearchGroupUserViewSet(viewsets.ModelViewSet):
 
 # Create your views here.
 class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
-    queryset = ResearchGroup.objects.all().order_by("name")
+    queryset = ResearchGroup.objects.order_by("name").all()
     serializer_class = ResearchGroupSerializer
     permission_classes = [AllowAny]
     permission_classes_per_method = {
@@ -168,20 +171,37 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
 
 
 class ResearchGroupPostViewSet(viewsets.ModelViewSet):
-    queryset = ResearchGroupPost.objects.all()
+    queryset = ResearchGroupPost.objects.order_by("-edited").all()
     serializer_class = ResearchGroupPostSerializer
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=["get"])
     def grouped(self, request):
+        serializer_class = ResearchGroupPostSerializerWithUser
         researchGroup = request.query_params.get("researchGroup", None)
+        userId = request.query_params.get("userId", None)
         if not researchGroup:
             return Response(
                 {"researchGroup": ["'researchGroup' parameter is required."]},
                 status=400,
             )
-        postsQueryset = ResearchGroupPost.objects.filter(research_group=researchGroup).order_by("added").all()
-        serializer = self.get_serializer(postsQueryset, many=True)
-        return Response({"researchGroup": researchGroup, "posts": serializer.data})
+        if not userId:
+            return Response(
+                {"userId": ["'userId' parameter is required."]},
+                status=400,
+            )
+        postsQueryset = self.queryset.filter(research_group=researchGroup).order_by("added")
+        serializer = serializer_class(postsQueryset, many=True)
+        participation = ResearchGroupUser.objects.filter(person_id=userId, research_group_id=researchGroup)
+        return Response(
+            {"researchGroup": researchGroup, "isParticipant": participation.exists(), "posts": serializer.data}
+        )
+
+    def retrieve(self, request, *args, pk=None, **kwargs):
+        serializer_class = ResearchGroupPostSerializerWithUser
+        post = get_object_or_404(self.queryset, pk=pk)
+        serializer = serializer_class(post)
+        return Response(serializer.data)
 
 
 class ResearchGroupLinkViewSet(viewsets.ModelViewSet):

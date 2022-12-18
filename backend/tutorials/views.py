@@ -21,7 +21,7 @@ from backend.projects.models import GuideProject, Project
 
 
 class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
-    queryset = Tutorial.objects.filter(is_public=True, is_draft=False).order_by("edited")
+    queryset = Tutorial.objects.filter(is_public=True, is_draft=False).order_by("-edited")
     permission_classes = [AllowAny]
     permission_classes_per_method = {
         "create": [IsAuthenticated],
@@ -146,12 +146,12 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
                             & Q(project_guide__project__members=self.request.user.id)
                         )
                         .exclude(Q(is_draft=True) & ~Q(editors=self.request.user.id))
-                        .order_by("edited")
+                        .order_by("-edited")
                     )
 
                 return Tutorial.objects.filter(
                     Q(project_guide__is_public=True) & Q(project_guide__project=projectId) & Q(is_draft=False)
-                ).order_by("edited")
+                ).order_by("-edited")
 
             if researchGroupId := self.request.GET.get("researchGroupId", None):
                 if self.request.user.is_authenticated:
@@ -161,14 +161,14 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
                             & Q(research_group_guide__research_group__members=self.request.user.id)
                         )
                         .exclude(Q(is_draft=True) & ~Q(editors=self.request.user.id))
-                        .order_by("edited")
+                        .order_by("-edited")
                     )
 
                 return Tutorial.objects.filter(
                     Q(research_group_guide__is_public=True)
                     & Q(research_group_guide__research_group=researchGroupId)
                     & Q(is_draft=False)
-                ).order_by("edited")
+                ).order_by("-edited")
 
             if self.request.user.is_authenticated:
                 q = (
@@ -190,6 +190,6 @@ class TutorialViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
                         & ~Q(editors=self.request.user.id)
                     )
                 )
-                return q.order_by("edited")
+                return q.order_by("-edited")
 
-        return Tutorial.objects.filter(is_public=True, is_draft=False).order_by("created")
+        return Tutorial.objects.filter(is_public=True, is_draft=False).order_by("-edited")

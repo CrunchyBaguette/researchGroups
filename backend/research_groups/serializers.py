@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+
+from backend.users.serializers import UserSerializerName
 from backend.utilsx.serializers import QuerySerializerMixin
 from backend.research_groups.models import (
     ResearchGroup,
@@ -44,6 +46,14 @@ class ResearchGroupUserSerializer(QuerySerializerMixin, serializers.ModelSeriali
 
 
 class ResearchGroupPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResearchGroupPost
+        fields = "__all__"
+
+
+class ResearchGroupPostSerializerWithUser(serializers.ModelSerializer):
+    author = UserSerializerName(many=False, read_only=True)
+
     class Meta:
         model = ResearchGroupPost
         fields = "__all__"

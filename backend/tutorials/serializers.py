@@ -12,15 +12,19 @@ class TutorialSerializer(serializers.ModelSerializer):
     owner = UserSerializer(partial=True)
     editors = UserSerializer(many=True, partial=True)
     editable = serializers.BooleanField(read_only=True, default=False)
+    category_code = serializers.SerializerMethodField()
 
     class Meta:
         model = Tutorial
         fields = "__all__"
         read_only_fields = ["created", "edited", "editable"]
 
+    def get_category_code(self, obj):
+        return obj.category
+
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation["type"] = instance.get_type_display()
+        representation["category"] = instance.get_category_display()
         return representation
 
 
@@ -38,7 +42,6 @@ class TutorialEditSerializer(serializers.ModelSerializer):
 
         del data["editor_emails"]
 
-        print(data)
         return super().create(data)
 
     def update(self, instance: Tutorial, validated_data):
@@ -61,6 +64,7 @@ class TutorialEditSerializer(serializers.ModelSerializer):
         instance.text = validated_data.get("text", instance.text)
         instance.is_draft = validated_data.get("is_draft", instance.is_draft)
         instance.is_public = validated_data.get("is_public", instance.is_public)
+        instance.category = validated_data.get("category", instance.category)
         ids = [o.id for o in editors]
         editors_to_remove = instance.editors.exclude(id__in=ids)
         instance.save()
@@ -74,7 +78,7 @@ class TutorialEditSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tutorial
-        fields = ["id", "title", "text", "is_draft", "owner", "editors", "is_public", "editor_emails"]
+        fields = ["id", "category", "title", "text", "is_draft", "owner", "editors", "is_public", "editor_emails"]
         read_only_fields = ["owner", "id"]
         extra_kwargs = {"editors": {"allow_empty": True, "allow_null": True}}
 

@@ -60,6 +60,7 @@ services:
     profiles:
       - prod
       - debug
+      - dev
 
   pgadmin:
     image: dpage/pgadmin4

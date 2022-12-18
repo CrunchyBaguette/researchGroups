@@ -1,11 +1,11 @@
   <template>
-  <div id="root-container" class="box">
+  <div id="root-container" style="height: fit-content" class="box">
     <div class="container">
       <div class="author-category-container">
         <p class="author">
           {{ author }}
         </p>
-        <p class="category">{{ type }}</p>
+        <p class="category">{{ category }}</p>
       </div>
       <div class="date-container">
         <p class="added" id="da">
@@ -33,7 +33,7 @@ export default {
     title: { type: String },
     added: { type: String },
     edited: { type: String },
-    type: { type: String },
+    category: { type: String },
     draft: { type: Boolean },
   },
 };
@@ -47,8 +47,8 @@ export default {
 }
 
 #root-container {
-  margin: 20px;
-  width: 97%;
+  /* margin: 20px; */
+  /* width: 97%; */
   background-color: rgb(196, 196, 196);
   color: black;
 }
@@ -62,7 +62,6 @@ export default {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 30%;
 }
 
 .author {

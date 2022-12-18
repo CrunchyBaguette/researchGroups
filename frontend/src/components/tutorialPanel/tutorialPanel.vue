@@ -1,7 +1,7 @@
 <template>
   <div
     id="content"
-    style="display: flex; flex-flow: column"
+    style="display: flex; flex-flow: column; margin-right: 10px"
     v-if="!this.loading"
   >
     <div>
@@ -12,7 +12,7 @@
               {{ this.tutorial.title }}
             </p>
             <p style="margin-bottom: 30px; margin-left: 13px">
-              {{ this.tutorial.type }}
+              {{ this.tutorial.category }}
             </p>
           </div>
           <div style="width: 50px">
@@ -111,7 +111,9 @@
             </b-field>
             <b-field label="Typ poradnika">
               <b-select v-model="category" expanded>
-                <option value="Default">Default</option>
+                <option value="math">Matematyka</option>
+                <option value="chem">Chemia</option>
+                <option value="med">Medycyna</option>
               </b-select>
             </b-field>
           </section>
@@ -121,7 +123,7 @@
               @click="
                 () => (
                   (title = tutorial.title),
-                  (category = tutorial.type),
+                  (category = tutorial.category),
                   (editingTitle = !editingTitle)
                 )
               "
@@ -272,7 +274,7 @@ export default {
       this.editingText = false;
 
       this.title = this.tutorial.title;
-      this.category = this.tutorial.type;
+      this.category = this.tutorial.category;
       this.text = this.tutorial.text;
       this.editors = this.extractEmails(this.tutorial.editors);
     },
@@ -316,7 +318,7 @@ export default {
         tutorialId: this.$route.params.id,
         tutorial: {
           title: this.title,
-          type: this.category,
+          category: this.category,
           text: this.text,
           editor_emails: this.editors,
           is_public: !this.is_draft,
@@ -324,8 +326,8 @@ export default {
         },
       })
         .then((response) => {
-          this.title = response.name;
-          this.category = response.type;
+          this.title = response.title;
+          this.category = response.category;
           this.text = response.text;
           this.is_draft = response.is_draft;
           this.editingTitle = false;
@@ -384,7 +386,7 @@ export default {
   mounted() {
     this.getTutorial(this.$route.params.id).then((response) => {
       this.title = response.title;
-      this.category = response.type;
+      this.category = response.category_code;
       this.text = response.text;
       this.editors = this.extractEmails(response.editors);
       this.canEdit = response.editable;
