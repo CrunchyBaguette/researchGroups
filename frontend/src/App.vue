@@ -87,6 +87,7 @@ export default {
 <style>
 html {
   overflow: auto;
+  background-color: #fad6a5;
 }
 
 html,
