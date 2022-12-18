@@ -14,6 +14,12 @@ class UserSerializer(serializers.ModelSerializer):
         return obj.first_name + " " + obj.last_name
 
 
+class UserSerializerName(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ["id", "username", "first_name", "last_name"]
+
+
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):

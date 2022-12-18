@@ -24,7 +24,8 @@ export default {
   background-color: rgb(196, 196, 196);
   color: black;
   width: 100%;
-  height: 150px;
+  height: fit-content;
+  min-height: 150px;
   text-align: center;
 }
 
@@ -34,17 +35,17 @@ export default {
 }
 
 .groupTileTitleContainer {
+  display: flex;
   width: 100%;
   height: 30%;
 }
 
 .groupTileTitle {
-  float: left;
+  flex: 1;
   text-align: left;
   padding-left: 5px;
   font-weight: bold;
   font-size: 25px;
-  width: fit-content;
 }
 
 .groupTileCategory {
@@ -54,6 +55,8 @@ export default {
   font-weight: bold;
   font-size: 25px;
   width: fit-content;
+  margin-left: 10px;
+  word-wrap: break-word;
   float: right;
 }
 

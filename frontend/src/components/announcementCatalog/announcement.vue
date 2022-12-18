@@ -1,6 +1,9 @@
   <template>
-  <div id="root-container" class="box">
-    <div class="container">
+  <div id="root-container" style="height: 100%; margin-bottom: 0" class="box">
+    <div
+      class="container"
+      style="display: flex; flex-flow: column; height: 100%"
+    >
       <div class="author-category-container">
         <p class="author">
           {{ author }} <span id="spanGroup">(koło: </span> {{ group
@@ -19,7 +22,11 @@
       <div style="margin-bottom: 5px">
         <p class="title">{{ title }}</p>
       </div>
-      <div class="box content-container" v-if="$route.name == 'announcement'">
+      <div
+        class="box"
+        style="overflow: auto; flex: 1 1 0"
+        v-if="$route.name == 'announcement'"
+      >
         <p class="content">
           <markdown-it-vue
             class="md-body"
@@ -72,8 +79,9 @@ export default {
 }
 
 #root-container {
-  margin: 20px;
-  width: 97%;
+  /* margin: 20px; */
+  /* width: 97%; */
+  height: 10px;
   background-color: rgb(196, 196, 196);
   color: black;
 }
@@ -87,7 +95,6 @@ export default {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 30%;
 }
 
 .author {
@@ -109,8 +116,7 @@ export default {
 
 .content-container {
   width: 100%;
-  height: 70%;
-  overflow: hidden;
+  height: 80vh;
 }
 
 .content {

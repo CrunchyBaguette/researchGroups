@@ -3,10 +3,19 @@
     <div style="flex: 0 1 auto">
       <p class="title" style="width: fit-content">Tworzenie koła naukowego</p>
     </div>
-    <div style="flex: 1 1 auto; overflow: auto; padding: 10px">
-      <div class="columns" style="width: 80%; margin: 50px auto">
+    <div
+      style="
+        display: flex;
+        flex: 1 1 auto;
+        overflow: auto;
+        padding: 10px;
+        justify-content: center;
+        padding-top: 50px;
+      "
+    >
+      <div class="columns" style="width: 80%">
         <div class="column" style="display: flex; flex-flow: column; margin: 0">
-          <div class="box" style="flex: 1 1 auto">
+          <div class="box" style="heigh: fit-content">
             <b-field
               :message="!nameGiven ? 'Proszę podać nazwę koła' : ''"
               :type="!nameGiven ? 'is-danger' : ''"
@@ -56,7 +65,7 @@
           </div>
           <div style="flex: 0 1 auto">
             <b-button
-              style="margin-top: 50px"
+              style="margin-top: 20px"
               expanded
               type="is-success"
               @click="clicked()"

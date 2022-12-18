@@ -3,7 +3,7 @@
     <p class="group-info-panel-title">{{ project.name }}</p>
     <div
       class="box group-info-panel-desc-container"
-      style="background-color: white"
+      style="background-color: white; overflow-x: hidden"
     >
       <p
         style="
@@ -73,7 +73,7 @@ export default {
 
 .no-research-group {
   text-align: center;
-  margin-top: 40%;
+  margin-top: 35%;
 }
 
 .no-research-group p {

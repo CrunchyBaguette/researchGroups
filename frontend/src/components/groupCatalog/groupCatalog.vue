@@ -1,6 +1,6 @@
 <template>
-  <div id="content">
-    <div style="width: 100%">
+  <div id="content" style="display: flex; flex-flow: column">
+    <div>
       <p class="title" style="float: left">Katalog kół naukowych</p>
       <b-button
         tag="router-link"
@@ -12,31 +12,37 @@
         >Dodaj nowe koło naukowe</b-button
       >
     </div>
-    <div id="column-container" class="columns" v-if="loaded">
-      <div id="c1" class="box column is-two-thirds">
-        <div class="columns">
-          <div class="column">
-            <groupTile
-              v-for="researchGroup in this.splitToTwoColumns(researchGroups)[0]"
-              :key="researchGroup.name"
-              :group="researchGroup"
-              style="margin-top: 10px; cursor: pointer"
-              @click.native="chooseGroup(researchGroup)"
-            />
-          </div>
-          <div class="column">
-            <groupTile
-              v-for="researchGroup in this.splitToTwoColumns(researchGroups)[1]"
-              :key="researchGroup.name"
-              :group="researchGroup"
-              style="margin-top: 10px; cursor: pointer"
-              @click.native="chooseGroup(researchGroup)"
-            />
+    <div style="overflow: auto; height: 100%">
+      <div style="height: 100%; width: 100%" class="columns" v-if="loaded">
+        <div id="c1" style="max-height: 100%" class="box column is-two-thirds">
+          <div class="columns">
+            <div class="column">
+              <groupTile
+                v-for="researchGroup in this.splitToTwoColumns(
+                  researchGroups
+                )[0]"
+                :key="researchGroup.name"
+                :group="researchGroup"
+                style="cursor: pointer"
+                @click.native="chooseGroup(researchGroup)"
+              />
+            </div>
+            <div class="column">
+              <groupTile
+                v-for="researchGroup in this.splitToTwoColumns(
+                  researchGroups
+                )[1]"
+                :key="researchGroup.name"
+                :group="researchGroup"
+                style="cursor: pointer"
+                @click.native="chooseGroup(researchGroup)"
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div id="c2" class="box column">
-        <groupInfoPanel :researchGroup="chosenResearchGroup" />
+        <div id="c2" style="max-height: 100%" class="box column">
+          <groupInfoPanel :researchGroup="chosenResearchGroup" />
+        </div>
       </div>
     </div>
   </div>
@@ -118,5 +124,9 @@ export default {
 #column-container {
   width: 100%;
   height: 90%;
+}
+
+.columns {
+  margin: 0 !important;
 }
 </style>

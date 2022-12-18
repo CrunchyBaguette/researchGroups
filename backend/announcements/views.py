@@ -9,7 +9,7 @@ from backend.common.utils import get_announcement_email, generate_announcement_l
 
 
 class AnnouncementViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
-    queryset = Announcement.objects.all()
+    queryset = Announcement.objects.order_by("-edited").all()
     serializer_class = AnnouncementSerializer
     permission_classes = [AllowAny]
     permission_classes_per_method = {
