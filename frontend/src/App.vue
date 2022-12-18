@@ -3,7 +3,7 @@
     <div>
       <NavBar :loginOrRegister="this.isLoginOrRegister()" />
     </div>
-    <div style="height: 100%">
+    <div style="height: 94%">
       <div class="columns" style="height: 100%; margin-top: 0">
         <div id="sidebar" class="column is-2" v-if="!this.isLoginOrRegister()">
           <SideBar />

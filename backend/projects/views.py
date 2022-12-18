@@ -170,7 +170,7 @@ class ProjectViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
 
 
 class ProjectPostViewSet(viewsets.ModelViewSet):
-    queryset = ProjectPost.objects.all()
+    queryset = ProjectPost.objects.order_by("-edited").all()
     serializer_class = ProjectPostSerializer
     permission_classes = [IsAuthenticated]
 

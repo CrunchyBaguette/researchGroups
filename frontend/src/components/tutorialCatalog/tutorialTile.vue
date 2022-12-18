@@ -5,7 +5,7 @@
         <p class="author">
           {{ author }}
         </p>
-        <p class="category">{{ type }}</p>
+        <p class="category">{{ category }}</p>
       </div>
       <div class="date-container">
         <p class="added" id="da">
@@ -33,7 +33,7 @@ export default {
     title: { type: String },
     added: { type: String },
     edited: { type: String },
-    type: { type: String },
+    category: { type: String },
     draft: { type: Boolean },
   },
 };

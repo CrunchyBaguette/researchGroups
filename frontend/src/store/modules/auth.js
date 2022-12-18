@@ -32,6 +32,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             authService.fetchTokens(credentials).then((data) => {
                 dispatch("setTokens", data);
+                dispatch("beginTokenRefreshCountdown")
                 resolve();
             }).catch((err) => {
                 reject(err);
@@ -53,7 +54,7 @@ const actions = {
                 dispatch("logOut");
                 router.push("/login");
             });
-        }, 3600000); // godzina
+        }, 60000); // minuta
         commit("setTokenRefreshCountdownID", ID);
     },
     setTokens({ commit, dispatch }, data) {

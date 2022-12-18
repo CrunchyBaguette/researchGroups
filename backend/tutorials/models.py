@@ -13,10 +13,13 @@ class Tutorial(models.Model):
     editors = models.ManyToManyField(User, related_name="editor")
     is_public = models.BooleanField(default=False)
 
-    class Types(models.TextChoices):
+    class Categories(models.TextChoices):
+        MATH = "math", "Matematyka"
+        MEDICAL = "med", "Medycyna"
+        CHEMISTRY = "chem", "Chemia"
         DEFAULT = "def", "Default"
 
-    type = models.CharField(max_length=20, choices=Types.choices, default=Types.DEFAULT)
+    category = models.CharField(max_length=20, choices=Categories.choices, default=Categories.DEFAULT)
 
 
 class Rating(models.Model):

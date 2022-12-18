@@ -188,7 +188,7 @@ def generate_tutorial(users):
         tutorials["created"].append(create)
         tutorials["edited"].append(create)
         tutorials["owner_id"].append(users["id"].values[i % len(users["id"])])
-        types = ["def"]
+        types = ["math", "chem", "med"]
         tutorials["type"].append(types[fake.pyint(0, len(types) - 1)])
     df_tutorials = pd.DataFrame(tutorials)
     if is_printing:
@@ -522,7 +522,7 @@ def generate_announcement(df_users, df_research_group):
         announcements["added"].append(created)
         announcements["edited"].append(created)
         announcements["research_group_id_id"].append(df_research_group["id"].values[i % len(df_research_group["id"])])
-        types = ["def", "Default"]
+        types = ["sponsor", "rekrutacja", "projekt"]
         announcements["ann_type"].append(types[fake.pyint(0, len(types) - 1)])
     df_announcements = pd.DataFrame(announcements)
     if is_printing:

@@ -38,7 +38,7 @@
               :title="tutorial.title"
               :added="tutorial.created"
               :edited="tutorial.edited"
-              :type="tutorial.type"
+              :category="tutorial.category"
               :draft="tutorial.is_draft"
               style="margin-top: 10px; cursor: pointer"
               @click.native="goToTutorial(tutorial.id)"
@@ -52,7 +52,7 @@
               :title="tutorial.title"
               :added="tutorial.created"
               :edited="tutorial.edited"
-              :type="tutorial.type"
+              :category="tutorial.category"
               :draft="tutorial.is_draft"
               style="margin-top: 10px; cursor: pointer"
               @click.native="goToTutorial(tutorial.id)"
@@ -66,7 +66,7 @@
               :title="tutorial.title"
               :added="tutorial.created"
               :edited="tutorial.edited"
-              :type="tutorial.type"
+              :category="tutorial.category"
               :draft="tutorial.is_draft"
               style="margin-top: 10px; cursor: pointer"
               @click.native="goToTutorial(tutorial.id)"
@@ -90,16 +90,18 @@
               ></b-input>
             </b-field>
             <b-field
-              :message="!typeGiven ? 'Proszę podać typ poradnika' : ''"
-              :type="!typeGiven ? 'is-danger' : ''"
+              :message="!categoryGiven ? 'Proszę podać typ poradnika' : ''"
+              :type="!categoryGiven ? 'is-danger' : ''"
               label="Typ poradnika"
             >
               <b-select
-                @focus="typeGiven = true"
-                v-model="tutorialType"
+                @focus="categoryGiven = true"
+                v-model="tutorialCategory"
                 expanded
               >
-                <option value="Default">Default</option>
+                <option value="math">Matematyka</option>
+                <option value="chem">Chemia</option>
+                <option value="med">Medycyna</option>
               </b-select>
             </b-field>
           </section>
@@ -112,7 +114,7 @@
                 () => (
                   (addingTutorial = false),
                   (tutorialName = ``),
-                  (tutorialType = ``)
+                  (tutorialCategory = ``)
                 )
               "
               >Anuluj</b-button
@@ -140,8 +142,8 @@ export default {
       addingTutorial: false,
       tutorialName: "",
       nameGiven: true,
-      tutorialType: "",
-      typeGiven: true,
+      tutorialCategory: "",
+      categoryGiven: true,
       loaded: false,
     };
   },
@@ -176,12 +178,12 @@ export default {
 
     createTutorial() {
       if (this.tutorialName == "") this.nameGiven = false;
-      if (this.tutorialType == "") this.typeGiven = false;
+      if (this.tutorialCategory == "") this.categoryGiven = false;
 
-      if (this.nameGiven && this.typeGiven) {
+      if (this.nameGiven && this.categoryGiven) {
         this.addTutorial({
           title: this.tutorialName,
-          type: this.tutorialType,
+          category: this.tutorialCategory,
           editors_emails: [],
           editors: [],
           is_public: false,
@@ -205,7 +207,7 @@ export default {
           });
 
         this.tutorialName = "";
-        this.tutorialType = "";
+        this.tutorialCategory = "";
       }
     },
 

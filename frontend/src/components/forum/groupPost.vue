@@ -83,11 +83,19 @@
           </div>
 
           <div v-if="isUpdate" style="height: 100%">
-            <b-field label="Tytuł:"
-              ><b-input id="title" v-model="title"></b-input>
+            <b-field
+              label="Tytuł:"
+              :message="titleError"
+              :type="titleError ? 'is-danger' : ''"
+              ><b-input
+                @focus="titleError = ''"
+                id="title"
+                v-model="title"
+              ></b-input>
             </b-field>
-            <b-field>
+            <b-field :message="textError" :type="textError ? 'is-danger' : ''">
               <b-input
+                @focus="textError = ''"
                 v-model="text"
                 id="editPostText"
                 type="textarea"
@@ -113,7 +121,9 @@ export default {
   data() {
     return {
       title: "",
+      titleError: "",
       text: "",
+      textError: "",
       postId: this.$route.params.postId,
       groupId: this.$route.params.groupId,
       loading: false,
@@ -146,11 +156,9 @@ export default {
       this.text = this.forumPost.text;
     },
     updatePost() {
-      if (
-        this.title &&
-        this.text &&
-        this.forumPost.author.id === this.authUser.id
-      ) {
+      if (!this.title) this.titleError = "Proszę podać tytuł ogłoszenia";
+      if (!this.text) this.textError = "Proszę podać treść ogłoszenia";
+      if (this.title && this.text) {
         this.updateForumPost({
           id: this.$route.params.postId,
           title: this.title,

@@ -92,7 +92,7 @@ class ResearchGroupUserViewSet(viewsets.ModelViewSet):
 
 # Create your views here.
 class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
-    queryset = ResearchGroup.objects.all().order_by("name")
+    queryset = ResearchGroup.objects.order_by("name").all()
     serializer_class = ResearchGroupSerializer
     permission_classes = [AllowAny]
     permission_classes_per_method = {
@@ -154,7 +154,7 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
 
 
 class ResearchGroupPostViewSet(viewsets.ModelViewSet):
-    queryset = ResearchGroupPost.objects.all()
+    queryset = ResearchGroupPost.objects.order_by("-edited").all()
     serializer_class = ResearchGroupPostSerializer
     permission_classes = [IsAuthenticated]
 

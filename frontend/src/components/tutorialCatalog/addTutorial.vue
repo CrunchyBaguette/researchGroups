@@ -21,20 +21,22 @@
               />
             </b-field>
             <b-field
-              :message="!typeGiven ? 'Proszę podać typ poradnika' : ''"
-              :type="!typeGiven ? 'is-danger' : ''"
+              :message="!categoryGiven ? 'Proszę podać typ poradnika' : ''"
+              :type="!categoryGiven ? 'is-danger' : ''"
             >
               <template #label
                 ><p style="font-size: 20px">Typ poradnika</p></template
               >
               <b-select
-                @focus="typeGiven = true"
-                v-model="tutorialType"
+                @focus="categoryGiven = true"
+                v-model="tutorialCategory"
                 expanded
                 style="width: 100%"
                 placeholder="Wybierz typ poradnika"
               >
-                <option value="def">Default</option>
+                <option value="math">Matematyka</option>
+                <option value="chem">Chemia</option>
+                <option value="med">Medycyna</option>
               </b-select>
             </b-field>
           </div>
@@ -128,12 +130,12 @@ export default {
   data() {
     return {
       tutorialName: "",
-      tutorialType: "",
+      tutorialCategory: "",
       //   groupAboutUs: "",
       tutorialEditorInput: "",
       tutorialEditors: [],
       nameGiven: true,
-      typeGiven: true,
+      categoryGiven: true,
       //   aboutUsGiven: true,
       invalidEmailMessage: "",
     };
@@ -143,12 +145,12 @@ export default {
     ...mapActions("tutorial", ["addTutorial"]),
     clicked() {
       if (this.tutorialName == "") this.nameGiven = false;
-      if (this.tutorialType == "") this.typeGiven = false;
+      if (this.tutorialCategory == "") this.categoryGiven = false;
 
-      if (this.nameGiven && this.typeGiven) {
+      if (this.nameGiven && this.categoryGiven) {
         this.addTutorial({
           title: this.tutorialName,
-          type: this.tutorialType,
+          category: this.tutorialCategory,
           editors: [],
           is_public: true,
         })
@@ -170,7 +172,7 @@ export default {
           });
 
         this.tutorialName = "";
-        this.tutorialType = "";
+        this.tutorialCategory = "";
       }
     },
     addToMemberList(memberEmail) {

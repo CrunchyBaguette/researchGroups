@@ -12,7 +12,7 @@
         >Dodaj nowe koło naukowe</b-button
       >
     </div>
-    <div style="overflow: auto; height: 100%; margin-bottom: 20px">
+    <div style="overflow: auto; height: 100%">
       <div style="height: 100%; width: 100%" class="columns" v-if="loaded">
         <div id="c1" style="max-height: 100%" class="box column is-two-thirds">
           <div class="columns">
