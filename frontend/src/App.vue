@@ -8,7 +8,7 @@
         <div id="sidebar" class="column is-2" v-if="!this.isLoginOrRegister()">
           <SideBar />
         </div>
-        <div class="column" style="background-color: #fad6a5">
+        <div class="column" style="padding: 0; background-color: #fad6a5">
           <div id="content">
             <router-view />
           </div>
@@ -86,7 +86,7 @@ export default {
 
 <style>
 html {
-  overflow: hidden;
+  overflow: auto;
 }
 
 html,

@@ -65,9 +65,16 @@
           :content="announcementContent"
         />
       </div>
-      <div v-else>
-        <div id="root-container" class="box">
-          <div class="container">
+      <div v-else style="height: 100%">
+        <div
+          id="root-container"
+          style="height: 100%; margin-bottom: 0"
+          class="box"
+        >
+          <div
+            class="container"
+            style="display: flex; flex-flow: column; height: 100%"
+          >
             <div class="author-category-container">
               <div class="author-group-container">
                 <p class="author-in-edit-mode">{{ announcementAuthor }}</p>
@@ -221,7 +228,10 @@
               </div>
             </div>
 
-            <div class="content-container">
+            <div
+              class="content-container"
+              style="display: flex; flex-flow: column"
+            >
               <div id="btnEditContent">
                 <b-button
                   :disabled="isButtonDisabled"
@@ -234,6 +244,7 @@
               </div>
               <div
                 class="box content"
+                style="overflow: auto; flex: 1 1 0"
                 v-if="!editAnnouncementContent || !isBeingEdited"
               >
                 <markdown-it-vue
@@ -695,7 +706,6 @@ export default {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 30%;
 }
 
 .author-in-edit-mode {

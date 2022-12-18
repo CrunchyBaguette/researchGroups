@@ -1,3 +1,4 @@
+import os
 from collections import defaultdict
 from faker import Faker
 import pandas as pd
@@ -6,9 +7,9 @@ from sqlalchemy import create_engine, text
 
 # Aby wywołać generator trzeba w folderze researchGroup wpisać "python manage.py runscript data-generator"
 # falga do printowania danych do konsoli
-is_printing = False
+is_printing = True
 
-number_of_announcements = 10
+number_of_announcements = 30
 number_of_projects = 10
 number_of_users = 20
 number_of_guides = 10
@@ -26,9 +27,9 @@ number_of_tutorials = 10
 number_of_ratings = 10
 
 fake = Faker()
+database = os.environ.get("DATABASE_HOST", "localhost")
 engine = create_engine(
-    "postgresql://admin:pleasechangeme@postgres:5432/backend",
-    # "postgresql://admin:pleasechangeme@localhost:5432/backend",
+    f"postgresql://admin:pleasechangeme@{database}:5432/backend",
     echo=False,
 )
 

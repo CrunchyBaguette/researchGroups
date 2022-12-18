@@ -70,7 +70,11 @@
           <div style="margin-bottom: 10px">
             <p v-if="!isUpdate" class="title">{{ forumPost.title }}</p>
           </div>
-          <div style="overflow: auto" v-if="!isUpdate" class="box">
+          <div
+            style="overflow: auto; height: 100%"
+            v-if="!isUpdate"
+            class="box"
+          >
             <markdown-it-vue
               class="md-body"
               :content="forumPost.text"

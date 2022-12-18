@@ -12,7 +12,7 @@
         >Stwórz nowy projekt</b-button
       >
     </div>
-    <div style="overflow: auto; height: 100%">
+    <div style="overflow: auto; height: 100%; margin-bottom: 20px">
       <div style="height: 100%; width: 100%" class="columns" v-if="loaded">
         <div id="c1" style="max-height: 100%" class="box column is-two-thirds">
           <div class="columns">
@@ -21,7 +21,7 @@
                 v-for="project in this.splitToTwoColumns(projects)[0]"
                 :key="project.name"
                 :project="project"
-                style="margin-top: 10px; margin-left: 10px; cursor: pointer"
+                style="cursor: pointer"
                 @click.native="chooseProject(project)"
               />
             </div>
@@ -30,17 +30,13 @@
                 v-for="project in this.splitToTwoColumns(projects)[1]"
                 :key="project.name"
                 :project="project"
-                style="margin-top: 10px; margin-left: 10px; cursor: pointer"
+                style="cursor: pointer"
                 @click.native="chooseProject(project)"
               />
             </div>
           </div>
         </div>
-        <div
-          id="c2"
-          style="max-height: 100%; border-radius: 0"
-          class="box column"
-        >
+        <div id="c2" style="max-height: 100%" class="box column">
           <projectInfoPanel :project="chosenProject" />
         </div>
       </div>
@@ -124,5 +120,9 @@ export default {
 #column-container {
   width: 100%;
   height: 90%;
+}
+
+.columns {
+  margin: 0 !important;
 }
 </style>

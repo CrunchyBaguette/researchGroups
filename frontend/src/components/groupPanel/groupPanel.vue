@@ -2,7 +2,7 @@
   <div class="container" id="content" v-if="!this.loading">
     <div class="columns" style="width: 100%">
       <div class="column is-one-fifth"></div>
-      <div class="column is-7" style="margin-left: 15px">
+      <div class="column is-7" id="centerDivHead" style="margin-left: 15px">
         <div class="div-title">
           <h1 class="title" id="title" v-if="!editGroupName || !isBeingEdited">
             {{ groupName }}
@@ -1212,6 +1212,11 @@ export default {
   background-color: rgb(203, 203, 203);
 }
 
+#centerDivHead {
+  margin-right: 15px;
+  margin-left: 15px;
+}
+
 #centerDiv {
   margin-right: 15px;
   margin-left: 15px;
@@ -1335,7 +1340,8 @@ export default {
 
 #col {
   display: flex;
-  justify-content: left;
+  width: 20%;
+  justify-content: center;
   align-items: center;
 }
 

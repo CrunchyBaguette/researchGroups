@@ -51,6 +51,7 @@
             :total="announcements.length"
             :per-page="perPage"
             :current.sync="current"
+            @change="scrollToTop"
           ></b-pagination>
         </div>
       </div>
@@ -94,6 +95,10 @@ export default {
     },
     moveToAnnouncement(announcementId) {
       this.$router.push(`/announcement/${announcementId}`);
+    },
+
+    scrollToTop() {
+      document.getElementById("box").scrollTo(0, 0);
     },
   },
 
