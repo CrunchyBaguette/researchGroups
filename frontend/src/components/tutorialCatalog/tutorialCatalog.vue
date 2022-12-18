@@ -1,5 +1,9 @@
 <template>
-  <div id="content" style="display: flex; flex-flow: column" v-if="this.loaded">
+  <div
+    id="content"
+    style="display: flex; flex-flow: column; margin-right: 10px"
+    v-if="this.loaded"
+  >
     <div>
       <div id="titleDiv">
         <p class="title" id="tit">Katalog Poradników</p>

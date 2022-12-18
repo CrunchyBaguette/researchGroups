@@ -1,7 +1,13 @@
 <template>
   <div
     v-if="loading"
-    style="display: flex; flex-flow: column; height: 100%; height: 100%"
+    style="
+      display: flex;
+      flex-flow: column;
+      height: 100%;
+      height: 100%;
+      margin-right: 10px;
+    "
   >
     <div style="flex: 0 1 0; display: flex; margin-bottom: 10px">
       <div style="flex: 1 0 0">

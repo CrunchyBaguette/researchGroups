@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div style="height: 100%; margin-right: 10px">
     <div
       style="display: flex; flex-flow: column; height: 100%"
       v-if="isAuthenticated && isParticipant"

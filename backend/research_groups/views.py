@@ -173,7 +173,7 @@ class ResearchGroupPostViewSet(viewsets.ModelViewSet):
                 {"userId": ["'userId' parameter is required."]},
                 status=400,
             )
-        postsQueryset = self.queryset.filter(research_group=researchGroup).order_by("added").all()
+        postsQueryset = self.queryset.filter(research_group=researchGroup).order_by("added")
         serializer = serializer_class(postsQueryset, many=True)
         participation = ResearchGroupUser.objects.filter(person_id=userId, research_group_id=researchGroup)
         return Response(

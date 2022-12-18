@@ -1,7 +1,7 @@
 <template>
   <div
     id="content"
-    style="display: flex; flex-flow: column"
+    style="display: flex; flex-flow: column; margin-right: 10px"
     v-if="!this.loading"
   >
     <div>
