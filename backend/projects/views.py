@@ -7,7 +7,6 @@ from rest_framework import viewsets, status
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from django.contrib.auth.models import User
 from backend.projects.serializers import (
     ProjectSerializer,
     ProjectUserSerializer,
