@@ -1,11 +1,14 @@
 <template>
-  <div>
-    <div v-if="isAuthenticated && isParticipant">
-      <div class="columns mr-3">
-        <div class="column is-2 pr-6">
+  <div style="height: 100%">
+    <div
+      style="display: flex; flex-flow: column; height: 100%"
+      v-if="isAuthenticated && isParticipant"
+    >
+      <div style="display: flex; margin-bottom: 10px">
+        <div style="flex: 1 0 0">
           <p class="title" style="text-align: left">Forum</p>
         </div>
-        <div class="column is-2 is-offset-8 pl-6">
+        <div style="margin-right: 10px">
           <b-button
             class="button is-medium is-success is-rounded"
             v-on:click="addPost"
@@ -16,7 +19,7 @@
       <div v-if="adding">
         <AddProjectPost @close="adding = false"></AddProjectPost>
       </div>
-      <div v-if="loading">
+      <div class="box" style="flex: 1 0 0; overflow: auto" v-if="loading">
         <div v-for="post in forumPosts" :key="post.id" class="mb-5">
           <router-link
             :to="{
@@ -98,7 +101,7 @@ export default {
   },
 
   mounted() {
-    document.title = "Forum koła naukowego";
+    document.title = "Forum projektu";
     this.getForumPosts({
       project: this.projectId,
       userId: this.authUser.id,

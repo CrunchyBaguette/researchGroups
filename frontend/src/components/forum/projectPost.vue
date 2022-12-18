@@ -1,46 +1,32 @@
 <template>
   <div
     v-if="loading"
-    style="display: flex; flex-flow: column; height: 100%; overflow-x: hidden"
+    style="display: flex; flex-flow: column; height: 100%; height: 100%"
   >
-    <div class="columns" style="flex: 0 1 auto">
-      <div class="column is-4">
+    <div style="flex: 0 1 0; display: flex; margin-bottom: 10px">
+      <div style="flex: 1 0 0">
         <b-button
-          class="button is-success is-rounded"
+          class="button is-success is-rounded is-medium"
           v-on:click="$router.back()"
           >Powrót
         </b-button>
-        <p class="author-decor">
-          <b
-            >{{ forumPost.author.first_name }}
-            {{ forumPost.author.last_name }}</b
-          >
-        </p>
-        <p class="author-decor">
-          Utworzone:
-          {{ new Date(forumPost.added) | dateFormat("DD.MM.YYYY HH:mm") }}
-        </p>
-        <p class="author-decor">
-          Edytowane:
-          {{ new Date(forumPost.edited) | dateFormat("DD.MM.YYYY HH:mm") }}
-        </p>
       </div>
-      <div class="column is-2 is-offset-6">
+      <div>
         <div>
           <b-button
             v-if="forumPost.author.id === authUser.id && !isUpdate"
-            class="button is-success is-rounded mr-2"
+            class="button is-success is-rounded mr-2 is-medium"
             v-on:click="showEdit"
             >Edytuj
           </b-button>
           <b-button
             v-if="isUpdate"
-            class="button is-success is-rounded mr-2"
+            class="button is-success is-rounded mr-2 is-medium"
             v-on:click="isUpdate = false"
             >Anuluj
           </b-button>
           <b-button
-            class="button is-danger is-rounded"
+            class="button is-danger is-rounded is-medium"
             v-if="canDelete"
             v-on:click="confirmDeleting"
             >Usuń</b-button
@@ -48,30 +34,61 @@
         </div>
       </div>
     </div>
-    <div
-      class="box"
-      style="
-        flex: 1 1 auto;
-        background-color: rgb(196, 196, 196);
-        margin-bottom: 20px;
-      "
-    >
-      <div>
-        <p v-if="!isUpdate" class="title">{{ forumPost.title }}</p>
-        <p v-if="!isUpdate" class="box postText">{{ forumPost.text }}</p>
+    <div style="flex: 1 0 0; overflow: hidden">
+      <div
+        class="box"
+        style="
+          flex: 1 1 auto;
+          overflow: auto;
+          height: 100%;
+          background-color: rgb(196, 196, 196);
+        "
+      >
+        <div style="display: flex; flex-flow: column; height: 100%">
+          <div>
+            <p class="author-decor">
+              <b
+                >{{ forumPost.author.first_name }}
+                {{ forumPost.author.last_name }}</b
+              >
+            </p>
+            <p class="author-decor">
+              Utworzone:
+              {{ new Date(forumPost.added) | dateFormat("DD.MM.YYYY HH:mm") }}
+            </p>
+            <p class="author-decor">
+              Edytowane:
+              {{ new Date(forumPost.edited) | dateFormat("DD.MM.YYYY HH:mm") }}
+            </p>
+          </div>
+          <div style="margin-bottom: 10px">
+            <p v-if="!isUpdate" class="title">{{ forumPost.title }}</p>
+          </div>
+          <div style="overflow: auto" v-if="!isUpdate" class="box">
+            <markdown-it-vue
+              class="md-body"
+              :content="forumPost.text"
+              :options="markdownOptions"
+            />
+          </div>
 
-        <div v-if="isUpdate" style="height: 100%">
-          <b-field label="Tytuł:"
-            ><b-input id="title" v-model="title"></b-input>
-          </b-field>
-          <b-field>
-            <b-input v-model="text" id="editPostText" type="textarea"></b-input>
-          </b-field>
-          <b-button
-            class="button is-success is-rounded mt-2"
-            v-on:click="updatePost"
-            >Akceptuj zmiany</b-button
-          >
+          <div v-if="isUpdate" style="height: 100%">
+            <b-field label="Tytuł:"
+              ><b-input id="title" v-model="title"></b-input>
+            </b-field>
+            <b-field>
+              <b-input
+                v-model="text"
+                id="editPostText"
+                type="textarea"
+              ></b-input>
+            </b-field>
+            <b-button
+              class="button is-success is-rounded mt-2"
+              v-on:click="updatePost"
+              >Akceptuj zmiany</b-button
+            >
+          </div>
         </div>
       </div>
     </div>
