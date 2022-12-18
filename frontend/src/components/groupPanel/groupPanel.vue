@@ -1,8 +1,8 @@
 <template>
   <div class="container" id="content" v-if="!this.loading">
     <div class="columns" style="width: 100%">
-      <div class="column is-3"></div>
-      <div class="column is-6">
+      <div class="column is-one-fifth"></div>
+      <div class="column is-7" style="margin-left: 15px">
         <div class="div-title">
           <h1 class="title" id="title" v-if="!editGroupName || !isBeingEdited">
             {{ groupName }}
@@ -115,12 +115,15 @@
       <div class="columns"></div>
     </div>
     <div class="columns" style="width: 100%">
-      <div class="box column is-3">
+      <div class="box column is-one-fifth">
         <b-button
           id="btn"
           size="is-medium"
           tag="router-link"
-          :to="{ name: 'groupForum', params: { groupId: this.$route.params.id} }"
+          :to="{
+            name: 'groupForum',
+            params: { groupId: this.$route.params.id },
+          }"
           v-if="isMember()"
           :disabled="isButtonDisabled"
           >Forum</b-button
@@ -154,7 +157,7 @@
           >Kontakt</b-button
         >
       </div>
-      <div class="box column is-6" id="centerDiv">
+      <div class="box column is-7" id="centerDiv">
         <div class="outer" v-if="selectedTabTitle === 'Czym się zajmujemy'">
           <div class="div-title">
             <h2 class="centerDivHeader">{{ selectedTabTitle }}</h2>
@@ -1332,7 +1335,7 @@ export default {
 
 #col {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
 }
 

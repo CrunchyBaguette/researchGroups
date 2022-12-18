@@ -34,13 +34,17 @@
                 )[1]"
                 :key="researchGroup.name"
                 :group="researchGroup"
-                style="margin-top: 10px; margin-left: 10px; cursor: pointer"
+                style="margin-top: 10px; cursor: pointer"
                 @click.native="chooseGroup(researchGroup)"
               />
             </div>
           </div>
         </div>
-        <div id="c2" style="max-height: 100%" class="box column">
+        <div
+          id="c2"
+          style="max-height: 100%; border-radius: 0"
+          class="box column"
+        >
           <groupInfoPanel :researchGroup="chosenResearchGroup" />
         </div>
       </div>

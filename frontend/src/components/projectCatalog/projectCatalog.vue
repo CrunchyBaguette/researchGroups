@@ -36,7 +36,11 @@
             </div>
           </div>
         </div>
-        <div id="c2" style="max-height: 100%" class="box column">
+        <div
+          id="c2"
+          style="max-height: 100%; border-radius: 0"
+          class="box column"
+        >
           <projectInfoPanel :project="chosenProject" />
         </div>
       </div>
