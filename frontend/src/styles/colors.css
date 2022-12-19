@@ -69,6 +69,10 @@
     filter: brightness(95%);
 }
 
+.pagination-link:focus {
+    border-color: var(--third-color-green);
+}
+
 .pagination-link.is-current {
     background-color: var(--third-color-green);
     border-color: var(--third-color-green);
