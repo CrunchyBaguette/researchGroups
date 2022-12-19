@@ -172,7 +172,7 @@
               </b-button>
             </div>
           </div>
-          <div class="inner" v-if="!editWhatWeDo">
+          <div class="box white inner" v-if="!editWhatWeDo">
             <markdown-it-vue
               class="md-body"
               :content="whatWeDo"
@@ -315,7 +315,7 @@
               </b-button>
             </div>
           </div>
-          <div class="inner" v-if="!editAboutUs">
+          <div class="box white inner" v-if="!editAboutUs">
             <markdown-it-vue
               class="md-body"
               :content="aboutUs"
@@ -357,7 +357,7 @@
               </b-button>
             </div>
           </div>
-          <div class="inner" v-if="!editContact">
+          <div class="box white inner" v-if="!editContact">
             <markdown-it-vue
               class="md-body"
               :content="contact"
@@ -1344,6 +1344,7 @@ export default {
 
 .outer {
   height: 100%;
+  overflow: auto;
 }
 
 .inner {

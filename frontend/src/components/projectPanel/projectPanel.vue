@@ -272,7 +272,7 @@
               </b-button>
             </div>
           </div>
-          <div class="inner" v-if="!editProjectDescription">
+          <div class="box white inner" v-if="!editProjectDescription">
             <markdown-it-vue
               class="md-body"
               :content="projectDescription"
@@ -315,7 +315,7 @@
               </b-button>
             </div>
           </div>
-          <div class="inner" v-if="!editProjectContact">
+          <div class="box white inner" v-if="!editProjectContact">
             <markdown-it-vue
               class="md-body"
               :content="projectContact"
@@ -614,7 +614,7 @@ export default {
 
     updateLinkInList(list, newTitle, newUrl, newPublic, newUsers) {
       for (let i = 0; i < list.length; i++) {
-        if (this.links[i].id == this.linkId) {
+        if (list[i].id == this.linkId) {
           list[i].name = newTitle;
           list[i].link = newUrl;
           list[i].is_public = newPublic;
@@ -1268,6 +1268,7 @@ export default {
 
 .outer {
   height: 100%;
+  overflow: auto;
 }
 
 .inner {
