@@ -2,7 +2,6 @@ import router from "@/router";
 import { api } from "@/services/api";
 import authService from "@/services/authService";
 import jwt_decode from "jwt-decode"
-import store from "..";
 
 const state = {
     accessToken: localStorage.getItem("accessToken") || "",
@@ -86,7 +85,7 @@ const mutations = {
         localStorage.setItem("accessToken", token);
     },
     setTokenRefreshCountdownID(state, ID) {
-        store.refreshTokenCountdownID = ID;
+        state.refreshTokenCountdownID = ID;
     },
     setRefreshToken(state, token) {
         state.refreshToken = token;

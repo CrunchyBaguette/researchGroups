@@ -166,7 +166,7 @@
                 :disabled="isButtonDisabled"
                 id="btnPencil"
                 @click="changeMembers"
-                v-if="!editMembers && isBeingEdited"
+                v-if="!editMembers && isBeingEdited && isOwner()"
               >
                 <b-icon icon="lead-pencil" />
               </b-button>
@@ -531,6 +531,19 @@ export default {
 
       isBeingEdited: false,
       isButtonDisabled: false,
+
+      markdownOptions: {
+        markdownIt: {
+          html: true,
+          linkify: true,
+        },
+        linkAttributes: {
+          attrs: {
+            target: "_self",
+            rel: "noopener",
+          },
+        },
+      },
     };
   },
   mounted() {
@@ -850,6 +863,17 @@ export default {
       return false;
     },
 
+    isOwner() {
+      if (
+        this.isAuthenticated &&
+        this.project.project_owner == this.authUser.email
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
     removeMemberFromList(email) {
       for (let i = 0; i < this.members.length; i++) {
         if (this.members[i].person == email) {
@@ -1063,6 +1087,9 @@ export default {
         .then(() => {
           this.loading = false;
         });
+    },
+    members() {
+      this.getProject(this.$route.params.id);
     },
   },
 

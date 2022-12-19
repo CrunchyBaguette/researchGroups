@@ -12,7 +12,13 @@
       </b-field>
 
       <b-field label="Email">
-        <b-input type="email" v-model="email" maxlength="30" required>
+        <b-input
+          :disabled="this.joining"
+          type="email"
+          v-model="email"
+          maxlength="30"
+          required
+        >
         </b-input>
       </b-field>
 
@@ -55,10 +61,16 @@
         <p class="p-login">Zaloguj się.</p>
       </router-link>
     </form>
+    <b-loading
+      :is-full-page="true"
+      v-model="isLoading"
+      :can-cancel="false"
+    ></b-loading>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
 //import axios from 'axios'
 //import { toast } from 'bulma-toast'
 
@@ -73,12 +85,21 @@ export default {
       password: "",
       repeatedPassword: "",
       errors: [],
+      isLoading: false,
+      joining: false,
+      researchGroupId: "",
+      projectId: "",
     };
   },
   mounted() {
     document.title = "Zarejestruj się";
+    if (this.$route.query.email) {
+      this.email = this.$route.query.email;
+      this.joining = true;
+    }
   },
   methods: {
+    ...mapActions("register", ["registerUser", "registerUserFromInvite"]),
     submitForm() {
       this.errors = [];
 
@@ -97,43 +118,40 @@ export default {
       if (this.password !== this.repeatedPassword) {
         this.errors.push("Hasła się nie zgadzają!");
       }
-
       if (!this.errors.length) {
-        /*
-        const formData = {
-          name: this.name,
-          surname: this.surname,
-          email: this.email,
-          login: this.login,
-          password: this.password
-        }
-
-        axios
-          .post("api/v1/users/", formData) 
+        this.isLoading = true;
+        this.registerUser({
+          joining: this.joining,
+          user: {
+            first_name: this.name,
+            last_name: this.surname,
+            email: this.email,
+            username: this.login,
+            password: this.password,
+          },
+        })
           .then(() => {
-            toast({
-              message: 'Konto zostało stworzone, można się zalogować!',
-              type: 'is-success',
-              dismissible: true,
-              pauseOnHover: true,
-              duration: 2000,
-              position: 'bottom-right'
-            })
-
-            this.$router.push('/login')
+            this.name = "";
+            this.surname = "";
+            this.email = "";
+            this.login = "";
+            this.password = "";
+            this.repeatedPassword = "";
+            this.isLoading = false;
+            this.researchGroupId = "";
+            this.projectId = "";
+            this.$buefy.toast.open({
+              message: "Wysłano email z linkiem aktywacyjnym",
+              type: "is-success",
+            });
           })
-          .catch(error => {
-            if (error.response){
-              for (const property in error.response.data) {
-                this.errors.push(`${property}: ${error.response.data[property]}`)
-              }
-              console.log(error.response.data);
-            } else if (error.message) {
-              this.errors.push('Coś poszło nie tak. Spróbuj ponownie')
-              console.log(JSON.stringify(error));
-            }
-          })
-          */
+          .catch((err) => {
+            this.isLoading = false;
+            this.$buefy.toast.open({
+              message: err.response.data[Object.keys(err.response.data)[0]],
+              type: "is-danger",
+            });
+          });
       }
     },
   },

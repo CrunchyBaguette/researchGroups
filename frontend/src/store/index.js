@@ -16,6 +16,7 @@ import tutorial from "./modules/tutorial";
 import announcement from "./modules/announcement";
 import auth from "./modules/auth";
 import user from "./modules/user";
+import register from "./modules/register";
 
 Vue.use(Vuex);
 Vue.use(VueFilterDateFormat);
@@ -36,5 +37,6 @@ export default new Vuex.Store({
         announcement,
         user,
         auth,
+        register,
     },
 });

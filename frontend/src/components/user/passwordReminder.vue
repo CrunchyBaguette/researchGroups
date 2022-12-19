@@ -14,50 +14,57 @@
       <br />
 
       <form @submit.prevent="submitForm">
-        <b-field label="Podaj emaila/jeden z emaili">
+        <b-field label="Podaj adres email">
           <b-input type="email" v-model="email" maxlength="30" required>
           </b-input>
         </b-field>
-
-        <div class="notification is-danger" v-if="errors.length">
-          <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
-        </div>
 
         <br />
 
         <button id="btnReset" class="button">RESETUJ HASŁO</button>
       </form>
     </div>
+    <b-loading
+      :is-full-page="true"
+      v-model="isLoading"
+      :can-cancel="false"
+    ></b-loading>
   </div>
 </template>
   
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "passwordReminder",
   data() {
     return {
       email: "",
-      errors: [],
+      isLoading: false,
     };
   },
   mounted() {
     document.title = "Przypomnienie";
   },
   methods: {
+    ...mapActions("register", ["sendResetEmail"]),
     async submitForm() {
-      this.errors = [];
-      // if (this.login === '') {
-      //   this.errors.push('Nie podałeś emaila!')
-      // }
-      // axios.defaults.headers.common["Authorization"] = ""
-      // localStorage.removeItem("token")
-      if (!this.errors.length) {
-        // const formData = {
-        //   login: this.username,
-        //   password: this.password
-        // }
-        //code for sending email
-      }
+      this.isLoading = true;
+      this.sendResetEmail({ email: this.email })
+        .then(() => {
+          this.isLoading = false;
+          this.email = "";
+          this.$buefy.toast.open({
+            message: "Na podany email wysłano link resetujący hasło",
+            type: "is-success",
+          });
+        })
+        .catch(() => {
+          this.isLoading = false;
+          this.$buefy.toast.open({
+            message: "Użytkownik z podanym adresem email nie istnieje",
+            type: "is-danger",
+          });
+        });
     },
   },
 };

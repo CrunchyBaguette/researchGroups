@@ -18,7 +18,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ["username", "email", "password", "first_name", "last_name"]
 
     def validate(self, attrs):
-        email = attrs.get("email", "")
+        email = attrs.get("email", "").lower()
+
+        if User.objects.filter(email__iexact=email).exists():
+            raise serializers.ValidationError({"email": "A user with that email already exists."})
+
         username = attrs.get("username", "")
         first_name = attrs.get("first_name", "")
         last_name = attrs.get("last_name", "")
@@ -41,7 +45,7 @@ class ResetPasswordSerializer(serializers.Serializer):
 
 
 class SetNewPasswordSerializer(serializers.Serializer):
-    password = serializers.CharField(min_length=6, max_length=68, write_only=True)
+    password = serializers.CharField(min_length=8, max_length=68, write_only=True)
     token = serializers.CharField(min_length=1, write_only=True, required=False)
 
     class Meta:

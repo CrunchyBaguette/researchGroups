@@ -45,24 +45,33 @@ class RegisterView(generics.GenericAPIView):
     permission_classes = [AllowAny]
 
     def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        user = request.data
-        serializer: RegisterSerializer = self.serializer_class(data=user)
-
-        serializer.is_valid(raise_exception=True)
-        created_user: User = serializer.save()
+        user = request.data["user"]
+        created_user: User = None
+        if request.data["joining"]:
+            created_user = User.objects.filter(is_active=False, email=user["email"]).first()
+            if not created_user:
+                return Response({}, status=status.HTTP_404_NOT_FOUND)
+            created_user.username = user["username"]
+            created_user.first_name = user["first_name"]
+            created_user.last_name = user["last_name"]
+            created_user.set_password(user["password"])
+            created_user.save()
+        else:
+            serializer: RegisterSerializer = self.serializer_class(data=user)
+            serializer.is_valid(raise_exception=True)
+            created_user = serializer.save()
 
         token = RefreshToken.for_user(created_user).access_token
         token.lifetime = timedelta(days=1)
 
-        link = generate_registration_link(token, request)
+        link = generate_registration_link(token)
         email = get_registration_email(created_user, link)
         if email.send() == 1:
             logger.info("Email to user %s with register link sent", created_user.username)
         else:
             logger.warning("Could not send email with register link for user %s", created_user.username)
 
-        user_data = serializer.data
-        return Response(user_data, status=status.HTTP_201_CREATED)
+        return Response(request.data["user"], status=status.HTTP_201_CREATED)
 
     def get(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         token = request.GET.get("token")
@@ -103,7 +112,7 @@ class ResetPasswordRequestView(generics.GenericAPIView):
             token = RefreshToken.for_user(user).access_token
             token.lifetime = timedelta(minutes=30)
 
-            link = generate_reset_pass_link(token, request)
+            link = generate_reset_pass_link(token)
             mail = get_reset_pass_email(user, link)
             if mail.send() == 1:
                 logger.info("Email to user %s with register link sent", user.username)

@@ -43,9 +43,9 @@
                 style="width: 100%"
                 placeholder="Wybierz kategorię"
               >
-                <option value="math">Math</option>
-                <option value="med">Medical</option>
-                <option value="chem">Chemistry</option>
+                <option value="math">Matematyka</option>
+                <option value="med">Medycyna</option>
+                <option value="chem">Chemia</option>
               </b-select>
             </b-field>
             <b-field
@@ -177,14 +177,14 @@ export default {
           members: this.projectMembers,
           project_owner: this.authUser.email,
         })
-          .then(() => {
+          .then((response) => {
             this.$buefy.toast.open({
               message: "Pomyślnie dodano projekt",
               type: "is-success",
             });
 
             this.$router.replace(
-              this.$route.query.redirect || "/project-catalog"
+              this.$route.query.redirect || `/project/${response.id}`
             );
           })
           .catch((err) => {

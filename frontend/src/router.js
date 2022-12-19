@@ -15,6 +15,7 @@ import tutorialCatalog from "@/components/tutorialCatalog/tutorialCatalog"
 import loginPage from "@/components/user/loginPage"
 import registerPage from "@/components/user/registerPage"
 import passwordReminder from "@/components/user/passwordReminder"
+import passwordReset from "@/components/user/passwordReset"
 import groupPanel from "@/components/groupPanel/groupPanel"
 import groupTutorials from "@/components/tutorialCatalog/groupTutorials"
 import projectForum from "@/components/forum/projectForum";
@@ -207,6 +208,12 @@ const router = new Router({
                 requiresNoAuth: false,
             }
         },
+        {
+            path: "/login/password-reset",
+            name: "passwordReset",
+            component: passwordReset,
+        },
+
     ],
     scrollBehavior() {
         return { x: 0, y: 0 };

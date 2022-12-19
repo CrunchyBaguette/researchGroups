@@ -77,7 +77,8 @@ export default {
       return (
         this.$route.name == "login" ||
         this.$route.name == "register" ||
-        this.$route.name == "passwordReminder"
+        this.$route.name == "passwordReminder" ||
+        this.$route.name == "passwordReset"
       );
     },
   },

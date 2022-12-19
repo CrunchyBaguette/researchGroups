@@ -1,7 +1,10 @@
+import random
+import string
 from collections import Counter
 
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from django.core import mail
 from rest_framework.decorators import action
 from rest_framework import viewsets, status
 from rest_framework.exceptions import APIException
@@ -22,6 +25,12 @@ from backend.projects.models import (
     ProjectLink,
     ProjectDisk,
 )
+from backend.utilsx.mail.EmailBuilder import send_messages_conn
+from backend.common.utils import (
+    generate_join_link,
+    get_join_project_email,
+)
+from backend.users.serializers import UserSerializer
 
 from backend.common.views import PermissionPolicyMixin
 from backend.common.utils import get_project_email, generate_project_link
@@ -108,27 +117,37 @@ class ProjectViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
     }
 
     def create(self, request, *args, **kwargs):
-        # Obecnie, w przypadku gdy nie ma użytkownika z podanym mailem, tworzony jest
-        # nowy ale później można tu zaimplementować rozsyłanie maili
-        members = request.data["members"]
-        members.append(self.request.user.email)
+        member_emails = request.data["members"]
+        member_emails.append(self.request.user.email)
 
-        for member in members:
-            if not User.objects.filter(email=member).exists():
-                User.objects.create_user(
-                    username=member.split("@")[0],
-                    password=member.split("@")[0],
-                    email=member,
+        new_users = []
+
+        for member_email in member_emails:
+            if not User.objects.filter(email=member_email).exists():
+                randUsername = "".join(random.choice(string.ascii_letters) for x in range(150))
+                randPass = "".join(random.choice(string.ascii_letters) for x in range(150))
+                serializer = UserSerializer(
+                    data={"username": randUsername, "email": member_email, "password": randPass, "is_active": False}
                 )
+                serializer.is_valid(raise_exception=True)
+                new_users.append(serializer.save())
 
         response = super().create(request, *args, **kwargs)
 
-        ownerMember = ProjectUser.objects.filter(
-            project__name=request.data["name"],
-            person__email=request.user.email,
-        ).first()
+        ownerMember = ProjectUser.objects.get(
+            project__id=response.data["id"],
+            person__email=self.request.user.email,
+        )
         ownerMember.role = "own"
         ownerMember.save()
+
+        send_emails = []
+
+        for new_user in new_users:
+            link = generate_join_link(new_user.email)
+            send_emails.append(get_join_project_email(new_user.email, response.data["name"], link))
+
+        send_messages_conn(send_emails, mail.get_connection())
 
         return response
 
@@ -189,7 +208,7 @@ class ProjectPostViewSet(viewsets.ModelViewSet):
                 {"userId": ["'userId' parameter is required."]},
                 status=400,
             )
-        postsQueryset = self.queryset.filter(project=project).order_by("added")
+        postsQueryset = self.queryset.filter(project=project)
         serializer = serializer_class(postsQueryset, many=True)
         participation = ProjectUser.objects.filter(person_id=userId, project_id=project)
         return Response({"project": project, "isParticipant": participation.exists(), "posts": serializer.data})

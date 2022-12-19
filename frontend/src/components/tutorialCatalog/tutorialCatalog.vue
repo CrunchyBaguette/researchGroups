@@ -27,7 +27,7 @@
         </b-select>
       </b-field>
     </div>
-    <div class="box" style="flex: 1 0 auto; overflow: auto">
+    <div class="box" style="flex: 1 0 auto; overflow: auto; padding-top: 0">
       <div>
         <div class="columns" id="box-content">
           <div class="column">
