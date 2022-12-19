@@ -23,7 +23,7 @@
             <div id="btnsDiv">
               <b-button
                 id="btnSave"
-                class="button is-primary is-success"
+                class="button-secondary"
                 @click="saveGroupName"
                 >Zapisz</b-button
               >
@@ -57,7 +57,7 @@
             <div id="btnsDiv">
               <b-button
                 id="btnSave"
-                class="button is-primary is-success"
+                class="button-secondary"
                 @click="saveGroupCategory"
                 >Zapisz</b-button
               >
@@ -192,7 +192,7 @@
             <div id="btnsDiv">
               <b-button
                 id="btnSave"
-                class="button is-primary is-success"
+                class="button-secondary"
                 @click="saveWhatWeDo"
                 >Zapisz</b-button
               >
@@ -216,26 +216,9 @@
             </div>
           </div>
           <div class="inner">
-            <div
-              style="
-                width: 100%;
-                height: 80%;
-                background-color: rgb(240, 240, 240);
-                margin-top: 5px;
-                margin-bottom: 10px;
-                overflow: auto;
-              "
-            >
+            <div class="box member-list-box">
               <div
-                class="box"
-                style="
-                  border-radius: 25px;
-                  width: 95%;
-                  height: 40px;
-                  margin: 10px auto;
-                  padding: 5px 10px;
-                  display: flex;
-                "
+                class="box member-tile"
                 v-for="member in members"
                 :key="member.person"
               >
@@ -256,7 +239,7 @@
                     style="bottom: 5px; margin-right: 10px"
                   >
                     <template #trigger>
-                      <b-button icon-right="menu-down">
+                      <b-button icon-right="menu-down" @click="pullUp">
                         {{ member.role }}
                       </b-button>
                     </template>
@@ -276,18 +259,7 @@
                   />
                 </div>
               </div>
-              <div
-                class="box"
-                style="
-                  border-radius: 25px;
-                  width: 95%;
-                  height: 40px;
-                  margin: 10px auto;
-                  padding: 5px 10px;
-                  display: flex;
-                "
-                v-if="editMembers"
-              >
+              <div class="box member-tile" v-if="editMembers">
                 <div style="flex: 0 1 50%">
                   <b-input v-model="addEmail" style="bottom: 5px"></b-input>
                 </div>
@@ -320,7 +292,7 @@
             <div id="btnsDiv" v-if="editMembers">
               <b-button
                 id="btnSave"
-                class="button is-primary is-success"
+                class="button-secondary"
                 @click="saveMembers"
                 >Zapisz</b-button
               >
@@ -363,7 +335,7 @@
             <div id="btnsDiv">
               <b-button
                 id="btnSave"
-                class="button is-primary is-success"
+                class="button-secondary"
                 @click="saveAboutUs"
                 >Zapisz</b-button
               >
@@ -393,19 +365,12 @@
             />
             <div class="container-send-email">
               <button
-                class="button"
-                id="btnSendEmail"
+                class="button button-secondary"
+                id="btnEmail"
                 @click="popupEmail = !popupEmail"
               >
                 WYŚLIJ WIADOMOŚĆ
               </button>
-
-              <popupEmail
-                objectType="researchGroup"
-                :object="this.researchGroup"
-                v-if="popupEmail"
-                @close="popupEmail = false"
-              />
             </div>
           </div>
           <div v-else>
@@ -421,7 +386,7 @@
             <div id="btnsDiv">
               <b-button
                 id="btnSave"
-                class="button is-primary is-success"
+                class="button-secondary"
                 @click="saveContact"
                 >Zapisz</b-button
               >
@@ -517,6 +482,12 @@
         v-on:delete="deleteLink"
       />
     </b-modal>
+    <popupEmail
+      objectType="researchGroup"
+      :object="this.researchGroup"
+      v-if="popupEmail"
+      @close="popupEmail = false"
+    />
   </div>
 </template>
 
@@ -645,6 +616,14 @@ export default {
       "deleteResearchGroupDisk",
       "updateResearchGroupDisk",
     ]),
+
+    pullUp(event) {
+      let divs = document.getElementsByClassName("member-tile");
+      for (let i = 0; i < divs.length; i++) {
+        divs[i].style.zIndex = -1;
+      }
+      event.target.closest(".member-tile").style.zIndex = 0;
+    },
 
     canAccessLinks(links) {
       let canAccessLinks = [];
@@ -1226,6 +1205,7 @@ export default {
   background-color: var(--first-color);
   border-color: var(--fourth-color);
 }
+
 #btn:focus {
   border-color: var(--fourth-color);
 }
@@ -1239,7 +1219,7 @@ export default {
   right: 0;
   width: 20%;
   min-width: 100px;
-  background-color: var(--second-color);
+  background-color: var(--first-color);
 }
 #divLinks li {
   filter: brightness(95%);

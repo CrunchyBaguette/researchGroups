@@ -21,7 +21,9 @@ export default {
 
 <style>
 #group-tile {
-  background-color: rgb(196, 196, 196);
+  background-color: var(--first-color);
+  border-color: var(--fourth-color);
+  border-style: solid;
   color: black;
   width: 100%;
   height: fit-content;

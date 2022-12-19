@@ -47,9 +47,9 @@ export default {
 }
 
 #root-container {
-  /* margin: 20px; */
-  /* width: 97%; */
-  background-color: rgb(196, 196, 196);
+  background-color: var(--first-color);
+  border-color: var(--fourth-color);
+  border-style: solid;
   color: black;
 }
 

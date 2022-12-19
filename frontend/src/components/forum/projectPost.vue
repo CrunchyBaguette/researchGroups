@@ -12,7 +12,7 @@
     <div style="flex: 0 1 0; display: flex; margin-bottom: 10px">
       <div style="flex: 1 0 0">
         <b-button
-          class="button is-success is-rounded is-medium"
+          class="button-secondary is-rounded is-medium"
           v-on:click="$router.back()"
           >Powrót
         </b-button>
@@ -21,18 +21,18 @@
         <div>
           <b-button
             v-if="forumPost.author.id === authUser.id && !isUpdate"
-            class="button is-success is-rounded mr-2 is-medium"
+            class="button-secondary is-rounded mr-2 is-medium"
             v-on:click="showEdit"
             >Edytuj
           </b-button>
           <b-button
             v-if="isUpdate"
-            class="button is-success is-rounded mr-2 is-medium"
+            class="button-secondary is-rounded mr-2 is-medium"
             v-on:click="isUpdate = false"
             >Anuluj
           </b-button>
           <b-button
-            class="button is-danger is-rounded is-medium"
+            class="button-red is-rounded is-medium"
             v-if="canDelete"
             v-on:click="confirmDeleting"
             >Usuń</b-button
@@ -41,15 +41,7 @@
       </div>
     </div>
     <div style="flex: 1 0 0; overflow: hidden">
-      <div
-        class="box"
-        style="
-          flex: 1 1 auto;
-          overflow: auto;
-          height: 100%;
-          background-color: rgb(196, 196, 196);
-        "
-      >
+      <div class="box post-box">
         <div style="display: flex; flex-flow: column; height: 100%">
           <div>
             <p class="author-decor">
@@ -73,7 +65,7 @@
           <div
             style="overflow: auto; height: 100%"
             v-if="!isUpdate"
-            class="box"
+            class="box white"
           >
             <markdown-it-vue
               class="md-body"
@@ -102,7 +94,7 @@
               ></b-input>
             </b-field>
             <b-button
-              class="button is-success is-rounded mt-2"
+              class="button-secondary is-rounded mt-2"
               v-on:click="updatePost"
               >Akceptuj zmiany</b-button
             >

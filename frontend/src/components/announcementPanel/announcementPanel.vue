@@ -688,6 +688,8 @@ export default {
   margin-left: 10px;
   margin-right: 10px;
   background-color: var(--first-color);
+  border-style: solid;
+  border-color: var(--fourth-color);
   filter: brightness(98%);
 }
 

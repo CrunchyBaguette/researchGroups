@@ -54,9 +54,9 @@
         <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
       </div>
 
-      <button id="btnRegister" class="button">ZAREJESTRUJ SIĘ</button>
+      <b-button id="btnMain" class="button-secondary">ZAREJESTRUJ SIĘ</b-button>
 
-      <router-link :to="{ name: 'login' }" id="link">
+      <router-link :to="{ name: 'login' }" id="btnOther">
         Masz już konto? &nbsp;
         <p class="p-login">Zaloguj się.</p>
       </router-link>
@@ -178,10 +178,9 @@ export default {
   text-decoration: underline;
 }
 
-#btnRegister {
+/* #btnRegister {
   display: flex;
   width: 100%;
-  background-color: #7957d5;
   border-color: transparent;
   font-weight: bold;
   color: white;
@@ -191,7 +190,7 @@ export default {
 #btnRegister:hover {
   background-color: #7957d5;
   box-shadow: 0 0 5px #7957d5;
-}
+} */
 
 #link {
   display: flex;

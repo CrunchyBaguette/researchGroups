@@ -5,19 +5,7 @@
       class="box group-info-panel-desc-container"
       style="background-color: white; overflow-x: hidden"
     >
-      <p
-        style="
-          z-index: 1;
-          font-size: 30px;
-          position: sticky;
-          top: 0;
-          background-color: rgb(196, 196, 196);
-          border-radius: 10px;
-          padding-left: 5px;
-        "
-      >
-        Opis projektu:
-      </p>
+      <p class="box-title">Opis projektu:</p>
       <p style="font-size: 20px">
         <markdown-it-vue
           class="md-body"
@@ -28,6 +16,8 @@
     </div>
     <div style="width: 100%; text-align: center; margin-top: 40px">
       <b-button
+        class="button-secondary"
+        rounded
         size="is-medium"
         style="text-align: center"
         tag="router-link"

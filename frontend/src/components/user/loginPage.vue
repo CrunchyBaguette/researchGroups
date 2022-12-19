@@ -36,7 +36,9 @@
 
         <br />
 
-        <button id="btnLogin" class="button">ZALOGUJ SIĘ</button>
+        <button id="btnMain" class="button button-secondary">
+          ZALOGUJ SIĘ
+        </button>
       </form>
 
       <br />
@@ -189,7 +191,7 @@ export default {
   text-decoration: underline;
 }
 
-#btnLogin {
+/* #btnLogin {
   display: flex;
   width: 100%;
   background-color: #7957d5;
@@ -202,21 +204,5 @@ export default {
 #btnLogin:hover {
   background-color: #7957d5;
   box-shadow: 0 0 5px #7957d5;
-}
-
-#btnOther {
-  display: flex;
-  position: relative;
-  padding: 0.5rem 0.75rem;
-  line-height: 1.5;
-  color: #4a4a4a;
-  border: none;
-  transition: 0.3s;
-  cursor: pointer;
-}
-
-#btnOther:hover {
-  color: #7957d5;
-  background-color: #fafafa;
-}
+} */
 </style>

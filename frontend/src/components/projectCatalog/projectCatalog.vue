@@ -3,18 +3,21 @@
     <div>
       <p class="title" style="float: left">Katalog projektów</p>
       <b-button
+        class="button-secondary"
         tag="router-link"
         :to="isAuthenticated ? { name: 'addProject' } : { name: 'login' }"
         rounded
         size="is-medium"
         style="float: right; margin-top: 10px; margin-right: 20px"
-        type="is-success"
         >Stwórz nowy projekt</b-button
       >
     </div>
     <div style="overflow: auto; height: 100%">
       <div style="height: 100%; width: 100%" class="columns" v-if="loaded">
-        <div id="c1" style="max-height: 100%" class="box column is-two-thirds">
+        <div
+          style="max-height: 100%; overflow: auto"
+          class="box column is-two-thirds"
+        >
           <div class="columns">
             <div class="column">
               <projectTile
@@ -36,7 +39,10 @@
             </div>
           </div>
         </div>
-        <div id="c2" style="max-height: 100%" class="box column">
+        <div
+          style="max-height: 100%; margin-left: 10px; overflow: auto"
+          class="box column"
+        >
           <projectInfoPanel :project="chosenProject" />
         </div>
       </div>
@@ -103,11 +109,6 @@ export default {
 .title {
   font-size: 40px;
   padding: 10px;
-}
-
-#c1 {
-  background-color: white;
-  overflow: auto;
 }
 
 #c2 {

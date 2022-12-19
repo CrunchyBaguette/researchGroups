@@ -24,7 +24,9 @@
           </b-input>
         </b-field>
         <br />
-        <button id="btnSendMessage" class="button">WYŚLIJ WIADOMOŚĆ</button>
+        <button id="btnMain" class="button button-secondary">
+          WYŚLIJ WIADOMOŚĆ
+        </button>
       </form>
     </div>
   </popup>
