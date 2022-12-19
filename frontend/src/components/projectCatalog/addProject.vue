@@ -65,9 +65,9 @@
           </div>
           <div style="flex: 0 1 auto">
             <b-button
+              class="button-secondary"
               style="margin-top: 50px"
               expanded
-              type="is-success"
               @click="clicked()"
             >
               Stwórz projekt
@@ -86,7 +86,7 @@
               style="
                 width: 100%;
                 height: 400px;
-                background-color: rgb(240, 240, 240);
+                background-color: #fff;
                 margin-top: 5px;
                 overflow: auto;
               "
@@ -129,7 +129,7 @@
               ></b-input>
               <p class="control">
                 <b-button
-                  class="button is-primary is-success"
+                  class="button-secondary"
                   @click="addToMemberList(projectMemberInput)"
                   >Dodaj członka</b-button
                 >
