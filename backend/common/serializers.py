@@ -45,7 +45,7 @@ class ResetPasswordSerializer(serializers.Serializer):
 
 
 class SetNewPasswordSerializer(serializers.Serializer):
-    password = serializers.CharField(min_length=6, max_length=68, write_only=True)
+    password = serializers.CharField(min_length=8, max_length=68, write_only=True)
     token = serializers.CharField(min_length=1, write_only=True, required=False)
 
     class Meta:

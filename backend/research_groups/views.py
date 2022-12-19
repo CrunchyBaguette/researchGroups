@@ -4,6 +4,7 @@ from collections import Counter
 
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from django.core import mail
 from rest_framework.decorators import action
 from rest_framework import viewsets, status
 from rest_framework.exceptions import APIException
@@ -17,6 +18,7 @@ from backend.research_groups.serializers import (
     ResearchGroupDiskSerializer,
     ResearchGroupPostSerializerWithUser,
 )
+from backend.utilsx.mail.EmailBuilder import send_messages_conn
 from backend.research_groups.models import (
     ResearchGroup,
     ResearchGroupPost,
@@ -145,9 +147,13 @@ class ResearchGroupViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
         ownerMember.role = "cr"
         ownerMember.save()
 
+        send_emails = []
+
         for new_user in new_users:
             link = generate_join_link(new_user.email)
-            get_join_research_group_email(new_user.email, response.data["name"], link).send()
+            send_emails.append(get_join_research_group_email(new_user.email, response.data["name"], link))
+
+        send_messages_conn(send_emails, mail.get_connection())
 
         return response
 
@@ -190,7 +196,7 @@ class ResearchGroupPostViewSet(viewsets.ModelViewSet):
                 {"userId": ["'userId' parameter is required."]},
                 status=400,
             )
-        postsQueryset = self.queryset.filter(research_group=researchGroup).order_by("added")
+        postsQueryset = self.queryset.filter(research_group=researchGroup)
         serializer = serializer_class(postsQueryset, many=True)
         participation = ResearchGroupUser.objects.filter(person_id=userId, research_group_id=researchGroup)
         return Response(

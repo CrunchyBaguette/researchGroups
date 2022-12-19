@@ -156,8 +156,8 @@ export default {
       this.text = this.forumPost.text;
     },
     updatePost() {
-      if (!this.title) this.titleError = "Proszę podać tytuł ogłoszenia";
-      if (!this.text) this.textError = "Proszę podać treść ogłoszenia";
+      if (!this.title) this.titleError = "Proszę podać tytuł wpisu";
+      if (!this.text) this.textError = "Proszę podać treść wpisu";
       if (this.title && this.text) {
         this.updateForumPost({
           id: this.$route.params.postId,

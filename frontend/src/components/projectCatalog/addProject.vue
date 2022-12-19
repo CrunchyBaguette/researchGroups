@@ -177,14 +177,14 @@ export default {
           members: this.projectMembers,
           project_owner: this.authUser.email,
         })
-          .then(() => {
+          .then((response) => {
             this.$buefy.toast.open({
               message: "Pomyślnie dodano projekt",
               type: "is-success",
             });
 
             this.$router.replace(
-              this.$route.query.redirect || "/project-catalog"
+              this.$route.query.redirect || `/project/${response.id}`
             );
           })
           .catch((err) => {

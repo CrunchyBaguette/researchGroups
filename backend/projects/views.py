@@ -4,6 +4,7 @@ from collections import Counter
 
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from django.core import mail
 from rest_framework.decorators import action
 from rest_framework import viewsets, status
 from rest_framework.exceptions import APIException
@@ -24,6 +25,7 @@ from backend.projects.models import (
     ProjectLink,
     ProjectDisk,
 )
+from backend.utilsx.mail.EmailBuilder import send_messages_conn
 from backend.common.utils import (
     generate_join_link,
     get_join_project_email,
@@ -132,16 +134,20 @@ class ProjectViewSet(PermissionPolicyMixin, viewsets.ModelViewSet):
 
         response = super().create(request, *args, **kwargs)
 
-        ownerMember = ProjectUser.objects.filter(
+        ownerMember = ProjectUser.objects.get(
             project__id=response.data["id"],
             person__email=self.request.user.email,
-        ).first()
+        )
         ownerMember.role = "own"
         ownerMember.save()
 
+        send_emails = []
+
         for new_user in new_users:
             link = generate_join_link(new_user.email)
-            get_join_project_email(new_user.email, response.data["name"], link).send()
+            send_emails.append(get_join_project_email(new_user.email, response.data["name"], link))
+
+        send_messages_conn(send_emails, mail.get_connection())
 
         return response
 
@@ -202,7 +208,7 @@ class ProjectPostViewSet(viewsets.ModelViewSet):
                 {"userId": ["'userId' parameter is required."]},
                 status=400,
             )
-        postsQueryset = self.queryset.filter(project=project).order_by("added")
+        postsQueryset = self.queryset.filter(project=project)
         serializer = serializer_class(postsQueryset, many=True)
         participation = ProjectUser.objects.filter(person_id=userId, project_id=project)
         return Response({"project": project, "isParticipant": participation.exists(), "posts": serializer.data})

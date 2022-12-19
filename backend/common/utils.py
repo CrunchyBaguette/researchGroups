@@ -117,8 +117,8 @@ def get_email_body_for_research_group(userFrom: str, message: str, research_grou
 
 
 def get_email_body_for_research_group_join(research_group_name: str, link: str) -> str:
-    return f"Cześć.\n\nOtrzymałeś zaproszenie aby dołączyć do koła naukowego: {research_group_name}\
-        \n\nUżyj tego linku aby stworzyć konto: {link}"
+    return f"""Cześć.\n\nOtrzymałeś zaproszenie aby dołączyć do koła naukowego: {research_group_name}
+        \n\nUżyj tego linku aby stworzyć konto: {link}"""
 
 
 def get_email_body_for_project(userFrom: str, message: str, project_name: str, link: str) -> str:
@@ -126,8 +126,8 @@ def get_email_body_for_project(userFrom: str, message: str, project_name: str, l
 
 
 def get_email_body_for_project_join(project_name: str, link: str) -> str:
-    return f"Cześć.\n\nOtrzymałeś zaproszenie aby dołączyć do projektu: {project_name}\
-        \n\nUżyj tego linku aby stworzyć konto: {link}"
+    return f"""Cześć.\n\nOtrzymałeś zaproszenie aby dołączyć do projektu: {project_name}
+        \n\nUżyj tego linku aby stworzyć konto: {link}"""
 
 
 def generate_announcement_link(announcementId: int) -> str:
@@ -139,7 +139,7 @@ def generate_research_group_link(researchGroupId: int) -> str:
 
 
 def generate_join_link(email: str) -> str:
-    return f"http://localhost:8080/#/register/?{urlencode({'email': email})}"
+    return f"http://localhost:8378/#/register/?{urlencode({'email': email})}"
 
 
 def generate_project_link(projectId: int) -> str:
