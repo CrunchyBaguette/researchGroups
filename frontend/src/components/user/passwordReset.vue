@@ -34,7 +34,9 @@
 
         <br />
 
-        <button id="btnReset" class="button">Zmień hasło</button>
+        <button id="btnReset" class="button button-secondary">
+          Zmień hasło
+        </button>
       </form>
     </div>
     <b-loading

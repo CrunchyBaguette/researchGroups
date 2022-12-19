@@ -54,7 +54,9 @@
         <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
       </div>
 
-      <b-button id="btnMain" class="button-secondary">ZAREJESTRUJ SIĘ</b-button>
+      <button id="btnMain" class="button button-secondary">
+        ZAREJESTRUJ SIĘ
+      </button>
 
       <router-link :to="{ name: 'login' }" id="btnOther">
         Masz już konto? &nbsp;

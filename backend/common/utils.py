@@ -1,6 +1,7 @@
 # from django.contrib.sites.shortcuts import get_current_site
 # from django.urls import reverse
 from django.contrib.auth.models import User
+from django.conf import settings
 from rest_framework_simplejwt.tokens import AccessToken
 
 # from rest_framework.request import Request
@@ -93,7 +94,7 @@ def get_join_project_email(userTo: str, project_name: str, link: str) -> EmailBu
 def generate_registration_link(token: AccessToken) -> str:
     # current_site = get_current_site(request).domain
     # relative_link = reverse("register")
-    url = f"http://localhost:8080/#/login/?{urlencode({'token': token})}"
+    url = f"{settings.FRONTEND_LINK}/login/?{urlencode({'token': token})}"
 
     return url
 
@@ -131,24 +132,24 @@ def get_email_body_for_project_join(project_name: str, link: str) -> str:
 
 
 def generate_announcement_link(announcementId: int) -> str:
-    return f"http://localhost:8080/#/announcement/{announcementId}"
+    return f"{settings.FRONTEND_LINK}/announcement/{announcementId}"
 
 
 def generate_research_group_link(researchGroupId: int) -> str:
-    return f"http://localhost:8080/#/group/{researchGroupId}"
+    return f"{settings.FRONTEND_LINK}/group/{researchGroupId}"
 
 
 def generate_join_link(email: str) -> str:
-    return f"http://localhost:8378/#/register/?{urlencode({'email': email})}"
+    return f"{settings.FRONTEND_LINK}/register/?{urlencode({'email': email})}"
 
 
 def generate_project_link(projectId: int) -> str:
-    return f"http://localhost:8080/#/project/{projectId}"
+    return f"{settings.FRONTEND_LINK}/project/{projectId}"
 
 
 def generate_reset_pass_link(token: AccessToken) -> str:
     # current_site = get_current_site(request).domain
     # relative_link = reverse("reset-pass")
-    url = f"http://localhost:8080/#/login/password-reset/?{urlencode({'token': token})}"
+    url = f"{settings.FRONTEND_LINK}/login/password-reset/?{urlencode({'token': token})}"
 
     return url

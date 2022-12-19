@@ -21,7 +21,9 @@
 
         <br />
 
-        <b-button id="btnMain" class="button-secondary">RESETUJ HASŁO</b-button>
+        <button id="btnMain" class="button button-secondary">
+          RESETUJ HASŁO
+        </button>
       </form>
     </div>
     <b-loading
