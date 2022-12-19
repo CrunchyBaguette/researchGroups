@@ -67,6 +67,7 @@ def dropTables():
     DeleteTableData("research_groups_researchgroup")
     DeleteTableData("token_blacklist_blacklistedtoken")
     DeleteTableData("token_blacklist_outstandingtoken")
+    DeleteTableData("django_admin_log")
     DeleteTableData("auth_user")
 
 
@@ -188,8 +189,8 @@ def generate_tutorial(users):
         tutorials["created"].append(create)
         tutorials["edited"].append(create)
         tutorials["owner_id"].append(users["id"].values[i % len(users["id"])])
-        types = ["math", "chem", "med"]
-        tutorials["type"].append(types[fake.pyint(0, len(types) - 1)])
+        categories = ["math", "chem", "med"]
+        tutorials["category"].append(categories[fake.pyint(0, len(categories) - 1)])
     df_tutorials = pd.DataFrame(tutorials)
     if is_printing:
         print(df_tutorials)
