@@ -176,3 +176,7 @@ a.dropdown-item.is-active {
 .select select:focus {
     border-color: var(--third-color-green);
 }
+
+a.navbar-item:hover {
+    color: var(--third-color-green);
+}

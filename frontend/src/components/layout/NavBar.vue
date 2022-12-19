@@ -2,7 +2,10 @@
   <b-navbar>
     <template #brand>
       <b-navbar-item tag="router-link" :to="{ name: 'announcements' }">
-        <img src="../../assets/logo.png"/>
+        <img
+          src="../../assets/logo.png"
+          style="transform: scale(1.5); margin-left: 10px; margin-right: 10px"
+        />
       </b-navbar-item>
     </template>
 
@@ -22,16 +25,15 @@
       <b-navbar-item tag="div" v-if="!isAuthenticated">
         <div class="buttons">
           <b-button
-              class="button-primary"
-              :to="{ name: 'register' }"
-              tag="router-link"
+            class="button-primary"
+            :to="{ name: 'register' }"
+            tag="router-link"
           >
             <strong>Rejestracja</strong>
           </b-button>
           <b-button type="is-light" :to="{ name: 'login' }" tag="router-link"
-          >Zaloguj się
-          </b-button
-          >
+            >Zaloguj się
+          </b-button>
         </div>
       </b-navbar-item>
       <b-navbar-item tag="div" v-else>
@@ -49,7 +51,7 @@
 </template>
 
 <script>
-import {mapGetters, mapActions, mapMutations} from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "NavBar",
