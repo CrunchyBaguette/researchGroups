@@ -56,6 +56,10 @@
     border-color: var(--third-color-green);
 }
 
+.switch:hover input[type="checkbox"]:checked+.check {
+    background: var(--third-color-green);
+}
+
 .switch input[type=checkbox]:checked+.check {
     background: var(--third-color-green);
 }
@@ -177,6 +181,7 @@ a.dropdown-item.is-active {
     border-color: var(--third-color-green);
 }
 
-a.navbar-item:hover {
+a.navbar-item:hover,
+a.navbar-item:focus {
     color: var(--third-color-green);
 }

@@ -665,7 +665,7 @@ export default {
 
     updateLinkInList(list, newTitle, newUrl, newPublic, newUsers) {
       for (let i = 0; i < list.length; i++) {
-        if (this.links[i].id == this.linkId) {
+        if (list[i].id == this.linkId) {
           list[i].name = newTitle;
           list[i].link = newUrl;
           list[i].is_public = newPublic;
@@ -776,6 +776,7 @@ export default {
               this.closeEditLinkModal();
             })
             .catch((err) => {
+              console.log(err);
               this.$buefy.toast.open({
                 message: err.response.data[Object.keys(err.response.data)[0]],
                 type: "is-danger",
@@ -859,6 +860,7 @@ export default {
     },
 
     closeEditLinkModal() {
+      console.log("hej");
       this.linkId = null;
       this.linkTitle = "";
       this.linkUrl = "";

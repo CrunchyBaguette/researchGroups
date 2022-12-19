@@ -14,7 +14,14 @@
         />
       </p>
     </div>
-    <div style="width: 100%; text-align: center; margin-top: 40px">
+    <div
+      style="
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      "
+    >
       <b-button
         class="button-secondary"
         rounded

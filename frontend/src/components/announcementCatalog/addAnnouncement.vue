@@ -1,10 +1,14 @@
 <template>
   <div id="content" v-if="!this.loading">
     <p class="title" style="width: fit-content">Tworzenie ogłoszenia</p>
-    <div id="container" style="margin: 70px auto; width: 70%;">
+    <div id="container" style="margin: 70px auto; width: 70%">
       <div class="box">
         <b-field
-          :message="!groupGiven ? 'Proszę wybrać koło naukowe spośród tych do których należysz' : ''"
+          :message="
+            !groupGiven
+              ? 'Proszę wybrać koło naukowe spośród tych do których należysz'
+              : ''
+          "
           :type="!groupGiven ? 'is-danger' : ''"
         >
           <template #label
@@ -17,10 +21,13 @@
             style="width: 100%"
             placeholder="Wybierz koło"
           >
-            <option :value="group.id" v-for="group in userAdminGroups" v-bind:key="group.id">
+            <option
+              :value="group.id"
+              v-for="group in userAdminGroups"
+              v-bind:key="group.id"
+            >
               {{ group.name }}
             </option>
-            
           </b-select>
         </b-field>
         <b-field
@@ -41,9 +48,7 @@
           :message="!categoryGiven ? 'Proszę wybrać kategorię ogłoszenia' : ''"
           :type="!categoryGiven ? 'is-danger' : ''"
         >
-          <template #label
-            ><p style="font-size: 20px">Kategoria</p></template
-          >
+          <template #label><p style="font-size: 20px">Kategoria</p></template>
           <b-select
             @focus="categoryGiven = true"
             v-model="announcementCategory"
@@ -72,9 +77,9 @@
         </b-field>
       </div>
       <b-button
-        style="margin-top: 50px;"
+        class="button-secondary"
+        style="margin-top: 50px"
         expanded
-        type="is-success"
         @click="clicked()"
       >
         Stwórz ogłoszenie
@@ -115,14 +120,19 @@ export default {
       if (this.announcementCategory == "") this.categoryGiven = false;
       if (this.announcementContent == "") this.contentGiven = false;
 
-      if (this.groupGiven && this.titleGiven && this.categoryGiven && this.contentGiven) {
+      if (
+        this.groupGiven &&
+        this.titleGiven &&
+        this.categoryGiven &&
+        this.contentGiven
+      ) {
         //const researchGroup = document.getElementById('selectGroup');
-        
+
         this.addAnnouncement({
           title: this.announcementTitle,
           text: this.announcementContent,
           ann_type: this.announcementCategory,
-          
+
           author: this.authUser.id,
           //research_group_id: researchGroup.value,
           research_group_id: this.announcementGroup,
@@ -134,7 +144,8 @@ export default {
             });
 
             this.$router.replace(
-              this.$route.query.redirect || `/announcement/${newAnnouncement.id}`
+              this.$route.query.redirect ||
+                `/announcement/${newAnnouncement.id}`
             );
           })
           .catch((err) => {
@@ -146,7 +157,7 @@ export default {
               type: "is-danger",
             });
           });
-        
+
         this.announcementGroup = 0;
         this.announcementTitle = "";
         this.announcementContent = "";
@@ -162,15 +173,13 @@ export default {
   },
   mounted() {
     this.getUserAdminResearchGroups(this.authUser.id)
-      .then(
-        () => {
-          this.userAdminGroups = this.userAdminResearchGroups;
-        }
-      )
+      .then(() => {
+        this.userAdminGroups = this.userAdminResearchGroups;
+      })
       .then(() => {
         this.loading = false;
       });
-  }
-}
+  },
+};
 </script>
 

@@ -44,7 +44,12 @@
           </div>
         </div>
         <div
-          style="max-height: 100%; overflow: auto; margin-left: 10px"
+          style="
+            max-height: 100%;
+            overflow: auto;
+            margin-left: 10px;
+            margin-bottom: 1.5rem;
+          "
           class="box column"
         >
           <groupInfoPanel :researchGroup="chosenResearchGroup" />

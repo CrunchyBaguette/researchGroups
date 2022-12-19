@@ -40,7 +40,7 @@
           </div>
         </div>
         <div
-          style="max-height: 100%; margin-left: 10px; overflow: auto"
+          style="max-height: 100%; margin-left: 10px; overflow: auto; margin-bottom: 1.5rem"
           class="box column"
         >
           <projectInfoPanel :project="chosenProject" />

@@ -100,7 +100,7 @@
     </section>
     <footer class="modal-card-foot">
       <b-button class="button-secondary" @click="save">Zapisz</b-button>
-      <b-button v-if="linkId" type="is-danger" @click="remove">Usuń</b-button>
+      <b-button v-if="linkId" class="button-red" @click="remove">Usuń</b-button>
       <b-button @click="cancel">Anuluj</b-button>
     </footer>
   </div>
