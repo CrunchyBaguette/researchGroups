@@ -115,7 +115,7 @@
       <div class="columns"></div>
     </div>
     <div class="columns" style="width: 100%">
-      <div class="box column is-one-fifth">
+      <div class="box column is-one-fifth" id="left-panel">
         <b-button
           id="btn"
           size="is-medium"
@@ -1219,16 +1219,15 @@ export default {
 
 #btn {
   position: relative;
-  justify-content: center;
   margin-bottom: 8px;
   width: 100%;
   justify-content: left;
   color: black;
   background-color: var(--first-color);
-  filter: brightness(98%);
+  border-color: var(--fourth-color);
 }
 #btn:focus {
-  border-color: var(--first-color);
+  border-color: var(--fourth-color);
 }
 
 #menu {
@@ -1349,7 +1348,7 @@ export default {
   display: flex;
   width: 50%;
   font-size: 20px;
-  background-color: #7957d5;
+  background-color: var(--third-color-green);
   border-color: transparent;
   font-weight: bold;
   color: white;
@@ -1357,8 +1356,8 @@ export default {
 }
 
 #btnSendEmail:hover {
-  background-color: #7957d5;
-  box-shadow: 0 0 5px #7957d5;
+  background-color: var(--third-color-green);
+  box-shadow: 0 0 5px var(--third-color-green);
 }
 
 .outer {

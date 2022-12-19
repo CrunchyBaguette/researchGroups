@@ -116,6 +116,9 @@ body {
   min-width: 100px;
   background-color: var(--first-color);
   filter: brightness(98%);
+  border-right-style: solid;
+  border-right-color: var(--fourth-color);
+  border-right-width: 1px;
 }
 #sidebar a:hover {
   background-color: var(--first-color);
