@@ -83,7 +83,7 @@
             id="title"
             rounded
             size="is-medium"
-            type="is-success"
+            class="button-secondary"
             @click="changeToPanelMode"
             :disabled="isButtonDisabled"
             ><b-icon icon="arrow-left" />&nbsp;&nbsp;Wróć do panelu
@@ -94,7 +94,7 @@
             rounded
             style="margin-top: 10px"
             size="is-medium"
-            type="is-danger"
+            class="button-red"
             v-if="this.researchGroup.group_owner == this.authUser.email"
             @click="deleteGroupConfirmation"
             >Usuń koło naukowe</b-button
@@ -106,7 +106,7 @@
           id="title"
           rounded
           size="is-medium"
-          type="is-success"
+          class="button-secondary"
           v-if="this.isAuthenticated && isAdminOrOwner()"
           @click="changeToEditMode"
           >Edytuj koło naukowe</b-button
@@ -1224,7 +1224,11 @@ export default {
   width: 100%;
   justify-content: left;
   color: black;
-  background-color: rgb(165, 232, 163);
+  background-color: var(--first-color);
+  filter: brightness(98%);
+}
+#btn:focus {
+  border-color: var(--first-color);
 }
 
 #menu {
@@ -1236,7 +1240,10 @@ export default {
   right: 0;
   width: 20%;
   min-width: 100px;
-  background-color: rgb(203, 203, 203);
+  background-color: var(--second-color);
+}
+#divLinks li {
+  filter: brightness(95%);
 }
 
 #centerDivHead {

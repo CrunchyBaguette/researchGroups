@@ -1,0 +1,64 @@
+:root {
+
+    --first-color: #f6f0e1;
+
+    --second-color: #ffffff;
+
+    --third-color-green: #1ea896;
+
+    --third-color-red: #ff715b;
+
+    --fourth-color: #a8a8a8;
+
+    --box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+}
+
+.button-primary {
+    background-color: var(--third-color-red);
+    border-color: var(--third-color-red);
+}
+
+.button-primary:hover {
+    filter: brightness(90%);
+}
+
+.button-secondary {
+    background-color: var(--third-color-green);
+    border-color: var(--third-color-green);
+}
+.button-secondary:focus {
+    border-color: var(--third-color-green);
+}
+
+.button-primary:hover {
+    filter: brightness(90%);
+    border-color: var(--third-color-green);
+}
+.button-red {
+    background-color: var(--third-color-red);
+    border-color: var(--third-color-red);
+}
+
+.button-red:hover {
+    filter: brightness(90%);
+}
+
+.switch input[type=checkbox]:checked + .check {
+    background: var(--third-color-green);
+}
+.switch input[type=checkbox]:checked + .check:hover {
+    background: var(--third-color-green);
+    filter: brightness(95%);
+}
+
+.pagination-link.is-current {
+    background-color: var(--third-color-green);
+    border-color: var(--third-color-green);
+    color: #fff;
+}
+
+.box {
+    background-color: var(--first-color);
+    filter: brightness(98%);
+}

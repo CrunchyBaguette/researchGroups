@@ -2,7 +2,7 @@
   <b-navbar>
     <template #brand>
       <b-navbar-item tag="router-link" :to="{ name: 'announcements' }">
-        <img src="../../assets/logo.png" />
+        <img src="../../assets/logo.png"/>
       </b-navbar-item>
     </template>
 
@@ -22,14 +22,15 @@
       <b-navbar-item tag="div" v-if="!isAuthenticated">
         <div class="buttons">
           <b-button
-            type="is-primary"
-            :to="{ name: 'register' }"
-            tag="router-link"
+              class="button-primary"
+              :to="{ name: 'register' }"
+              tag="router-link"
           >
             <strong>Rejestracja</strong>
           </b-button>
           <b-button type="is-light" :to="{ name: 'login' }" tag="router-link"
-            >Zaloguj się</b-button
+          >Zaloguj się
+          </b-button
           >
         </div>
       </b-navbar-item>
@@ -38,7 +39,7 @@
           Witaj {{ authUser.username }}!
         </p>
         <div class="buttons">
-          <b-button type="is-primary" @click="logout()">
+          <b-button class="button-primary" @click="logout()">
             <strong>Wyloguj</strong>
           </b-button>
         </div>
@@ -48,7 +49,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from "vuex";
+import {mapGetters, mapActions, mapMutations} from "vuex";
 
 export default {
   name: "NavBar",
@@ -75,8 +76,9 @@ export default {
 
 <style>
 .navbar {
-  background-color: #a0ff42;
+  background-color: var(--third-color-green);
 }
+
 a {
   color: black;
 }

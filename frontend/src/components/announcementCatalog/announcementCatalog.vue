@@ -13,7 +13,7 @@
         :to="{ name: 'addAnnouncement' }"
         rounded
         size="is-medium"
-        type="is-success"
+        class="button-secondary"
         >Dodaj nowe ogłoszenie</b-button
       >
     </div>
@@ -43,7 +43,7 @@
 
       <br />
 
-      <div class="columns" style="width: 100%; margin-bottom: 0px">
+      <div class="columns" style="width: 100%; padding-bottom: 20px; padding-right: 5px">
         <div class="column is-two-thirds"></div>
         <div class="box column is-one-third">
           <b-pagination
@@ -162,6 +162,9 @@ export default {
 
 #box {
   min-height: 80%;
+  background-color: var(--first-color);
+  box-shadow: var(--box-shadow);
+  margin: 10px
 }
 
 #titleDiv {
@@ -180,8 +183,9 @@ export default {
   margin-bottom: 20px;
   margin-left: 10px;
   margin-right: 10px;
-  background-color: rgb(196, 196, 196);
-  border-color: transparent;
+  background-color: var(--first-color);
+  border-style: solid;
+  border-color: var(--fourth-color);
   transition: 0.3s;
   cursor: pointer;
 }
