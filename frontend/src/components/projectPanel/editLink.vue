@@ -36,7 +36,7 @@
               ><template #empty>Brak koła naukowego</template>
             </b-autocomplete>
             <b-button
-              class="button is-success"
+              class="button-secondary"
               @click="addResearchGroupMembers(researchGroupName)"
               >Dodaj członków</b-button
             >
@@ -99,8 +99,8 @@
       </div>
     </section>
     <footer class="modal-card-foot">
-      <b-button type="is-success" @click="save">Zapisz</b-button>
-      <b-button v-if="linkId" type="is-danger" @click="remove">Usuń</b-button>
+      <b-button class="button-secondary" @click="save">Zapisz</b-button>
+      <b-button v-if="linkId" class="button-red" @click="remove">Usuń</b-button>
       <b-button @click="cancel">Anuluj</b-button>
     </footer>
   </div>

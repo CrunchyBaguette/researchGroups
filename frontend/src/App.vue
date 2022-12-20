@@ -3,12 +3,12 @@
     <div>
       <NavBar :loginOrRegister="this.isLoginOrRegister()" />
     </div>
-    <div style="height: 94%">
+    <div style="height: 100%">
       <div class="columns" style="height: 100%; margin-top: 0">
         <div id="sidebar" class="column is-2" v-if="!this.isLoginOrRegister()">
           <SideBar />
         </div>
-        <div class="column" style="padding: 0; background-color: #fad6a5">
+        <div class="column" style="padding: 0">
           <div id="content">
             <router-view />
           </div>
@@ -86,9 +86,10 @@ export default {
 </script>
 
 <style>
+@import '@/styles/colors.css';
 html {
   overflow: auto;
-  background-color: #fad6a5;
+  background-color: var(--first-color);
 }
 
 html,
@@ -113,7 +114,15 @@ body {
   left: 0;
   width: 13%;
   min-width: 100px;
-  background-color: rgb(203, 203, 203);
+  background-color: var(--first-color);
+  filter: brightness(98%);
+  border-right-style: solid;
+  border-right-color: var(--fourth-color);
+  border-right-width: 1px;
+}
+#sidebar a:hover {
+  background-color: var(--first-color);
+  filter: brightness(95%);
 }
 
 #navbar {
@@ -124,9 +133,9 @@ body {
   padding: 10px;
   height: 100%;
   position: relative;
-  overflow: none;
   word-wrap: anywhere;
   white-space: normal;
+  background-color: var(--first-color);
 }
 
 /* .wrapper-content {

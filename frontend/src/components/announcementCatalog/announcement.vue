@@ -23,7 +23,7 @@
         <p class="title">{{ title }}</p>
       </div>
       <div
-        class="box"
+        class="box white"
         style="overflow: auto; flex: 1 1 0"
         v-if="$route.name == 'announcement'"
       >

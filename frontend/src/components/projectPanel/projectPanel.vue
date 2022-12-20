@@ -27,7 +27,7 @@
             <div id="btnsDiv">
               <b-button
                 id="btnSave"
-                class="button is-primary is-success"
+                class="button-secondary"
                 @click="saveProjectName"
                 >Zapisz</b-button
               >
@@ -64,7 +64,7 @@
             <div id="btnsDiv">
               <b-button
                 id="btnSave"
-                class="button is-primary is-success"
+                class="button-secondary"
                 @click="saveProjectCategory"
                 >Zapisz</b-button
               >
@@ -88,9 +88,9 @@
         <div style="display: flex; flex-direction: column">
           <b-button
             id="title"
+            class="button-secondary"
             rounded
             size="is-medium"
-            type="is-success"
             @click="changeToPanelMode"
             :disabled="isButtonDisabled"
             ><b-icon icon="arrow-left" />&nbsp;&nbsp;Wróć do panelu
@@ -101,7 +101,7 @@
             rounded
             style="margin-top: 10px"
             size="is-medium"
-            type="is-danger"
+            class="button-red"
             v-if="this.project.project_owner == this.authUser.email"
             @click="deleteProjectConfirmation"
             >Usuń projekt</b-button
@@ -111,9 +111,9 @@
       <div class="column is-3" id="col" v-else>
         <b-button
           id="title"
+          class="button-secondary"
           rounded
           size="is-medium"
-          type="is-success"
           v-if="isAdminOrOwner()"
           @click="changeToEditMode"
           >Edytuj projekt</b-button
@@ -173,26 +173,9 @@
             </div>
           </div>
           <div class="inner">
-            <div
-              style="
-                width: 100%;
-                height: 80%;
-                background-color: rgb(240, 240, 240);
-                margin-top: 5px;
-                margin-bottom: 10px;
-                overflow: auto;
-              "
-            >
+            <div class="box member-list-box">
               <div
-                class="box"
-                style="
-                  border-radius: 25px;
-                  width: 95%;
-                  height: 40px;
-                  margin: 10px auto;
-                  padding: 5px 10px;
-                  display: flex;
-                "
+                class="box member-tile"
                 v-for="member in members"
                 :key="member.person"
               >
@@ -213,7 +196,7 @@
                     style="bottom: 5px; margin-right: 10px"
                   >
                     <template #trigger>
-                      <b-button icon-right="menu-down">
+                      <b-button icon-right="menu-down" @click="pullUp">
                         {{ member.role }}
                       </b-button>
                     </template>
@@ -233,18 +216,7 @@
                   />
                 </div>
               </div>
-              <div
-                class="box"
-                style="
-                  border-radius: 25px;
-                  width: 95%;
-                  height: 40px;
-                  margin: 10px auto;
-                  padding: 5px 10px;
-                  display: flex;
-                "
-                v-if="editMembers"
-              >
+              <div class="box member-tile" v-if="editMembers">
                 <div style="flex: 0 1 50%">
                   <b-input v-model="addEmail" style="bottom: 5px"></b-input>
                 </div>
@@ -277,7 +249,7 @@
             <div id="btnsDiv" v-if="editMembers">
               <b-button
                 id="btnSave"
-                class="button is-primary is-success"
+                class="button-secondary"
                 @click="saveMembers"
                 >Zapisz</b-button
               >
@@ -300,7 +272,7 @@
               </b-button>
             </div>
           </div>
-          <div class="inner" v-if="!editProjectDescription">
+          <div class="box white inner" v-if="!editProjectDescription">
             <markdown-it-vue
               class="md-body"
               :content="projectDescription"
@@ -320,7 +292,7 @@
             <div id="btnsDiv">
               <b-button
                 id="btnSave"
-                class="button is-primary is-success"
+                class="button-secondary"
                 @click="saveProjectDescription"
                 >Zapisz</b-button
               >
@@ -343,27 +315,20 @@
               </b-button>
             </div>
           </div>
-          <div class="inner" v-if="!editProjectContact">
+          <div class="box white inner" v-if="!editProjectContact">
             <markdown-it-vue
               class="md-body"
               :content="projectContact"
               :options="markdownOptions"
             />
             <div class="container-send-email">
-              <button
-                class="button"
-                id="btnSendEmail"
+              <b-button
+                class="button-secondary"
+                id="btnEmail"
                 @click="popupEmail = !popupEmail"
               >
                 WYŚLIJ WIADOMOŚĆ
-              </button>
-
-              <popupEmail
-                objectType="project"
-                :object="this.project"
-                v-if="popupEmail"
-                @close="popupEmail = false"
-              />
+              </b-button>
             </div>
           </div>
           <div v-else>
@@ -379,7 +344,7 @@
             <div id="btnsDiv">
               <b-button
                 id="btnSave"
-                class="button is-primary is-success"
+                class="button-secondary"
                 @click="saveProjectContact"
                 >Zapisz</b-button
               >
@@ -476,6 +441,12 @@
         v-on:delete="deleteLink"
       />
     </b-modal>
+    <popupEmail
+      objectType="project"
+      :object="this.project"
+      v-if="popupEmail"
+      @close="popupEmail = false"
+    />
   </div>
 </template>
 
@@ -595,6 +566,14 @@ export default {
       "updateProjectDisk",
     ]),
 
+    pullUp(event) {
+      let divs = document.getElementsByClassName("member-tile");
+      for (let i = 0; i < divs.length; i++) {
+        divs[i].style.zIndex = -1;
+      }
+      event.target.closest(".member-tile").style.zIndex = 0;
+    },
+
     canAccessLinks(links) {
       let canAccessLinks = [];
       for (let i = 0; i < links.length; i++) {
@@ -635,7 +614,7 @@ export default {
 
     updateLinkInList(list, newTitle, newUrl, newPublic, newUsers) {
       for (let i = 0; i < list.length; i++) {
-        if (this.links[i].id == this.linkId) {
+        if (list[i].id == this.linkId) {
           list[i].name = newTitle;
           list[i].link = newUrl;
           list[i].is_public = newPublic;
@@ -1151,7 +1130,13 @@ export default {
   width: 100%;
   justify-content: left;
   color: black;
-  background-color: rgb(165, 232, 163);
+  background-color: var(--first-color);
+  box-shadow: var(--second-color);
+  filter: brightness(98%);
+}
+
+#btn:focus {
+  border-color: var(--fourth-color);
 }
 
 #menu {
@@ -1163,7 +1148,7 @@ export default {
   right: 0;
   width: 20%;
   min-width: 100px;
-  background-color: rgb(203, 203, 203);
+  background-color: var(--first-color);
 }
 
 #centerDivHead {
@@ -1283,6 +1268,7 @@ export default {
 
 .outer {
   height: 100%;
+  overflow: auto;
 }
 
 .inner {

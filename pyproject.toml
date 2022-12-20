@@ -20,6 +20,8 @@ Faker = "^15.3.2"
 pandas = "^1.5.1"
 SQLAlchemy = "^1.4.44"
 django-extensions = "^3.2.1"
+pyparsing = "^3.0.9"
+pydot = "^1.4.2"
 
 [tool.poetry.group.dev.dependencies]
 black = {version = "^22.10.0", allow-prereleases = true}

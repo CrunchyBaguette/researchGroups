@@ -13,16 +13,16 @@
             id="btnTitle"
             rounded
             size="is-medium"
-            type="is-success"
+            class="button-secondary"
             @click="() => (sendingEmail = true)"
             >Wyślij wiadomość</b-button
           >
           <b-button
             v-if="isOwner()"
             id="btnTitle"
+            class="button-secondary"
             rounded
             size="is-medium"
-            type="is-success"
             @click="changeToEditMode"
             >Edytuj ogłoszenie</b-button
           >
@@ -34,16 +34,16 @@
           <b-button
             v-if="isOwner()"
             id="btnTitle"
+            class="button-red"
             rounded
             size="is-medium"
-            type="is-danger"
             @click="deleteAnnouncementConfirmation"
             >Usuń ogłoszenie</b-button
           ><b-button
             id="btnTitle"
+            class="button-secondary"
             rounded
             size="is-medium"
-            type="is-success"
             @click="changeToPanelMode"
             :disabled="isButtonDisabled"
             ><b-icon icon="arrow-left" />&nbsp;&nbsp;Wróć do panelu
@@ -230,7 +230,7 @@
 
             <div
               class="content-container"
-              style="display: flex; flex-flow: column"
+              style="display: flex; flex-flow: column; height: 100%"
             >
               <div id="btnEditContent">
                 <b-button
@@ -243,7 +243,7 @@
                 </b-button>
               </div>
               <div
-                class="box content"
+                class="box white"
                 style="overflow: auto; flex: 1 1 0"
                 v-if="!editAnnouncementContent || !isBeingEdited"
               >
@@ -270,7 +270,7 @@
                 <div id="btnsDiv">
                   <b-button
                     id="btnSave"
-                    class="button is-primary is-success"
+                    class="button-secondary"
                     @click="saveAnnouncementContent"
                     >Zapisz</b-button
                   >
@@ -312,7 +312,7 @@
             </b-field>
           </section>
           <footer class="modal-card-foot">
-            <b-button type="is-success" @click="sendEmail"
+            <b-button class="button-secondary" @click="sendEmail"
               >Wyślij wiadomość</b-button
             >
             <b-button
@@ -687,7 +687,10 @@ export default {
   margin-bottom: 20px;
   margin-left: 10px;
   margin-right: 10px;
-  background-color: rgb(196, 196, 196);
+  background-color: var(--first-color);
+  border-style: solid;
+  border-color: var(--fourth-color);
+  filter: brightness(98%);
 }
 
 #root-container {

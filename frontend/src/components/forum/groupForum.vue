@@ -10,7 +10,7 @@
         </div>
         <div style="margin-right: 10px">
           <b-button
-            class="button is-medium is-success is-rounded"
+            class="button-secondary is-medium is-rounded"
             v-on:click="addPost"
             >Utwórz nowy wpis</b-button
           >
@@ -27,7 +27,7 @@
               params: { groupId: groupId, postId: post.id },
             }"
           >
-            <Post :post="post"></Post>
+            <Post class="post" :post="post"></Post>
           </router-link>
         </div>
       </div>
@@ -111,3 +111,12 @@ export default {
   },
 };
 </script>
+
+<style>
+.post {
+  background-color: var(--first-color) !important;
+  border-style: solid;
+  border-color: var(--fourth-color);
+  cursor: pointer;
+}
+</style>

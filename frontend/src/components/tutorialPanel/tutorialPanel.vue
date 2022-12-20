@@ -29,7 +29,7 @@
             id="btnTitle"
             rounded
             size="is-medium"
-            type="is-danger"
+            class="button-red"
             v-if="this.editing && this.tutorial.owner.id == this.authUser.id"
             @click="deleteTutorialConfirmation"
             >Usuń poradnik</b-button
@@ -46,7 +46,7 @@
             id="btnTitle"
             rounded
             size="is-medium"
-            type="is-success"
+            class="button-secondary"
             v-if="this.editing"
             @click="endEditTutorial()"
             >Wróć do poradnika</b-button
@@ -55,7 +55,7 @@
             id="btnTitle"
             rounded
             size="is-medium"
-            type="is-success"
+            class="button-secondary"
             v-if="!this.editing && this.canEdit"
             @click="startEditTutorial()"
             >Edytuj poradnik</b-button
@@ -63,7 +63,7 @@
         </div>
       </div>
     </div>
-    <div class="box" style="flex: 1 0 auto; overflow: auto">
+    <div class="box white" style="flex: 1 0 auto; overflow: auto">
       <div id="box-content">
         <b-icon
           v-if="this.editing && !this.editingTitle && !this.editingText"
@@ -89,7 +89,10 @@
             </b-input>
           </b-field>
           <div id="btnsDiv">
-            <b-button id="btnSave" type="is-success" @click="saveTutorial"
+            <b-button
+              id="btnSave"
+              class="button-secondary"
+              @click="saveTutorial"
               >Zapisz</b-button
             >
             <b-button
@@ -118,7 +121,9 @@
             </b-field>
           </section>
           <footer class="modal-card-foot">
-            <b-button type="is-success" @click="saveTutorial">Zapis</b-button>
+            <b-button class="button-secondary" @click="saveTutorial"
+              >Zapisz</b-button
+            >
             <b-button
               @click="
                 () => (
@@ -207,7 +212,9 @@
             </b-field>
           </section>
           <footer class="modal-card-foot">
-            <b-button type="is-success" @click="saveTutorial">Zapis</b-button>
+            <b-button class="button-secondary" @click="saveTutorial"
+              >Zapisz</b-button
+            >
             <b-button
               @click="
                 () => (

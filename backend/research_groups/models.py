@@ -46,7 +46,7 @@ class ResearchGroupGuide(models.Model):
 
 
 class ResearchGroupPost(models.Model):
-    title = models.CharField(max_length=120, blank=False, unique=True)
+    title = models.CharField(max_length=120, blank=False)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     text = models.TextField(blank=True)
     added = models.DateTimeField(auto_now_add=True)

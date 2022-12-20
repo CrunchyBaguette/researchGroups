@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+FRONTEND_LINK = "http://localhost:8080/#"
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -157,3 +159,8 @@ EMAIL_HOST = os.environ["EMAIL_HOST"]
 EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
 EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
 EMAIL_PORT = os.environ["EMAIL_PORT"]
+
+GRAPH_MODELS = {
+    "all_applications": True,
+    "group_models": True,
+}

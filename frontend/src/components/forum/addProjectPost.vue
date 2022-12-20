@@ -28,8 +28,7 @@
               ></b-input
             ></b-field>
             <b-button
-              class="mt-4"
-              type="is-primary"
+              class="button-secondary mt-4"
               expanded
               v-on:click="savePost"
               >Dodaj wpis</b-button

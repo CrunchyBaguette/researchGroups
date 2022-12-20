@@ -3,18 +3,21 @@
     <div>
       <p class="title" style="float: left">Katalog kół naukowych</p>
       <b-button
+        class="button-secondary"
         tag="router-link"
         :to="isAuthenticated ? { name: 'addGroup' } : { name: 'login' }"
         rounded
         size="is-medium"
         style="float: right; margin-top: 10px; margin-right: 20px"
-        type="is-success"
         >Dodaj nowe koło naukowe</b-button
       >
     </div>
     <div style="overflow: auto; height: 100%">
       <div style="height: 100%; width: 100%" class="columns" v-if="loaded">
-        <div id="c1" style="max-height: 100%" class="box column is-two-thirds">
+        <div
+          style="max-height: 100%; overflow: auto"
+          class="box column is-two-thirds"
+        >
           <div class="columns">
             <div class="column">
               <groupTile
@@ -40,7 +43,15 @@
             </div>
           </div>
         </div>
-        <div id="c2" style="max-height: 100%" class="box column">
+        <div
+          style="
+            max-height: 100%;
+            overflow: auto;
+            margin-left: 10px;
+            margin-bottom: 1.5rem;
+          "
+          class="box column"
+        >
           <groupInfoPanel :researchGroup="chosenResearchGroup" />
         </div>
       </div>
@@ -107,18 +118,6 @@ export default {
 .title {
   font-size: 40px;
   padding: 10px;
-}
-
-#c1 {
-  background-color: white;
-  overflow: auto;
-}
-
-#c2 {
-  margin-left: 10px;
-  margin-bottom: 1.5rem;
-  background-color: rgb(196, 196, 196);
-  overflow: auto;
 }
 
 #column-container {

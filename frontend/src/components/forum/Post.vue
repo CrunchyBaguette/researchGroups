@@ -1,6 +1,6 @@
 <template>
   <div class="card mx-4 pb-2;">
-    <div class="px-5 grayTile">
+    <div class="px-5">
       <div class="columns m-0">
         <div class="column is-4 p-1" style="display: flex; flex-flow: column">
           <p>
@@ -45,9 +45,5 @@ export default {
 .postText {
   margin-top: 10px;
   white-space: pre-line;
-}
-
-.grayTile {
-  background-color: rgb(196, 196, 196);
 }
 </style>

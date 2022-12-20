@@ -50,7 +50,7 @@ class ProjectUser(models.Model):
 
 
 class ProjectPost(models.Model):
-    title = models.CharField(max_length=120, blank=False, unique=True)
+    title = models.CharField(max_length=120, blank=False)
     text = models.TextField(blank=True)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     added = models.DateTimeField(auto_now_add=True)

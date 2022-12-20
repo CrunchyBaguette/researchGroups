@@ -9,9 +9,9 @@
         <p class="title" id="tit">Katalog Poradników</p>
         <b-button
           id="btnTitle"
+          class="button-secondary"
           rounded
           size="is-medium"
-          type="is-success"
           @click="openCreateTutorial"
           >Dodaj nowy poradnik</b-button
         >
@@ -106,7 +106,7 @@
             </b-field>
           </section>
           <footer class="modal-card-foot">
-            <b-button type="is-success" @click="createTutorial"
+            <b-button class="button-secondary" @click="createTutorial"
               >Stwórz poradnik</b-button
             >
             <b-button
